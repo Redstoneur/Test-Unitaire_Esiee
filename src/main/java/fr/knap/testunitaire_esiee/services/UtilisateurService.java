@@ -19,5 +19,4 @@ public class UtilisateurService {
     public List<Utilisateur> obtenirTousLesUtilisateurs() {
         return utilisateurRepository.findAll();
     }
-
 }

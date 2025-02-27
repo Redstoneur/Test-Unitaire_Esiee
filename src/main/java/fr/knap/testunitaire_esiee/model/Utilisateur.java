@@ -24,6 +24,13 @@ public class Utilisateur extends Interaction {
     @OneToMany(mappedBy = "utilisateur")
     private List<Objet> objets;
 
+    public Utilisateur(String pseudo, String mdp, String mail, String nom, String prenom) {
+    }
+
+    public Utilisateur() {
+
+    }
+
     @Override
     public Object ConsulterObjet(Object object) {
         return null;
@@ -33,4 +40,6 @@ public class Utilisateur extends Interaction {
     public List<Objet> RechercheObjet() {
         return List.of();
     }
+
+
 }
