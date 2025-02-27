@@ -20,7 +20,7 @@ public class Echange {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Long id;
 
     @ManyToOne
     private Objet ObjetPropose;

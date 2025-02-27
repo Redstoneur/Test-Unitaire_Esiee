@@ -15,40 +15,28 @@ public class Visiteur extends Interaction {
     public Visiteur() {
     }
 
+    @Override
+    public Object ConsulterObjet(Object object) {
+        return null;
+    }
+
     /*
     *
     * */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Long id;
 
-    @Override
-    public Object ConsulterObjet(Object object) {
-        return null;
-    }
-
-    /**
-     * @return
-     */
-    public String Connexion() {
-        // TODO implement here
-        return null;
-    }
+    private String pseudo;
+    private String mdp;
+    private String mail;
 
     /**
      * @return
      */
     public String Inscription() {
         // TODO implement here
-        return null;
-    }
-
-    /**
-     * @param object
-     * @return
-     */
-    public Objet ConsulterObjet(Objet object) {
         return null;
     }
 
