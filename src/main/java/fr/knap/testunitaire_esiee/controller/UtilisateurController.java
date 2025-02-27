@@ -23,4 +23,19 @@ public class UtilisateurController {
     public List<Utilisateur> obtenirTousLesUtilisateurs() {
         return utilisateurService.obtenirTousLesUtilisateurs();
     }
+
+    @GetMapping("/{id}")
+    public Utilisateur obtenirUtilisateurParId(@PathVariable Long id) {
+        return utilisateurService.obtenirUtilisateurParId(id);
+    }
+
+    @PutMapping("/{id}")
+    public Utilisateur mettreAJourUtilisateur(@PathVariable Long id, @RequestBody Utilisateur utilisateur) {
+        return utilisateurService.mettreAJourUtilisateur(id, utilisateur);
+    }
+
+    @DeleteMapping("/{id}")
+    public void supprimerUtilisateur(@PathVariable Long id) {
+        utilisateurService.supprimerUtilisateur(id);
+    }
 }

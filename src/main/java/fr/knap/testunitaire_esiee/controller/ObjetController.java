@@ -23,4 +23,19 @@ public class ObjetController {
     public List<Objet> obtenirTousLesObjets() {
         return objetService.obtenirTousLesObjets();
     }
+
+    @GetMapping("/{id}")
+    public Objet obtenirObjetParId(@PathVariable Long id) {
+        return objetService.obtenirObjetParId(id);
+    }
+
+    @PutMapping("/{id}")
+    public Objet mettreAJourObjet(@PathVariable Long id, @RequestBody Objet objet) {
+        return objetService.mettreAJourObjet(id, objet);
+    }
+
+    @DeleteMapping("/{id}")
+    public void supprimerObjet(@PathVariable Long id) {
+        objetService.supprimerObjet(id);
+    }
 }
