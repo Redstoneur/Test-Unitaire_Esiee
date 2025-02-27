@@ -1,16 +1,17 @@
 package fr.knap.testunitaire_esiee.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-
-import java.io.*;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
-import java.util.*;
 
 /**
  * 
  */
+@Entity
 public class Objet {
+
+    @ManyToOne
+    @JoinColumn(name = "utilisateur_id")
+    private Utilisateur utilisateur;
 
     /**
      * Default constructor
@@ -19,14 +20,27 @@ public class Objet {
     }
 
     /**
-     * 
+     *
      */
-    private String Nom;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private int id;
 
     /**
      * 
      */
-    private String Description;
+    private String nom;
+
+    /**
+     * 
+     */
+
+    @Enumerated(EnumType.STRING)
+    private CategorieObjet categorie;
+
+    private String description;
+
 
     /**
      * 

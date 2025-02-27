@@ -1,5 +1,8 @@
 package fr.knap.testunitaire_esiee.model;
 
+import fr.knap.testunitaire_esiee.respository.Interaction;
+import jakarta.persistence.*;
+
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.*;
@@ -7,89 +10,27 @@ import java.util.*;
 /**
  * 
  */
+@Entity
 public class Utilisateur extends Interaction {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String pseudo;
+    private String mdp;
+    private String mail;
+    private String nom;
+    private String prenom;
 
-    /**
-     * Default constructor
-     */
-    public Utilisateur() {
-    }
+    @OneToMany(mappedBy = "utilisateur")
+    private List<Objet> objets;
 
-    /**
-     * 
-     */
-    private String Pseudo;
-
-    /**
-     * 
-     */
-    private String MDP;
-
-    /**
-     * 
-     */
-    private String Mail;
-
-    /**
-     * 
-     */
-    private String Nom;
-
-    /**
-     * 
-     */
-    private String Prénom;
-
-    /**
-     * @param nom 
-     * @param description 
-     * @param dateTime
-     * @return
-     */
-    public Objet CréerObjet(String nom, String description, Timestamp dateTime) {
-        // TODO implement here
+    @Override
+    public Object ConsulterObjet(Object object) {
         return null;
     }
 
-    /**
-     * @param echange 
-     * @param proposition 
-     * @return
-     */
-    public Echange ProposerUnEchange(Objet echange, Objet proposition) {
-        // TODO implement here
-        return null;
-    }
-
-    /**
-     * @param etat 
-     * @return
-     */
-    public void RepondreEchange(Etat etat) {
-        // TODO implement here
-    }
-
-    /**
-     * @return
-     */
-    public Echange ConsulterEchange() {
-        // TODO implement here
-        return null;
-    }
-
-    /**
-     * @param objet
-     * @return
-     */
-    public Objet ConsulterObjet(Object objet) {
-        return null;
-    }
-
-    /**
-     * @return
-     */
+    @Override
     public List<Objet> RechercheObjet() {
-        return null;
+        return List.of();
     }
-
 }

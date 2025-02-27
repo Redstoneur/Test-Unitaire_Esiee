@@ -1,7 +1,12 @@
 package fr.knap.testunitaire_esiee.model;
 
+import fr.knap.testunitaire_esiee.respository.Interaction;
+import jakarta.persistence.*;
+
 import java.util.List;
 
+
+@Entity
 public class Visiteur extends Interaction {
 
     /**
@@ -9,6 +14,14 @@ public class Visiteur extends Interaction {
      */
     public Visiteur() {
     }
+
+    /*
+    *
+    * */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private int id;
 
     @Override
     public Object ConsulterObjet(Object object) {

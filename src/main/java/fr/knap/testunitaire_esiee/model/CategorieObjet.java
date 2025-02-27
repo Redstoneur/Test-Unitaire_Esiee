@@ -1,13 +1,10 @@
 package fr.knap.testunitaire_esiee.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-
 /**
  * 
  */
 
-public enum CatégorieObjet {
+public enum CategorieObjet {
     MOBILIER,
     JARDINAGE,
     INFORMATIQUE,
