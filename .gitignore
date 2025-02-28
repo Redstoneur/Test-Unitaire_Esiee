@@ -6,3 +6,8 @@
 
 ### VS Code ###
 .vscode/
+
+### Backend ###
+/Backend/data
+/data
+/target
