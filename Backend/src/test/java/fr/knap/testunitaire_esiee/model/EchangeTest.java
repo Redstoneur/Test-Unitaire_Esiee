@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @SpringBootTest
 class EchangeTest {
@@ -19,7 +19,7 @@ class EchangeTest {
     @Test
     void testSetDateProposition() {
         Echange echange = new Echange();
-        echange.setDateProposition(new Timestamp(System.currentTimeMillis()));
+        echange.setDateProposition(LocalDateTime.now());
         assertNotNull(echange.getDateProposition());
     }
 
@@ -33,7 +33,7 @@ class EchangeTest {
     @Test
     void testSetDateCloture() {
         Echange echange = new Echange();
-        echange.setDateCloture(new Timestamp(System.currentTimeMillis()));
+        echange.setDateCloture(LocalDateTime.now());
         assertNotNull(echange.getDateCloture());
     }
 }

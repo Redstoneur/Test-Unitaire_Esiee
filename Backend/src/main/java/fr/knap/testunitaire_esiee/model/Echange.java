@@ -4,12 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.*;
 
 /**
- * 
+ *
  */
 @Entity
 @Getter
@@ -47,5 +45,5 @@ public class Echange {
     @Enumerated(EnumType.STRING)
     private Etat EtatEchange;
 
-    private LocalDateTime  dateCloture;
+    private LocalDateTime dateCloture;
 }

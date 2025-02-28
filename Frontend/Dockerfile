@@ -5,7 +5,7 @@ FROM node:22-slim
 WORKDIR /app
 
 # Copier les fichiers de l'application
-COPY ../../../../Users/alfaa/Desktop /app
+COPY . /app
 
 # Installer les dépendances
 RUN npm install
