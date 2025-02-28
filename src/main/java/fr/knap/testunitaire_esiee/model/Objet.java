@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * 
@@ -50,6 +53,6 @@ public class Objet {
     /**
      * 
      */
-    private Timestamp dateCreation;
+    private LocalDateTime dateCreation;
 
 }

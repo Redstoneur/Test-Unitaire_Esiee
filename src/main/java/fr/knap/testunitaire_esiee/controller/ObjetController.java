@@ -23,4 +23,10 @@ public class ObjetController {
     public List<Objet> obtenirTousLesObjets() {
         return objetService.obtenirTousLesObjets();
     }
+
+    @GetMapping("/{idUtilisateur}")
+    public List<Objet> obtenirObjetsParUtilisateur(@PathVariable Long idUtilisateur) {
+        return objetService.obtenirObjetsParUtilisateur(idUtilisateur);
+    }
+
 }

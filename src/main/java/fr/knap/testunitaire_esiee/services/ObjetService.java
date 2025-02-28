@@ -19,4 +19,8 @@ public class ObjetService {
     public List<Objet> obtenirTousLesObjets() {
         return objetRepository.findAll();
     }
+
+    public List<Objet> obtenirObjetsParUtilisateur(Long idUtilisateur) {
+        return objetRepository.findByUtilisateurId(idUtilisateur);
+    }
 }
