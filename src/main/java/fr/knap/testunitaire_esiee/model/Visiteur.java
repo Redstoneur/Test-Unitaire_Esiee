@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 
-@Entity
+
 public class Visiteur extends Interaction {
 
     /**
@@ -15,47 +15,18 @@ public class Visiteur extends Interaction {
     public Visiteur() {
     }
 
-    /*
-    *
-    * */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private int id;
-
     @Override
     public Object ConsulterObjet(Object object) {
         return null;
     }
 
-    /**
-     * @return
-     */
-    public String Connexion() {
-        // TODO implement here
-        return null;
+    @Override
+    public List<Objet> RechercheObjet() {
+        return List.of();
     }
 
-    /**
-     * @return
-     */
     public String Inscription() {
         // TODO implement here
-        return null;
-    }
-
-    /**
-     * @param object
-     * @return
-     */
-    public Objet ConsulterObjet(Objet object) {
-        return null;
-    }
-
-    /**
-     * @return
-     */
-    public List RechercheObjet() {
         return null;
     }
 

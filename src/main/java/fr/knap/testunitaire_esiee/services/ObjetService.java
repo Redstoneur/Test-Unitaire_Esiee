@@ -19,4 +19,25 @@ public class ObjetService {
     public List<Objet> obtenirTousLesObjets() {
         return objetRepository.findAll();
     }
+    public Objet obtenirObjetParId(Long id) {
+        return objetRepository.findById(id).orElse(null);
+    }
+
+    public Objet mettreAJourObjet(Long id, Objet objet) {
+        if (objetRepository.existsById(id)) {
+            return objetRepository.save(objet);
+        }
+        return null;
+    }
+
+    public void supprimerObjet(Long id) {
+        objetRepository.deleteById(id);
+    }
+
+    public List<Objet> obtenirObjetsParUtilisateur(Long idUtilisateur) {
+        return objetRepository.findByUtilisateurId(idUtilisateur);
+    }
 }
+
+
+
