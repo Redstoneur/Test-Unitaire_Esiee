@@ -28,6 +28,14 @@ public class Objet {
     public Objet() {
     }
 
+    public Objet(Utilisateur utilisateur, String nom, String description, CategorieObjet categorie, LocalDateTime dateCreation) {
+        this.utilisateur = utilisateur;
+        this.nom = nom;
+        this.description = description;
+        this.categorie = categorie;
+        this.dateCreation = dateCreation;
+    }
+
     /**
      *
      */
@@ -36,14 +44,8 @@ public class Objet {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    /**
-     * 
-     */
-    private String nom;
 
-    /**
-     * 
-     */
+    private String nom;
 
     @Enumerated(EnumType.STRING)
     private CategorieObjet categorie;

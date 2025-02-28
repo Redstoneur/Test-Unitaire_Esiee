@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -21,6 +22,14 @@ public class Echange {
     public Echange() {
     }
 
+    public Echange(Objet objetPropose, Objet objetDemande, LocalDateTime dateProposition, Etat etatEchange, LocalDateTime dateCloture) {
+        ObjetPropose = objetPropose;
+        ObjetDemande = objetDemande;
+        this.dateProposition = dateProposition;
+        EtatEchange = etatEchange;
+        this.dateCloture = dateCloture;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -32,16 +41,11 @@ public class Echange {
     @ManyToOne
     private Objet ObjetDemande;
 
-    /**
-     * 
-     */
-    private Timestamp dateProposition;
+
+    private LocalDateTime dateProposition;
 
     @Enumerated(EnumType.STRING)
     private Etat EtatEchange;
 
-    /**
-     * 
-     */
-    private Timestamp  dateCloture;
+    private LocalDateTime  dateCloture;
 }
