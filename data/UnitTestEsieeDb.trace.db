@@ -1,0 +1,124 @@
+2025-02-28 10:02:25.963720+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "UTILISATEUR" not found (this database is empty); SQL statement:
+INSERT INTO UTILISATEUR (mail,mdp,nom,prenom,pseudo) values ('gbjonrsbpngrssbs@shssdfg.dfg','ognerjkignegng','john','doe','jodoers') [42104-232]
+2025-02-28 10:02:25.970395+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "UTILISATEUR" not found (this database is empty); SQL statement:
+INSERT INTO UTILISATEUR (mail,mdp,nom,prenom,pseudo) values ('gbjonrsbpngrssbs@shssdfg.dfg','ognerjkignegng','john','doe','jodoers') [42104-232]
+2025-02-28 10:02:25.976738+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "UTILISATEUR" not found (this database is empty); SQL statement:
+INSERT INTO UTILISATEUR (mail,mdp,nom,prenom,pseudo) values ('gbjonrsbpngrssbs@shssdfg.dfg','ognerjkignegng','john','doe','jodoers') [42104-232]
+2025-02-28 10:02:25.979759+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "UTILISATEUR" not found (this database is empty); SQL statement:
+INSERT INTO UTILISATEUR (mail,mdp,nom,prenom,pseudo) values ('gbjonrsbpngrssbs@shssdfg.dfg','ognerjkignegng','john','doe','jodoers') [42104-232]
+2025-02-28 10:02:25.981031+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "UTILISATEUR" not found (this database is empty); SQL statement:
+INSERT INTO UTILISATEUR (mail,mdp,nom,prenom,pseudo) values ('gbjonrsbpngrssbs@shssdfg.dfg','ognerjkignegng','john','doe','jodoers') [42104-232]
+2025-02-28 10:02:25.981031+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "UTILISATEUR" not found (this database is empty); SQL statement:
+INSERT INTO UTILISATEUR (mail,mdp,nom,prenom,pseudo) values ('gbjonrsbpngrssbs@shssdfg.dfg','ognerjkignegng','john','doe','jodoers') [42104-232]
+2025-02-28 10:02:25.982125+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "UTILISATEUR" not found (this database is empty); SQL statement:
+INSERT INTO UTILISATEUR (mail,mdp,nom,prenom,pseudo) values ('gbjonrsbpngrssbs@shssdfg.dfg','ognerjkignegng','john','doe','jodoers') [42104-232]
+2025-02-28 10:02:25.982125+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "UTILISATEUR" not found (this database is empty); SQL statement:
+SELECT * FROM utilisateur [42104-232]
+2025-02-28 10:02:25.983249+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OBJET" not found (this database is empty); SQL statement:
+INSERT INTO OBJET (DATE_CREATION,UTILISATEUR_ID,DESCRIPTION,NOM,CATEGORIE) values ('2025-02-28T14:30:00',2,'osnbiugnbiufgsuhgd','objet de test','Gaming') [42104-232]
+2025-02-28 10:02:25.983249+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OBJET" not found (this database is empty); SQL statement:
+INSERT INTO OBJET (DATE_CREATION,UTILISATEUR_ID,DESCRIPTION,NOM,CATEGORIE) values ('2025-02-28T14:30:00',2,'osnbiugnbiufgsuhgd','objet de test','Gaming') [42104-232]
+2025-02-28 10:02:25.983249+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OBJET" not found (this database is empty); SQL statement:
+INSERT INTO OBJET (DATE_CREATION,UTILISATEUR_ID,DESCRIPTION,NOM,CATEGORIE) values ('2025-02-28T14:30:00',1,'osnbiugnbiufgsuhgd','objet de test','Gaming') [42104-232]
+2025-02-28 10:02:25.984275+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OBJET" not found (this database is empty); SQL statement:
+INSERT INTO OBJET (DATE_CREATION,UTILISATEUR_ID,DESCRIPTION,NOM,CATEGORIE) values ('2025-02-28T14:30:00',2,'osnbiugnbiufgsuhgd','objet de test','Gaming') [42104-232]
+2025-02-28 10:02:25.984275+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OBJET" not found (this database is empty); SQL statement:
+INSERT INTO OBJET (DATE_CREATION,UTILISATEUR_ID,DESCRIPTION,NOM,CATEGORIE) values ('2025-02-28T14:30:00',3,'osnbiugnbiufgsuhgd','objet de test','Gaming') [42104-232]
+2025-02-28 10:02:25.984275+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OBJET" not found (this database is empty); SQL statement:
+INSERT INTO OBJET (DATE_CREATION,UTILISATEUR_ID,DESCRIPTION,NOM,CATEGORIE) values ('2025-02-28T14:30:00',5,'osnbiugnbiufgsuhgd','objet de test','Gaming') [42104-232]
+2025-02-28 10:02:25.985282+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OBJET" not found (this database is empty); SQL statement:
+INSERT INTO OBJET (DATE_CREATION,UTILISATEUR_ID,DESCRIPTION,NOM,CATEGORIE) values ('2025-02-28T14:30:00',8,'osnbiugnbiufgsuhgd','objet de test','Gaming') [42104-232]
+2025-02-28 10:02:25.985282+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OBJET" not found (this database is empty); SQL statement:
+SELECT * FROM OBJET WHERE UTILISATEUR_ID = 2 [42104-232]
+2025-02-28 10:02:25.986295+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OBJET" not found (this database is empty); SQL statement:
+SELECT * FROM OBJET WHERE UTILISATEUR_ID = 4 [42104-232]
+2025-02-28 10:02:25.986295+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OBJET" not found (this database is empty); SQL statement:
+SELECT * FROM OBJET WHERE UTILISATEUR_ID = 5 [42104-232]
+2025-02-28 10:23:37.868783+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "SELECT * FROM ECHANGE OBJET [*]UTILISATEUR"
+Syntax error in SQL statement "SELECT * FROM ECHANGE OBJET [*]UTILISATEUR"; SQL statement:
+SELECT * FROM ECHANGE OBJET UTILISATEUR [42000-232]
+2025-02-28 10:24:23.438374+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "SELECT * FROM ECHANGE \000d\000a[*]SELECT * FROM OBJET\000d\000aSELECT * FROM UTILISATEUR"
+Syntax error in SQL statement "SELECT * FROM ECHANGE \000d\000a[*]SELECT * FROM OBJET\000d\000aSELECT * FROM UTILISATEUR"; SQL statement:
+SELECT * FROM ECHANGE 
+SELECT * FROM OBJET
+SELECT * FROM UTILISATEUR [42000-232]
+2025-02-28 10:34:48.959732+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "Drop [*]*"; attendu "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, MATERIALIZED, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, AGGREGATE, SYNONYM"
+Syntax error in SQL statement "Drop [*]*"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, MATERIALIZED, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, AGGREGATE, SYNONYM"; SQL statement:
+Drop * [42001-232]
+2025-02-28 10:34:54.800286+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "Drop TABLE [*]*"; attendu "identifier"
+Syntax error in SQL statement "Drop TABLE [*]*"; expected "identifier"; SQL statement:
+Drop TABLE * [42001-232]
+2025-02-28 10:35:01.235402+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP [*]* Table"; attendu "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, MATERIALIZED, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, AGGREGATE, SYNONYM"
+Syntax error in SQL statement "DROP [*]* Table"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, MATERIALIZED, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, AGGREGATE, SYNONYM"; SQL statement:
+DROP * Table [42001-232]
+2025-02-28 10:35:01.705114+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP [*]* Table"; attendu "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, MATERIALIZED, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, AGGREGATE, SYNONYM"
+Syntax error in SQL statement "DROP [*]* Table"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, MATERIALIZED, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, AGGREGATE, SYNONYM"; SQL statement:
+DROP * Table [42001-232]
+2025-02-28 10:35:05.866689+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP table[*]"; attendu "identifier"
+Syntax error in SQL statement "DROP table[*]"; expected "identifier"; SQL statement:
+DROP table [42001-232]
+2025-02-28 10:35:06.096980+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP table[*]"; attendu "identifier"
+Syntax error in SQL statement "DROP table[*]"; expected "identifier"; SQL statement:
+DROP table [42001-232]
+2025-02-28 10:35:06.456374+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP table[*]"; attendu "identifier"
+Syntax error in SQL statement "DROP table[*]"; expected "identifier"; SQL statement:
+DROP table [42001-232]
+2025-02-28 10:35:06.604804+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP table[*]"; attendu "identifier"
+Syntax error in SQL statement "DROP table[*]"; expected "identifier"; SQL statement:
+DROP table [42001-232]
+2025-02-28 10:35:06.762571+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP table[*]"; attendu "identifier"
+Syntax error in SQL statement "DROP table[*]"; expected "identifier"; SQL statement:
+DROP table [42001-232]
+2025-02-28 10:35:06.902204+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP table[*]"; attendu "identifier"
+Syntax error in SQL statement "DROP table[*]"; expected "identifier"; SQL statement:
+DROP table [42001-232]
+2025-02-28 10:35:06.998260+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP table[*]"; attendu "identifier"
+Syntax error in SQL statement "DROP table[*]"; expected "identifier"; SQL statement:
+DROP table [42001-232]
+2025-02-28 10:35:07.155632+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP table[*]"; attendu "identifier"
+Syntax error in SQL statement "DROP table[*]"; expected "identifier"; SQL statement:
+DROP table [42001-232]
+2025-02-28 10:35:07.269236+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP table[*]"; attendu "identifier"
+Syntax error in SQL statement "DROP table[*]"; expected "identifier"; SQL statement:
+DROP table [42001-232]
+2025-02-28 10:35:07.435268+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP table[*]"; attendu "identifier"
+Syntax error in SQL statement "DROP table[*]"; expected "identifier"; SQL statement:
+DROP table [42001-232]
+2025-02-28 10:35:07.542715+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "DROP table[*]"; attendu "identifier"
+Syntax error in SQL statement "DROP table[*]"; expected "identifier"; SQL statement:
+DROP table [42001-232]

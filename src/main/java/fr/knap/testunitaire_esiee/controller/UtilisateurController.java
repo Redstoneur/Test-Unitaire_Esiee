@@ -14,11 +14,6 @@ public class UtilisateurController {
     @Autowired
     private UtilisateurService utilisateurService;
 
-    @PostMapping
-    public Utilisateur creerUtilisateur(@RequestBody Utilisateur utilisateur) {
-        return utilisateurService.creerUtilisateur(utilisateur);
-    }
-
     @GetMapping
     public List<Utilisateur> obtenirTousLesUtilisateurs() {
         return utilisateurService.obtenirTousLesUtilisateurs();
@@ -27,6 +22,11 @@ public class UtilisateurController {
     @GetMapping("/{id}")
     public Utilisateur obtenirUtilisateurParId(@PathVariable Long id) {
         return utilisateurService.obtenirUtilisateurParId(id);
+    }
+
+    @PostMapping
+    public Utilisateur creerUtilisateur(@RequestBody Utilisateur utilisateur) {
+        return utilisateurService.creerUtilisateur(utilisateur);
     }
 
     @PutMapping("/{id}")

@@ -1,5 +1,8 @@
 package fr.knap.testunitaire_esiee.config;
 
+import fr.knap.testunitaire_esiee.model.Utilisateur;
+import fr.knap.testunitaire_esiee.respository.UtilisateurRepository;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,19 +16,17 @@ public class Config {
     /**
      * Bean that runs on application startup to create initial greetings.
      *
-     * @param greetingServicesImpl The service used for managing greetings.
+     * @param utilisateurRepository The service used for managing greetings.
      * @return A CommandLineRunner that creates initial greetings.
      */
-   /* @Bean
-    CommandLineRunner commandLineRunner(GreetingServicesImpl greetingServicesImpl) {
+    @Bean
+    CommandLineRunner commandLineRunner(UtilisateurRepository utilisateurRepository) {
+
         return args -> {
-            greetingServicesImpl.createGreeting(new Greeting("pavel"));
-            greetingServicesImpl.createGreeting(new Greeting("Alipio"));
-            greetingServicesImpl.createGreeting(new Greeting("Killyan"));
-            greetingServicesImpl.createGreeting(new Greeting("Nicolas"));
-            greetingServicesImpl.createGreeting(new Greeting("Anaïs"));
-            greetingServicesImpl.createGreeting(new Greeting("Edouard"));
-            greetingServicesImpl.createGreeting(new Greeting("George"));
+            for (int i = 0; i < 10; i++) {            Utilisateur user = new Utilisateur("hubbhubhbuhb"+i,"aaaa","aaaaaa","qiudifsiudfqs","eiqrnoifbqiub");
+            utilisateurRepository.save(user);
+            }
+            
         };
-    }*/
+    }
 }

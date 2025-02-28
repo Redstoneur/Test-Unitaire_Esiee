@@ -29,10 +29,23 @@
         private List<Objet> objets;
 
         public Utilisateur(String pseudo, String mdp, String mail, String nom, String prenom) {
+            this.pseudo = pseudo;
+            this.mdp = mdp;
+            this.mail = mail;
+            this.nom = nom;
+            this.prenom = prenom;
+            this.objets = new ArrayList<>();
+        }
+        public Utilisateur(String pseudo, String mdp, String mail, String nom, String prenom, List<Objet> objets) {
+            this.pseudo = pseudo;
+            this.mdp = mdp;
+            this.mail = mail;
+            this.nom = nom;
+            this.prenom = prenom;
+            this.objets = objets;
         }
 
         public Utilisateur() {
-
         }
 
         @Override
