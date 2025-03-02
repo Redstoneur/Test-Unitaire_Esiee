@@ -1,5 +1,7 @@
 package fr.knap.testunitaire_esiee.services;
 
+import fr.knap.testunitaire_esiee.model.Credentials;
+import fr.knap.testunitaire_esiee.model.Token;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.respository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,24 @@ public class UtilisateurService {
             return utilisateurRepository.save(utilisateur);
         }
         return null;
+    }
+
+    public Token Login(Credentials credentials) {
+        if(utilisateurRepository.existsByMail(credentials.getMail()) && utilisateurRepository.existsByMdp(credentials.getMdp()))
+        {
+            return new Token(credentials.getMail(), credentials.getMdp());
+        } else {
+            return null;
+        }
+    }
+
+    public Token disconnect(Token token) {
+        token.disconnect();
+        return token;
+    }
+
+    public boolean verifyToken(String token) {
+ return Token.validateToken(token);
     }
 
     public void supprimerUtilisateur(Long id) {

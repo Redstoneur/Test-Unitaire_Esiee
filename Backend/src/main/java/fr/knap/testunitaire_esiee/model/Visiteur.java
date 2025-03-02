@@ -15,16 +15,6 @@ public class Visiteur extends Interaction {
     public Visiteur() {
     }
 
-    @Override
-    public Object ConsulterObjet(Object object) {
-        return null;
-    }
-
-    @Override
-    public List<Objet> RechercheObjet() {
-        return List.of();
-    }
-
     public String Inscription() {
         // TODO implement here
         return null;

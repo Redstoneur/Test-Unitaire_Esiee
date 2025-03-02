@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
 
+    boolean existsByMail(String mail);
+
+    boolean existsByMdp(String mdp);
 }

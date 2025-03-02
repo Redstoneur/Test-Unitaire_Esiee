@@ -48,15 +48,4 @@
         public Utilisateur() {
         }
 
-        @Override
-        public Object ConsulterObjet(Object object) {
-            return null;
-        }
-
-        @Override
-        public List<Objet> RechercheObjet() {
-            return List.of();
-        }
-
-
     }
