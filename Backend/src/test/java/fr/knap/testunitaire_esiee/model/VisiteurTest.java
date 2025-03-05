@@ -9,8 +9,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class VisiteurTest {
 
     @Test
-    void testVisiteur() {
+    void testVisiteurCreation() {
         Visiteur visiteur = new Visiteur();
         assertNotNull(visiteur);
+    }
+
+    @Test
+    void testInscription() {
+        Visiteur visiteur = new Visiteur();
+        assertNull(visiteur.Inscription());
     }
 }

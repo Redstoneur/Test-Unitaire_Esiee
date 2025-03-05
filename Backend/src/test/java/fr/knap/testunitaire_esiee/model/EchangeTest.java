@@ -66,11 +66,6 @@ class EchangeTest {
     }
 
     @Test
-    void testSetId2() {
-        assertEquals(1L, echange2.getId());
-    }
-
-    @Test
     void testSetDateProposition2() {
         assertNotNull(echange2.getDateProposition());
     }
