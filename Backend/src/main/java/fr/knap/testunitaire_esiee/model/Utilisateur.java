@@ -19,8 +19,12 @@
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
+
+        @Column(nullable = false, unique = true)
         private String pseudo;
         private String mdp;
+
+        @Column(nullable = false, unique = true)
         private String mail;
         private String nom;
         private String prenom;
