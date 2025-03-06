@@ -39,7 +39,7 @@ class CredentialsControllerTest {
     void testGetConnexionToken() {
         Credentials credentials = new Credentials("test@mail.com", "password");
         Token token = new Token("test@mail.com", "password");
-        when(utilisateurService.Login(credentials)).thenReturn(token);
+        when(utilisateurService.login(credentials)).thenReturn(token);
         assertEquals(token, credentialsController.getConnexionToken(credentials));
     }
 

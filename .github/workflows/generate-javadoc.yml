@@ -1,0 +1,45 @@
+name: Generate JavaDoc
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - features/workflow
+  pull_request:
+    branches:
+      - master
+      - dev
+
+jobs:
+  javadoc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4.7.0
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          server-id: github
+          settings-path: ${{ github.workspace }}
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3.4.3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven
+
+      - name: Generate JavaDoc
+        run: mvn javadoc:javadoc
+        working-directory: ./Backend
+
+      - name: Upload JavaDoc
+        uses: actions/upload-artifact@v4
+        with:
+          name: javadoc
+          path: Backend/target/site/apidocs
