@@ -1,53 +1,100 @@
-    package fr.knap.testunitaire_esiee.model;
+package fr.knap.testunitaire_esiee.model;
 
-    import jakarta.persistence.*;
-    import lombok.Getter;
-    import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-    import java.util.*;
+import java.util.*;
+
+/**
+ * Entity class representing a user.
+ */
+@Entity
+@Getter
+@Setter
+public class Utilisateur {
 
     /**
-     *
+     * The unique identifier for the user.
      */
-    @Entity
-    @Getter
-    @Setter
-    public class Utilisateur {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Column(nullable = false, unique = true)
-        private String pseudo;
-        private String mdp;
+    /**
+     * The username of the user.
+     */
+    @Column(nullable = false, unique = true)
+    private String pseudo;
 
-        @Column(nullable = false, unique = true)
-        private String mail;
-        private String nom;
-        private String prenom;
+    /**
+     * The password of the user.
+     */
+    private String mdp;
 
-        @OneToMany
-        @JoinColumn(name = "OBJET_ID")
-        private List<Objet> objets;
+    /**
+     * The email of the user.
+     */
+    @Column(nullable = false, unique = true)
+    private String mail;
 
-        public Utilisateur(String pseudo, String mdp, String mail, String nom, String prenom) {
-            this.pseudo = pseudo;
-            this.mdp = mdp;
-            this.mail = mail;
-            this.nom = nom;
-            this.prenom = prenom;
-            this.objets = new ArrayList<>();
-        }
-        public Utilisateur(String pseudo, String mdp, String mail, String nom, String prenom, List<Objet> objets) {
-            this.pseudo = pseudo;
-            this.mdp = mdp;
-            this.mail = mail;
-            this.nom = nom;
-            this.prenom = prenom;
-            this.objets = objets;
-        }
+    /**
+     * The last name of the user.
+     */
+    private String nom;
 
-        public Utilisateur() {
-        }
+    /**
+     * The first name of the user.
+     */
+    private String prenom;
 
+    /**
+     * The list of objects associated with the user.
+     */
+    @OneToMany
+    @JoinColumn(name = "OBJET_ID")
+    private List<Objet> objets;
+
+    /**
+     * Constructs a new Utilisateur object with the specified details.
+     *
+     * @param pseudo The username of the user.
+     * @param mdp    The password of the user.
+     * @param mail   The email of the user.
+     * @param nom    The last name of the user.
+     * @param prenom The first name of the user.
+     */
+    public Utilisateur(String pseudo, String mdp, String mail, String nom, String prenom) {
+        this.pseudo = pseudo;
+        this.mdp = mdp;
+        this.mail = mail;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.objets = new ArrayList<>();
     }
+
+    /**
+     * Constructs a new Utilisateur object with the specified details and list of objects.
+     *
+     * @param pseudo The username of the user.
+     * @param mdp    The password of the user.
+     * @param mail   The email of the user.
+     * @param nom    The last name of the user.
+     * @param prenom The first name of the user.
+     * @param objets The list of objects associated with the user.
+     */
+    public Utilisateur(String pseudo, String mdp, String mail, String nom, String prenom, List<Objet> objets) {
+        this.pseudo = pseudo;
+        this.mdp = mdp;
+        this.mail = mail;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.objets = objets;
+    }
+
+    /**
+     * Default constructor for Utilisateur.
+     */
+    public Utilisateur() {
+    }
+}
