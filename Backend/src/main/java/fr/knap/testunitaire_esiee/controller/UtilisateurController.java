@@ -24,7 +24,7 @@ public class UtilisateurController {
         return utilisateurService.obtenirUtilisateurParId(id);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public Utilisateur creerUtilisateur(@RequestBody Utilisateur utilisateur) {
         return utilisateurService.creerUtilisateur(utilisateur);
     }
