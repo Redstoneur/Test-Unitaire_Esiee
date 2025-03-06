@@ -53,8 +53,8 @@ public class UtilisateurService {
         return token.isPresent() && token.get().getExpirationDate().after(new Date());
     }
 
-    public void disconnect(Token token) {
-        Optional<Token> tokenEntity = tokenRepository.findByToken(token.getToken());
+    public void disconnect(String token) {
+        Optional<Token> tokenEntity = tokenRepository.findByToken(token);
         if (tokenEntity.isPresent()) {
             Token existingToken = tokenEntity.get();
             existingToken.disconnect();

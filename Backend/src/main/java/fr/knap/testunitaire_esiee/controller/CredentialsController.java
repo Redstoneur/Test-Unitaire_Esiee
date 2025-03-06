@@ -2,6 +2,7 @@ package fr.knap.testunitaire_esiee.controller;
 
 import fr.knap.testunitaire_esiee.model.Credentials;
 import fr.knap.testunitaire_esiee.model.Token;
+import fr.knap.testunitaire_esiee.model.TokenCredential;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,34 +23,33 @@ public class CredentialsController {
     }
 
     @PostMapping("/register")
-    public Token creerUtilisateur(@RequestBody Utilisateur utilisateur) {
+    public TokenCredential creerUtilisateur(@RequestBody Utilisateur utilisateur) {
         utilisateurService.creerUtilisateur(utilisateur);
-
-
-        return utilisateurService.login(new Credentials(utilisateur.getMail(), utilisateur.getMdp()));
+        TokenCredential tokenCredential = new TokenCredential(utilisateurService.login(new Credentials(utilisateur.getMail(), utilisateur.getMdp())).getToken());
+        return tokenCredential;
     }
 
     @PostMapping("/login")
-    public Token getConnexionToken(@RequestBody Credentials credentials) {
+    public TokenCredential getConnexionToken(@RequestBody Credentials credentials) {
         Token token = utilisateurService.login(credentials);
         if (token != null) {
-            return token;
+            return new TokenCredential(token.getToken());
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Token not found");
         }
     }
 
     @PostMapping("/disconnect")
-    public void disconnect(@RequestBody Token token) {
+    public void disconnect(@RequestBody TokenCredential token) {
         if (!utilisateurService.verifyToken(token.getToken())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token is not valid");
         }
-        utilisateurService.disconnect(token);
+        utilisateurService.disconnect(token.getToken());
         throw new ResponseStatusException(HttpStatus.OK, "Disconnection successful");
     }
 
     @PostMapping("/verifyToken")
-    public void verifyToken(@RequestBody Token token) {
+    public void verifyToken(@RequestBody TokenCredential token) {
         if (utilisateurService.verifyToken(token.getToken())) {
             throw new ResponseStatusException(HttpStatus.OK, "Token is valid");
         } else {

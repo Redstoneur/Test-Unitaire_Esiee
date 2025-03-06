@@ -2,6 +2,7 @@ package fr.knap.testunitaire_esiee.controller;
 
 import fr.knap.testunitaire_esiee.model.Credentials;
 import fr.knap.testunitaire_esiee.model.Token;
+import fr.knap.testunitaire_esiee.model.TokenCredential;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,6 +57,6 @@ class CredentialsControllerTest {
     void testVerifyToken() {
         Token token = new Token("test@mail.com", "password");
         when(utilisateurService.verifyToken(token.getToken())).thenReturn(true);
-        assertThrows(ResponseStatusException.class, () -> credentialsController.verifyToken(token));
+        assertThrows(ResponseStatusException.class, () -> credentialsController.verifyToken(new TokenCredential(token.getToken())));
     }
 }
