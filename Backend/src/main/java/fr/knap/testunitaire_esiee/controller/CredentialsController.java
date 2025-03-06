@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * REST controller for managing user credentials.
+ */
 @RestController
 @RequestMapping("/api/credentials")
 public class CredentialsController {
@@ -17,11 +20,12 @@ public class CredentialsController {
     @Autowired
     private UtilisateurService utilisateurService;
 
-    @GetMapping
-    public String test() {
-        return "Hello World";
-    }
-
+    /**
+     * Registers a new user and returns a token credential.
+     *
+     * @param utilisateur The user to be registered.
+     * @return The token credential for the newly registered user.
+     */
     @PostMapping("/register")
     public TokenCredential creerUtilisateur(@RequestBody Utilisateur utilisateur) {
         utilisateurService.creerUtilisateur(utilisateur);
@@ -34,6 +38,13 @@ public class CredentialsController {
         );
     }
 
+    /**
+     * Authenticates a user and returns a token credential.
+     *
+     * @param credentials The user's credentials.
+     * @return The token credential if authentication is successful.
+     * @throws ResponseStatusException if the token is not found.
+     */
     @PostMapping("/login")
     public TokenCredential getConnexionToken(@RequestBody Credentials credentials) {
         Token token = utilisateurService.login(credentials);
@@ -44,6 +55,12 @@ public class CredentialsController {
         }
     }
 
+    /**
+     * Disconnects a user by invalidating their token.
+     *
+     * @param token The token credential to be invalidated.
+     * @throws ResponseStatusException if the token is not valid.
+     */
     @PostMapping("/disconnect")
     public void disconnect(@RequestBody TokenCredential token) {
         if (!utilisateurService.verifyToken(token.getToken())) {
@@ -53,6 +70,12 @@ public class CredentialsController {
         throw new ResponseStatusException(HttpStatus.OK, "Disconnection successful");
     }
 
+    /**
+     * Verifies the validity of a token.
+     *
+     * @param token The token credential to be verified.
+     * @throws ResponseStatusException if the token is invalid.
+     */
     @PostMapping("/verifyToken")
     public void verifyToken(@RequestBody TokenCredential token) {
         if (utilisateurService.verifyToken(token.getToken())) {

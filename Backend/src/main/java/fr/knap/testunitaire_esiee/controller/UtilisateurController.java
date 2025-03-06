@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller for managing users.
+ */
 @RestController
 @RequestMapping("/api/utilisateurs")
 public class UtilisateurController {
@@ -14,21 +17,44 @@ public class UtilisateurController {
     @Autowired
     private UtilisateurService utilisateurService;
 
+    /**
+     * Retrieves all users.
+     *
+     * @return A list of all users.
+     */
     @GetMapping
     public List<Utilisateur> obtenirTousLesUtilisateurs() {
         return utilisateurService.obtenirTousLesUtilisateurs();
     }
 
+    /**
+     * Retrieves a specific user by their ID.
+     *
+     * @param id The ID of the user to retrieve.
+     * @return The user with the specified ID.
+     */
     @GetMapping("/{id}")
     public Utilisateur obtenirUtilisateurParId(@PathVariable Long id) {
         return utilisateurService.obtenirUtilisateurParId(id);
     }
 
+    /**
+     * Updates an existing user.
+     *
+     * @param id The ID of the user to update.
+     * @param utilisateur The updated user data.
+     * @return The updated user.
+     */
     @PutMapping("/{id}")
     public Utilisateur mettreAJourUtilisateur(@PathVariable Long id, @RequestBody Utilisateur utilisateur) {
         return utilisateurService.mettreAJourUtilisateur(id, utilisateur);
     }
 
+    /**
+     * Deletes a user by their ID.
+     *
+     * @param id The ID of the user to delete.
+     */
     @DeleteMapping("/{id}")
     public void supprimerUtilisateur(@PathVariable Long id) {
         utilisateurService.supprimerUtilisateur(id);

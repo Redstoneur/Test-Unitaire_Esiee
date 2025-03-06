@@ -9,6 +9,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * REST controller for managing exchanges.
+ */
 @RestController
 @RequestMapping("/api/echanges")
 public class EchangeController {
@@ -16,21 +19,46 @@ public class EchangeController {
     @Autowired
     private EchangeService echangeService;
 
+    /**
+     * Creates a new exchange.
+     *
+     * @param echange The exchange to be created.
+     * @return The created exchange.
+     */
     @PostMapping("/create")
     public Echange creerEchange(@RequestBody Echange echange) {
         return echangeService.creerEchange(echange);
     }
 
+    /**
+     * Retrieves all exchanges.
+     *
+     * @return A list of all exchanges.
+     */
     @GetMapping("/all")
     public List<Echange> obtenirTousLesEchanges() {
         return echangeService.obtenirTousLesEchanges();
     }
 
+    /**
+     * Retrieves a specific exchange by its ID.
+     *
+     * @param id The ID of the exchange to retrieve.
+     * @return The exchange with the specified ID.
+     */
     @GetMapping("/{id}")
     public Echange obtenirUnEchange(@PathVariable Long id) {
         return echangeService.obtenirEchangeParId(id);
     }
 
+    /**
+     * Updates an existing exchange.
+     *
+     * @param echange The exchange to update.
+     * @return The updated exchange.
+     * @throws IllegalArgumentException if the exchange ID is null.
+     * @throws ResponseStatusException if the exchange does not exist.
+     */
     @PutMapping("/update")
     public Echange mettreAJourEchange(@RequestBody Echange echange) {
         if(echange.getId() == null)
