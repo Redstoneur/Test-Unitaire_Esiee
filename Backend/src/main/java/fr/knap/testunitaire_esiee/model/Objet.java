@@ -18,24 +18,6 @@ import java.time.ZonedDateTime;
 @Setter
 public class Objet {
 
-    @ManyToOne
-    @JoinColumn(name = "UTILISATEUR_ID")
-    private Utilisateur utilisateur;
-
-    /**
-     * Default constructor
-     */
-    public Objet() {
-    }
-
-    public Objet(Utilisateur utilisateur, String nom, String description, CategorieObjet categorie, LocalDateTime dateCreation) {
-        this.utilisateur = utilisateur;
-        this.nom = nom;
-        this.description = description;
-        this.categorie = categorie;
-        this.dateCreation = dateCreation;
-    }
-
     /**
      *
      */
@@ -54,9 +36,29 @@ public class Objet {
 
 
     /**
-     * 
+     *
      */
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateCreation;
+
+    @ManyToOne
+    @JoinColumn(name = "UTILISATEUR_ID")
+    private Utilisateur utilisateur;
+
+
+    /**
+     * Default constructor
+     */
+    public Objet() {
+    }
+
+    public Objet(Utilisateur utilisateur, String nom, String description, CategorieObjet categorie, LocalDateTime dateCreation) {
+        this.utilisateur = utilisateur;
+        this.nom = nom;
+        this.description = description;
+        this.categorie = categorie;
+        this.dateCreation = dateCreation;
+    }
+
 
 }

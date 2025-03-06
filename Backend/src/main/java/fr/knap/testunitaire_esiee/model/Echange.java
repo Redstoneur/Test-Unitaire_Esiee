@@ -14,20 +14,6 @@ import java.time.LocalDateTime;
 @Setter
 public class Echange {
 
-    /**
-     * Default constructor
-     */
-    public Echange() {
-    }
-
-    public Echange(Objet objetPropose, Objet objetDemande, LocalDateTime dateProposition, Etat etatEchange, LocalDateTime dateCloture) {
-        ObjetPropose = objetPropose;
-        ObjetDemande = objetDemande;
-        this.dateProposition = dateProposition;
-        EtatEchange = etatEchange;
-        this.dateCloture = dateCloture;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -46,4 +32,19 @@ public class Echange {
     private Etat EtatEchange;
 
     private LocalDateTime dateCloture;
+
+    /**
+     * Default constructor
+     */
+    public Echange() {
+    }
+
+    public Echange(Objet objetPropose, Objet objetDemande, LocalDateTime dateProposition, Etat etatEchange, LocalDateTime dateCloture) {
+        ObjetPropose = objetPropose;
+        ObjetDemande = objetDemande;
+        this.dateProposition = dateProposition;
+        EtatEchange = etatEchange;
+        this.dateCloture = dateCloture;
+    }
+
 }
