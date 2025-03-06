@@ -26,7 +26,8 @@
         private String nom;
         private String prenom;
 
-        @OneToMany(mappedBy = "utilisateur")
+        @OneToMany
+        @JoinColumn(name = "OBJET_ID")
         private List<Objet> objets;
 
         public Utilisateur(String pseudo, String mdp, String mail, String nom, String prenom) {

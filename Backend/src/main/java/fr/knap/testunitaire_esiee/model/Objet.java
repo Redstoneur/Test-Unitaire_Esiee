@@ -19,7 +19,7 @@ import java.time.ZonedDateTime;
 public class Objet {
 
     @ManyToOne
-    @JoinColumn(name = "utilisateur_id")
+    @JoinColumn(name = "UTILISATEUR_ID")
     private Utilisateur utilisateur;
 
     /**
