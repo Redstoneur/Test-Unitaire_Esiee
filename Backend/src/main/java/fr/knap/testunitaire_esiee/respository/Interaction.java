@@ -7,23 +7,17 @@ import java.util.List;
 public abstract class Interaction {
 
     /**
-     * Default constructor
-     */
-    public Interaction() {
-    }
-
-    /**
      * @param object
      * @return
      */
-    public Object ConsulterObjet(Object object){
+    public Object ConsulterObjet(Object object) {
         return null;
     }
 
     /**
      * @return
      */
-    public List<Objet> RechercheObjet(){
+    public List<Objet> RechercheObjet() {
         return List.of();
     }
 }

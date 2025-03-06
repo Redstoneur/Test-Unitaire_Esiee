@@ -6,14 +6,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 
-
 public class Visiteur extends Interaction {
-
-    /**
-     * Default constructor
-     */
-    public Visiteur() {
-    }
 
     public String Inscription() {
         // TODO implement here
