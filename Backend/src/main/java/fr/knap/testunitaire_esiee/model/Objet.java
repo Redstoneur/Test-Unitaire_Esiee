@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 
 /**
- * 
+ *
  */
 @Entity
 @Getter
@@ -52,7 +52,11 @@ public class Objet {
     public Objet() {
     }
 
-    public Objet(Utilisateur utilisateur, String nom, String description, CategorieObjet categorie, LocalDateTime dateCreation) {
+    public Objet(
+            Utilisateur utilisateur, String nom,
+            String description, CategorieObjet categorie,
+            LocalDateTime dateCreation
+    ) {
         this.utilisateur = utilisateur;
         this.nom = nom;
         this.description = description;

@@ -39,7 +39,11 @@ public class Echange {
     public Echange() {
     }
 
-    public Echange(Objet objetPropose, Objet objetDemande, LocalDateTime dateProposition, Etat etatEchange, LocalDateTime dateCloture) {
+    public Echange(
+            Objet objetPropose, Objet objetDemande,
+            LocalDateTime dateProposition, Etat etatEchange,
+            LocalDateTime dateCloture
+    ) {
         ObjetPropose = objetPropose;
         ObjetDemande = objetDemande;
         this.dateProposition = dateProposition;

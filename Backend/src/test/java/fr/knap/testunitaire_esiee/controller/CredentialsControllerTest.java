@@ -50,13 +50,19 @@ class CredentialsControllerTest {
         Token token = new Token("test@mail.com", "password");
         when(utilisateurService.verifyToken(token.getToken())).thenReturn(true);
         doNothing().when(utilisateurService).disconnect(token.getToken());
-        assertThrows(ResponseStatusException.class, () -> credentialsController.disconnect(new TokenCredential(token.getToken())));
+        assertThrows(
+                ResponseStatusException.class,
+                () -> credentialsController.disconnect(new TokenCredential(token.getToken()))
+        );
     }
 
     @Test
     void testVerifyToken() {
         Token token = new Token("test@mail.com", "password");
         when(utilisateurService.verifyToken(token.getToken())).thenReturn(true);
-        assertThrows(ResponseStatusException.class, () -> credentialsController.verifyToken(new TokenCredential(token.getToken())));
+        assertThrows(
+                ResponseStatusException.class,
+                () -> credentialsController.verifyToken(new TokenCredential(token.getToken()))
+        );
     }
 }

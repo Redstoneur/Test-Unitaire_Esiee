@@ -25,7 +25,13 @@ public class CredentialsController {
     @PostMapping("/register")
     public TokenCredential creerUtilisateur(@RequestBody Utilisateur utilisateur) {
         utilisateurService.creerUtilisateur(utilisateur);
-        return new TokenCredential(utilisateurService.login(new Credentials(utilisateur.getMail(), utilisateur.getMdp())).getToken());
+        return new TokenCredential(
+                utilisateurService.login(
+                        new Credentials(
+                                utilisateur.getMail(),
+                                utilisateur.getMdp())
+                ).getToken()
+        );
     }
 
     @PostMapping("/login")

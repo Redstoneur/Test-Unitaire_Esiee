@@ -40,7 +40,9 @@ public class UtilisateurService {
     }
 
     public Token login(Credentials credentials) {
-        Optional<Utilisateur> utilisateur = utilisateurRepository.findByMailAndMdp(credentials.getMail(), credentials.getMdp());
+        Optional<Utilisateur> utilisateur = utilisateurRepository.findByMailAndMdp(
+                credentials.getMail(), credentials.getMdp()
+        );
         if (utilisateur.isPresent()) {
             Token token = new Token(credentials.getMail(), credentials.getMdp());
             return tokenRepository.save(token);
