@@ -45,7 +45,8 @@ class CredentialsControllerTest {
     //        //assertEquals(TokenCredential.class, credentialsController.creerUtilisateur(utilisateur).getClass());
     //
     //    }
-    //
+
+    //    TODO: Fix the test
     //    /**
     //     * Tests the getConnexionToken method of the CredentialsController.
     //     * Verifies that a ResponseStatusException is thrown when the credentials are invalid.
