@@ -28,7 +28,7 @@ public class CredentialsController {
 
     @PostMapping("/login")
     public Token getConnexionToken(@RequestBody Credentials credentials) {
-        Token token = utilisateurService.Login(credentials);
+        Token token = utilisateurService.login(credentials);
         if (token != null) {
             return token;
         } else {
