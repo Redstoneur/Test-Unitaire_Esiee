@@ -21,5 +21,17 @@ public class EchangeService {
     public List<Echange> obtenirTousLesEchanges() {
         return echangeRepository.findAll();
     }
+    public Echange obtenirEchangeParId(Long id) {
+        return echangeRepository.findById(id).orElse(null);
+    }
+
+    public Echange mettreAJourEchange(Echange echange) {
+        return echangeRepository.save(echange);
+    }
+
+    public boolean echangeExist(Long id){
+        return echangeRepository.existsById(id);
+    }
+
 }
 

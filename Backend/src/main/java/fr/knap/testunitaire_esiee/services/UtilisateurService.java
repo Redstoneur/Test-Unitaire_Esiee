@@ -33,7 +33,7 @@ public class UtilisateurService {
         return null;
     }
 
-    public Token Login(Credentials credentials) {
+    public Token login(Credentials credentials) {
         if(utilisateurRepository.existsByMail(credentials.getMail()) && utilisateurRepository.existsByMdp(credentials.getMdp()))
         {
             return new Token(credentials.getMail(), credentials.getMdp());
