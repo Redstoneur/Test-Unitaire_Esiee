@@ -1,7 +1,7 @@
 package fr.knap.testunitaire_esiee.services;
 
 import fr.knap.testunitaire_esiee.model.Objet;
-import fr.knap.testunitaire_esiee.respository.ObjetRepository;
+import fr.knap.testunitaire_esiee.repository.ObjetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

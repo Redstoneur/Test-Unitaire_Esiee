@@ -1,7 +1,7 @@
 package fr.knap.testunitaire_esiee.services;
 
 import fr.knap.testunitaire_esiee.model.Echange;
-import fr.knap.testunitaire_esiee.respository.EchangeRepository;
+import fr.knap.testunitaire_esiee.repository.EchangeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
