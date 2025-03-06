@@ -31,7 +31,7 @@ public class Config {
 
         return args -> {
             for (int i = 0; i < 10; i++) {
-                Utilisateur user = new Utilisateur("hubbhubhbuhb" + i, "aaaa", "aaaaaa", "qiudifsiudfqs", "eiqrnoifbqiub");
+                Utilisateur user = new Utilisateur("hubbhubhbuhb" + i, "aaaa", "aaaaaa"+i, "qiudifsiudfqs", "eiqrnoifbqiub");
                 utilisateurRepository.save(user);
             }
             for (int i = 0; i < 5; i++) {

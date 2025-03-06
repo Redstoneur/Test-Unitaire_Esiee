@@ -24,11 +24,6 @@ public class UtilisateurController {
         return utilisateurService.obtenirUtilisateurParId(id);
     }
 
-    @PostMapping("/register")
-    public Utilisateur creerUtilisateur(@RequestBody Utilisateur utilisateur) {
-        return utilisateurService.creerUtilisateur(utilisateur);
-    }
-
     @PutMapping("/{id}")
     public Utilisateur mettreAJourUtilisateur(@PathVariable Long id, @RequestBody Utilisateur utilisateur) {
         return utilisateurService.mettreAJourUtilisateur(id, utilisateur);

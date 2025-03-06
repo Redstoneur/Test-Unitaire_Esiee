@@ -4,15 +4,21 @@ import fr.knap.testunitaire_esiee.model.Credentials;
 import fr.knap.testunitaire_esiee.model.Token;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.respository.UtilisateurRepository;
+import fr.knap.testunitaire_esiee.respository.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class UtilisateurService {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
+
+    @Autowired
+    private TokenRepository tokenRepository;
 
     public Utilisateur creerUtilisateur(Utilisateur utilisateur) {
         return utilisateurRepository.save(utilisateur);
@@ -34,21 +40,26 @@ public class UtilisateurService {
     }
 
     public Token login(Credentials credentials) {
-        if(utilisateurRepository.existsByMail(credentials.getMail()) && utilisateurRepository.existsByMdp(credentials.getMdp()))
-        {
-            return new Token(credentials.getMail(), credentials.getMdp());
-        } else {
-            return null;
+        Optional<Utilisateur> utilisateur = utilisateurRepository.findByMailAndMdp(credentials.getMail(), credentials.getMdp());
+        if (utilisateur.isPresent()) {
+            Token token = new Token(credentials.getMail(), credentials.getMdp());
+            return tokenRepository.save(token);
         }
+        return null;
     }
 
-    public Token disconnect(Token token) {
-        token.disconnect();
-        return token;
+    public boolean verifyToken(String tokenString) {
+        Optional<Token> token = tokenRepository.findByToken(tokenString);
+        return token.isPresent() && token.get().getExpirationDate().after(new Date());
     }
 
-    public boolean verifyToken(String token) {
- return Token.validateToken(token);
+    public void disconnect(String token) {
+        Optional<Token> tokenEntity = tokenRepository.findByToken(token);
+        if (tokenEntity.isPresent()) {
+            Token existingToken = tokenEntity.get();
+            existingToken.disconnect();
+            tokenRepository.save(existingToken);
+        }
     }
 
     public void supprimerUtilisateur(Long id) {
