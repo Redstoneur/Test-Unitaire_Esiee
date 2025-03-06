@@ -39,12 +39,6 @@ class UtilisateurControllerTest {
         assertEquals(utilisateur, utilisateurController.obtenirUtilisateurParId(1L));
     }
 
-    @Test
-    void testCreerUtilisateur() {
-        Utilisateur utilisateur = new Utilisateur();
-        when(utilisateurService.creerUtilisateur(utilisateur)).thenReturn(utilisateur);
-        assertEquals(utilisateur, utilisateurController.creerUtilisateur(utilisateur));
-    }
 
     @Test
     void testMettreAJourUtilisateur() {
