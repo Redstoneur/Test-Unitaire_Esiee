@@ -10,14 +10,14 @@ public abstract class Interaction {
      * @param object
      * @return
      */
-    public Object ConsulterObjet(Object object) {
+    public Object consulterObjet(Object object) {
         return null;
     }
 
     /**
      * @return
      */
-    public List<Objet> RechercheObjet() {
+    public List<Objet> rechercheObjet() {
         return List.of();
     }
 }

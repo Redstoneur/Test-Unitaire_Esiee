@@ -61,7 +61,7 @@ class UtilisateurServiceTest {
         Credentials credentials = new Credentials("test@mail.com", "password");
         when(utilisateurRepository.existsByMail(credentials.getMail())).thenReturn(true);
         when(utilisateurRepository.existsByMdp(credentials.getMdp())).thenReturn(true);
-        assertNotNull(utilisateurService.Login(credentials));
+        assertNotNull(utilisateurService.login(credentials));
     }
 
     @Test
