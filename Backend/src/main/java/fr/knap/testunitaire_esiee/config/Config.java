@@ -36,8 +36,7 @@ public class Config {
             for (int i = 0; i < 10; i++) {
                 Utilisateur user = new Utilisateur(
                         "hubbhubhbuhb" + i,
-                        "aaaa",
-                        "aaaaaa" + i,
+                        "aaaa", "aaaaaa" + i,
                         "qiudifsiudfqs",
                         "eiqrnoifbqiub"
                 );
