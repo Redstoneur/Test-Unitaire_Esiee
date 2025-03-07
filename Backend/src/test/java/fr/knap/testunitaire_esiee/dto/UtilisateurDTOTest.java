@@ -5,9 +5,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the UtilisateurDTO class.
+ */
 @SpringBootTest
 class UtilisateurDTOTest {
 
+    /**
+     * Tests the constructor with all parameters to ensure it sets all fields correctly.
+     */
     @Test
     void constructorWithAllParameters_SetsAllFields() {
         String pseudo = "user123";
@@ -21,6 +27,9 @@ class UtilisateurDTOTest {
         assertEquals(prenom, utilisateurDTO.getPrenom());
     }
 
+    /**
+     * Tests the constructor with pseudo parameter to ensure it sets the pseudo field only.
+     */
     @Test
     void constructorWithPseudo_SetsPseudoOnly() {
         String pseudo = "user123";
@@ -32,6 +41,9 @@ class UtilisateurDTOTest {
         assertNull(utilisateurDTO.getPrenom());
     }
 
+    /**
+     * Tests the setPseudo method to ensure it updates the pseudo field.
+     */
     @Test
     void setPseudo_UpdatesPseudo() {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO("initialPseudo");
@@ -41,6 +53,9 @@ class UtilisateurDTOTest {
         assertEquals(newPseudo, utilisateurDTO.getPseudo());
     }
 
+    /**
+     * Tests the setNom method to ensure it updates the nom field.
+     */
     @Test
     void setNom_UpdatesNom() {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO("user123");
@@ -50,6 +65,9 @@ class UtilisateurDTOTest {
         assertEquals(newNom, utilisateurDTO.getNom());
     }
 
+    /**
+     * Tests the setPrenom method to ensure it updates the prenom field.
+     */
     @Test
     void setPrenom_UpdatesPrenom() {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO("user123");

@@ -5,11 +5,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.time.LocalDateTime;
 
+/**
+ * Unit tests for the ObjetDTO class.
+ */
 @SpringBootTest
 class ObjetDTOTest {
 
+    /**
+     * Tests the constructor with parameters to ensure it sets all fields correctly.
+     */
     @Test
     void constructorWithParameters_SetsAllFields() {
         String nom = "Laptop";
@@ -29,6 +36,9 @@ class ObjetDTOTest {
         assertEquals(dateCreation, objetDTO.getDateCreation());
     }
 
+    /**
+     * Tests the setNom method to ensure it updates the nom field.
+     */
     @Test
     void setNom_UpdatesNom() {
         ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
@@ -38,6 +48,9 @@ class ObjetDTOTest {
         assertEquals(newNom, objetDTO.getNom());
     }
 
+    /**
+     * Tests the setDescription method to ensure it updates the description field.
+     */
     @Test
     void setDescription_UpdatesDescription() {
         ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
@@ -47,6 +60,9 @@ class ObjetDTOTest {
         assertEquals(newDescription, objetDTO.getDescription());
     }
 
+    /**
+     * Tests the setCategorie method to ensure it updates the categorie field.
+     */
     @Test
     void setCategorie_UpdatesCategorie() {
         ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
@@ -56,6 +72,9 @@ class ObjetDTOTest {
         assertEquals(newCategorie, objetDTO.getCategorie());
     }
 
+    /**
+     * Tests the setUtilisateur method to ensure it updates the utilisateur field.
+     */
     @Test
     void setUtilisateur_UpdatesUtilisateur() {
         ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
@@ -65,6 +84,9 @@ class ObjetDTOTest {
         assertEquals(newUtilisateur, objetDTO.getUtilisateur());
     }
 
+    /**
+     * Tests the setIdUtilisateur method to ensure it updates the idUtilisateur field.
+     */
     @Test
     void setIdUtilisateur_UpdatesIdUtilisateur() {
         ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
@@ -74,6 +96,9 @@ class ObjetDTOTest {
         assertEquals(newIdUtilisateur, objetDTO.getIdUtilisateur());
     }
 
+    /**
+     * Tests the setDateCreation method to ensure it updates the dateCreation field.
+     */
     @Test
     void setDateCreation_UpdatesDateCreation() {
         ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());

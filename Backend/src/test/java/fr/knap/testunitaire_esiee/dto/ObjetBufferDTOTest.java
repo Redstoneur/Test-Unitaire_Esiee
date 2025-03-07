@@ -5,11 +5,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the ObjetBufferDTO class.
+ */
 @SpringBootTest
 class ObjetBufferDTOTest {
 
+    /**
+     * Tests the constructor with parameters to ensure it sets all fields correctly.
+     */
     @Test
     void constructorWithParameters_SetsAllFields() {
         String nom = "Laptop";
@@ -25,6 +32,9 @@ class ObjetBufferDTOTest {
         assertEquals(dateCreation, objetBufferDTO.getDateCreation());
     }
 
+    /**
+     * Tests the setNom method to ensure it updates the nom field.
+     */
     @Test
     void setNom_UpdatesNom() {
         ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
@@ -34,6 +44,9 @@ class ObjetBufferDTOTest {
         assertEquals(newNom, objetBufferDTO.getNom());
     }
 
+    /**
+     * Tests the setDescription method to ensure it updates the description field.
+     */
     @Test
     void setDescription_UpdatesDescription() {
         ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
@@ -43,6 +56,9 @@ class ObjetBufferDTOTest {
         assertEquals(newDescription, objetBufferDTO.getDescription());
     }
 
+    /**
+     * Tests the setCategorie method to ensure it updates the categorie field.
+     */
     @Test
     void setCategorie_UpdatesCategorie() {
         ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
@@ -52,6 +68,9 @@ class ObjetBufferDTOTest {
         assertEquals(newCategorie, objetBufferDTO.getCategorie());
     }
 
+    /**
+     * Tests the setDateCreation method to ensure it updates the dateCreation field.
+     */
     @Test
     void setDateCreation_UpdatesDateCreation() {
         ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
