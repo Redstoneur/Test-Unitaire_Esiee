@@ -17,7 +17,7 @@ class ObjetTest {
      * Tests the constructor with parameters to ensure it sets all fields correctly.
      */
     @Test
-    void constructorWithParameters_SetsAllFields() {
+    void constructorWithParametersSetsAllFields() {
         Utilisateur utilisateur = new Utilisateur();
         String nom = "Laptop";
         String description = "A high-end gaming laptop";
@@ -37,7 +37,7 @@ class ObjetTest {
      * Tests the default constructor to ensure it sets all fields to null.
      */
     @Test
-    void defaultConstructor_SetsFieldsToNull() {
+    void defaultConstructorSetsFieldsToNull() {
         Objet objet = new Objet();
 
         assertNull(objet.getUtilisateur());
@@ -51,7 +51,7 @@ class ObjetTest {
      * Tests the setUtilisateur method to ensure it updates the utilisateur field.
      */
     @Test
-    void setUtilisateur_UpdatesUtilisateur() {
+    void setUtilisateurUpdatesUtilisateur() {
         Objet objet = new Objet();
         Utilisateur utilisateur = new Utilisateur();
         objet.setUtilisateur(utilisateur);
@@ -63,7 +63,7 @@ class ObjetTest {
      * Tests the setNom method to ensure it updates the nom field.
      */
     @Test
-    void setNom_UpdatesNom() {
+    void setNomUpdatesNom() {
         Objet objet = new Objet();
         String nom = "Smartphone";
         objet.setNom(nom);
@@ -75,7 +75,7 @@ class ObjetTest {
      * Tests the setDescription method to ensure it updates the description field.
      */
     @Test
-    void setDescription_UpdatesDescription() {
+    void setDescriptionUpdatesDescription() {
         Objet objet = new Objet();
         String description = "A brand new smartphone";
         objet.setDescription(description);
@@ -87,7 +87,7 @@ class ObjetTest {
      * Tests the setCategorie method to ensure it updates the categorie field.
      */
     @Test
-    void setCategorie_UpdatesCategorie() {
+    void setCategorieUpdatesCategorie() {
         Objet objet = new Objet();
         CategorieObjet categorie = CategorieObjet.ELECTROMENAGER;
         objet.setCategorie(categorie);
@@ -99,7 +99,7 @@ class ObjetTest {
      * Tests the setDateCreation method to ensure it updates the dateCreation field.
      */
     @Test
-    void setDateCreation_UpdatesDateCreation() {
+    void setDateCreationUpdatesDateCreation() {
         Objet objet = new Objet();
         LocalDateTime dateCreation = LocalDateTime.now();
         objet.setDateCreation(dateCreation);

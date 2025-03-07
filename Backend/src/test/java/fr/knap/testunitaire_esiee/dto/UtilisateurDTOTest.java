@@ -15,7 +15,7 @@ class UtilisateurDTOTest {
      * Tests the constructor with all parameters to ensure it sets all fields correctly.
      */
     @Test
-    void constructorWithAllParameters_SetsAllFields() {
+    void constructorWithAllParametersSetsAllFields() {
         String pseudo = "user123";
         String nom = "Doe";
         String prenom = "John";
@@ -31,7 +31,7 @@ class UtilisateurDTOTest {
      * Tests the constructor with pseudo parameter to ensure it sets the pseudo field only.
      */
     @Test
-    void constructorWithPseudo_SetsPseudoOnly() {
+    void constructorWithPseudoSetsPseudoOnly() {
         String pseudo = "user123";
 
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO(pseudo);
@@ -45,7 +45,7 @@ class UtilisateurDTOTest {
      * Tests the setPseudo method to ensure it updates the pseudo field.
      */
     @Test
-    void setPseudo_UpdatesPseudo() {
+    void setPseudoUpdatesPseudo() {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO("initialPseudo");
         String newPseudo = "updatedPseudo";
         utilisateurDTO.setPseudo(newPseudo);
@@ -57,7 +57,7 @@ class UtilisateurDTOTest {
      * Tests the setNom method to ensure it updates the nom field.
      */
     @Test
-    void setNom_UpdatesNom() {
+    void setNomUpdatesNom() {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO("user123");
         String newNom = "Smith";
         utilisateurDTO.setNom(newNom);
@@ -69,7 +69,7 @@ class UtilisateurDTOTest {
      * Tests the setPrenom method to ensure it updates the prenom field.
      */
     @Test
-    void setPrenom_UpdatesPrenom() {
+    void setPrenomUpdatesPrenom() {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO("user123");
         String newPrenom = "Jane";
         utilisateurDTO.setPrenom(newPrenom);

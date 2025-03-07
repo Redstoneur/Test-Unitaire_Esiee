@@ -46,7 +46,7 @@ class ObjetServiceTest {
      * Tests the creerObjet method to ensure it saves and returns the Objet object.
      */
     @Test
-    void creerObjet_SavesAndReturnsObjet() {
+    void creerObjetSavesAndReturnsObjet() {
         Objet objet = new Objet();
         when(objetRepository.save(objet)).thenReturn(objet);
 
@@ -60,7 +60,7 @@ class ObjetServiceTest {
      * Tests the obtenirTousLesObjets method to ensure it returns all Objet objects.
      */
     @Test
-    void obtenirTousLesObjets_ReturnsAllObjets() {
+    void obtenirTousLesObjetsReturnsAllObjets() {
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setPseudo("user123");
         utilisateur.setId(1L);
@@ -82,7 +82,7 @@ class ObjetServiceTest {
      * Tests the obtenirObjetParId method to ensure it returns the Objet object if it exists.
      */
     @Test
-    void obtenirObjetParId_ReturnsObjetIfExists() {
+    void obtenirObjetParIdReturnsObjetIfExists() {
         Long id = 1L;
         Objet objet = new Objet();
         when(objetRepository.findById(id)).thenReturn(Optional.of(objet));
@@ -97,7 +97,7 @@ class ObjetServiceTest {
      * Tests the obtenirObjetParId method to ensure it returns null if the Objet object does not exist.
      */
     @Test
-    void obtenirObjetParId_ReturnsNullIfNotExists() {
+    void obtenirObjetParIdReturnsNullIfNotExists() {
         Long id = 1L;
         when(objetRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -111,7 +111,7 @@ class ObjetServiceTest {
      * Tests the mettreAJourObjet method to ensure it saves and returns the updated Objet object.
      */
     @Test
-    void mettreAJourObjet_SavesAndReturnsUpdatedObjet() {
+    void mettreAJourObjetSavesAndReturnsUpdatedObjet() {
         Long id = 1L;
         Objet objet = new Objet();
         when(objetRepository.existsById(id)).thenReturn(true);
@@ -127,7 +127,7 @@ class ObjetServiceTest {
      * Tests the mettreAJourObjet method to ensure it returns null if the Objet object does not exist.
      */
     @Test
-    void mettreAJourObjet_ReturnsNullIfNotExists() {
+    void mettreAJourObjetReturnsNullIfNotExists() {
         Long id = 1L;
         Objet objet = new Objet();
         when(objetRepository.existsById(id)).thenReturn(false);
@@ -142,7 +142,7 @@ class ObjetServiceTest {
      * Tests the supprimerObjet method to ensure it deletes the Objet object.
      */
     @Test
-    void supprimerObjet_DeletesObjet() {
+    void supprimerObjetDeletesObjet() {
         Long id = 1L;
 
         objetService.supprimerObjet(id);
@@ -154,7 +154,7 @@ class ObjetServiceTest {
      * Tests the obtenirObjetsParUtilisateur method to ensure it returns the Objet objects if the user exists.
      */
     @Test
-    void obtenirObjetsParUtilisateur_ReturnsObjetsIfUserExists() {
+    void obtenirObjetsParUtilisateurReturnsObjetsIfUserExists() {
         Long idUtilisateur = 1L;
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setPseudo("user123");
@@ -179,7 +179,7 @@ class ObjetServiceTest {
      * Tests the obtenirObjetsParUtilisateur method to ensure it returns null if the user does not exist.
      */
     @Test
-    void obtenirObjetsParUtilisateur_ReturnsNullIfUserNotExists() {
+    void obtenirObjetsParUtilisateurReturnsNullIfUserNotExists() {
         Long idUtilisateur = 1L;
         when(utilisateurRepository.findById(idUtilisateur)).thenReturn(Optional.empty());
 

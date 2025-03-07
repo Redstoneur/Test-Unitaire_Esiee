@@ -15,7 +15,7 @@ class CategorieObjetTest {
      * Tests the valueOf method for the MOBILIER category.
      */
     @Test
-    void valueOf_Mobilier() {
+    void valueOfMobilier() {
         assertEquals(CategorieObjet.MOBILIER, CategorieObjet.valueOf("MOBILIER"));
     }
 
@@ -23,7 +23,7 @@ class CategorieObjetTest {
      * Tests the valueOf method for the JARDINAGE category.
      */
     @Test
-    void valueOf_Jardinage() {
+    void valueOfJardinage() {
         assertEquals(CategorieObjet.JARDINAGE, CategorieObjet.valueOf("JARDINAGE"));
     }
 
@@ -31,7 +31,7 @@ class CategorieObjetTest {
      * Tests the valueOf method for the INFORMATIQUE category.
      */
     @Test
-    void valueOf_Informatique() {
+    void valueOfInformatique() {
         assertEquals(CategorieObjet.INFORMATIQUE, CategorieObjet.valueOf("INFORMATIQUE"));
     }
 
@@ -39,7 +39,7 @@ class CategorieObjetTest {
      * Tests the valueOf method for the GAMING category.
      */
     @Test
-    void valueOf_Gaming() {
+    void valueOfGaming() {
         assertEquals(CategorieObjet.GAMING, CategorieObjet.valueOf("GAMING"));
     }
 
@@ -47,7 +47,7 @@ class CategorieObjetTest {
      * Tests the valueOf method for the OUTILS category.
      */
     @Test
-    void valueOf_Outils() {
+    void valueOfOutils() {
         assertEquals(CategorieObjet.OUTILS, CategorieObjet.valueOf("OUTILS"));
     }
 
@@ -55,7 +55,7 @@ class CategorieObjetTest {
      * Tests the valueOf method for the COLLECTION category.
      */
     @Test
-    void valueOf_Collection() {
+    void valueOfCollection() {
         assertEquals(CategorieObjet.COLLECTION, CategorieObjet.valueOf("COLLECTION"));
     }
 
@@ -63,7 +63,7 @@ class CategorieObjetTest {
      * Tests the valueOf method for the LITTERATURE category.
      */
     @Test
-    void valueOf_Litterature() {
+    void valueOfLitterature() {
         assertEquals(CategorieObjet.LITTERATURE, CategorieObjet.valueOf("LITTERATURE"));
     }
 
@@ -71,7 +71,7 @@ class CategorieObjetTest {
      * Tests the valueOf method for the VETEMENTS category.
      */
     @Test
-    void valueOf_Vetements() {
+    void valueOfVetements() {
         assertEquals(CategorieObjet.VETEMENTS, CategorieObjet.valueOf("VETEMENTS"));
     }
 
@@ -79,7 +79,7 @@ class CategorieObjetTest {
      * Tests the valueOf method for the ELECTROMENAGER category.
      */
     @Test
-    void valueOf_Electromenager() {
+    void valueOfElectromenager() {
         assertEquals(CategorieObjet.ELECTROMENAGER, CategorieObjet.valueOf("ELECTROMENAGER"));
     }
 
@@ -87,7 +87,7 @@ class CategorieObjetTest {
      * Tests the valueOf method for the AUTRE category.
      */
     @Test
-    void valueOf_Autre() {
+    void valueOfAutre() {
         assertEquals(CategorieObjet.AUTRE, CategorieObjet.valueOf("AUTRE"));
     }
 
@@ -95,7 +95,7 @@ class CategorieObjetTest {
      * Tests the valueOf method for an invalid category.
      */
     @Test
-    void valueOf_InvalidCategory() {
+    void valueOfInvalidCategory() {
         assertThrows(IllegalArgumentException.class, () -> CategorieObjet.valueOf("INVALID"));
     }
 
@@ -103,7 +103,7 @@ class CategorieObjetTest {
      * Tests the values method to ensure it contains all categories.
      */
     @Test
-    void values_ContainsAllCategories() {
+    void valuesContainsAllCategories() {
         CategorieObjet[] categories = CategorieObjet.values();
         assertEquals(10, categories.length);
         assertArrayEquals(new CategorieObjet[]{

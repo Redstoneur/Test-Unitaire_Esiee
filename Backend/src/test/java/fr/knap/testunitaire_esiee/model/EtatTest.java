@@ -15,7 +15,7 @@ class EtatTest {
      * Tests the valueOf method for the ATTENTE state.
      */
     @Test
-    void valueOf_Attente() {
+    void valueOfAttente() {
         assertEquals(Etat.ATTENTE, Etat.valueOf("ATTENTE"));
     }
 
@@ -23,7 +23,7 @@ class EtatTest {
      * Tests the valueOf method for the ACCEPTE state.
      */
     @Test
-    void valueOf_Accepte() {
+    void valueOfAccepte() {
         assertEquals(Etat.ACCEPTE, Etat.valueOf("ACCEPTE"));
     }
 
@@ -31,7 +31,7 @@ class EtatTest {
      * Tests the valueOf method for the REFUSE state.
      */
     @Test
-    void valueOf_Refuse() {
+    void valueOfRefuse() {
         assertEquals(Etat.REFUSE, Etat.valueOf("REFUSE"));
     }
 
@@ -39,7 +39,7 @@ class EtatTest {
      * Tests the valueOf method for the ANNULER state.
      */
     @Test
-    void valueOf_Annuler() {
+    void valueOfAnnuler() {
         assertEquals(Etat.ANNULER, Etat.valueOf("ANNULER"));
     }
 
@@ -47,7 +47,7 @@ class EtatTest {
      * Tests the valueOf method for an invalid state.
      */
     @Test
-    void valueOf_InvalidState() {
+    void valueOfInvalidState() {
         assertThrows(IllegalArgumentException.class, () -> Etat.valueOf("INVALID"));
     }
 
@@ -55,7 +55,7 @@ class EtatTest {
      * Tests the values method to ensure it contains all states.
      */
     @Test
-    void values_ContainsAllStates() {
+    void valuesContainsAllStates() {
         Etat[] states = Etat.values();
         assertEquals(4, states.length);
         assertArrayEquals(new Etat[]{

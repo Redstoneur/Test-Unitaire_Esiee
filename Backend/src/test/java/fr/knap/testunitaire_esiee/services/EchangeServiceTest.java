@@ -38,7 +38,7 @@ class EchangeServiceTest {
      * Tests the creerEchange method to ensure it saves and returns the Echange object.
      */
     @Test
-    void creerEchange_SavesAndReturnsEchange() {
+    void creerEchangeSavesAndReturnsEchange() {
         Echange echange = new Echange();
         when(echangeRepository.save(echange)).thenReturn(echange);
 
@@ -52,7 +52,7 @@ class EchangeServiceTest {
      * Tests the obtenirTousLesEchanges method to ensure it returns all Echange objects.
      */
     @Test
-    void obtenirTousLesEchanges_ReturnsAllEchanges() {
+    void obtenirTousLesEchangesReturnsAllEchanges() {
         List<Echange> echanges = Arrays.asList(new Echange(), new Echange());
         when(echangeRepository.findAll()).thenReturn(echanges);
 
@@ -66,7 +66,7 @@ class EchangeServiceTest {
      * Tests the obtenirEchangeParId method to ensure it returns the Echange object if it exists.
      */
     @Test
-    void obtenirEchangeParId_ReturnsEchangeIfExists() {
+    void obtenirEchangeParIdReturnsEchangeIfExists() {
         Long id = 1L;
         Echange echange = new Echange();
         when(echangeRepository.findById(id)).thenReturn(Optional.of(echange));
@@ -81,7 +81,7 @@ class EchangeServiceTest {
      * Tests the obtenirEchangeParId method to ensure it returns null if the Echange object does not exist.
      */
     @Test
-    void obtenirEchangeParId_ReturnsNullIfNotExists() {
+    void obtenirEchangeParIdReturnsNullIfNotExists() {
         Long id = 1L;
         when(echangeRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -95,7 +95,7 @@ class EchangeServiceTest {
      * Tests the mettreAJourEchange method to ensure it saves and returns the updated Echange object.
      */
     @Test
-    void mettreAJourEchange_SavesAndReturnsUpdatedEchange() {
+    void mettreAJourEchangeSavesAndReturnsUpdatedEchange() {
         Echange echange = new Echange();
         when(echangeRepository.save(echange)).thenReturn(echange);
 
@@ -109,7 +109,7 @@ class EchangeServiceTest {
      * Tests the echangeExist method to ensure it returns true if the Echange object exists.
      */
     @Test
-    void echangeExist_ReturnsTrueIfExists() {
+    void echangeExistReturnsTrueIfExists() {
         Long id = 1L;
         when(echangeRepository.existsById(id)).thenReturn(true);
 
@@ -123,7 +123,7 @@ class EchangeServiceTest {
      * Tests the echangeExist method to ensure it returns false if the Echange object does not exist.
      */
     @Test
-    void echangeExist_ReturnsFalseIfNotExists() {
+    void echangeExistReturnsFalseIfNotExists() {
         Long id = 1L;
         when(echangeRepository.existsById(id)).thenReturn(false);
 

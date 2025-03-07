@@ -46,7 +46,7 @@ class UtilisateurServiceTest {
      * Tests the creerUtilisateur method to ensure it saves and returns the Utilisateur object.
      */
     @Test
-    void creerUtilisateur_SavesAndReturnsUtilisateur() {
+    void creerUtilisateurSavesAndReturnsUtilisateur() {
         Utilisateur utilisateur = new Utilisateur();
         when(utilisateurRepository.save(utilisateur)).thenReturn(utilisateur);
 
@@ -60,7 +60,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirTousLesUtilisateurs method to ensure it returns all Utilisateur objects.
      */
     @Test
-    void obtenirTousLesUtilisateurs_ReturnsAllUtilisateurs() {
+    void obtenirTousLesUtilisateursReturnsAllUtilisateurs() {
         List<Utilisateur> utilisateurs = Arrays.asList(new Utilisateur(), new Utilisateur());
         when(utilisateurRepository.findAll()).thenReturn(utilisateurs);
 
@@ -74,7 +74,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirUtilisateurParId method to ensure it returns the Utilisateur object if it exists.
      */
     @Test
-    void obtenirUtilisateurParId_ReturnsUtilisateurIfExists() {
+    void obtenirUtilisateurParIdReturnsUtilisateurIfExists() {
         Long id = 1L;
         Utilisateur utilisateur = new Utilisateur();
         when(utilisateurRepository.findById(id)).thenReturn(Optional.of(utilisateur));
@@ -89,7 +89,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirUtilisateurParId method to ensure it returns null if the Utilisateur object does not exist.
      */
     @Test
-    void obtenirUtilisateurParId_ReturnsNullIfNotExists() {
+    void obtenirUtilisateurParIdReturnsNullIfNotExists() {
         Long id = 1L;
         when(utilisateurRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -103,7 +103,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirUtilisateurInfoParId method to ensure it returns the UtilisateurDTO object if the Utilisateur exists.
      */
     @Test
-    void obtenirUtilisateurInfoParId_ReturnsUtilisateurDTOIfExists() {
+    void obtenirUtilisateurInfoParIdReturnsUtilisateurDTOIfExists() {
         Long id = 1L;
         Utilisateur utilisateur = new Utilisateur(
                 "user123", "mdp", "Doe.John@mail.com", "Doe", "John"
@@ -122,7 +122,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirUtilisateurInfoParId method to ensure it returns null if the Utilisateur object does not exist.
      */
     @Test
-    void obtenirUtilisateurInfoParId_ReturnsNullIfNotExists() {
+    void obtenirUtilisateurInfoParIdReturnsNullIfNotExists() {
         Long id = 1L;
         when(utilisateurRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -136,7 +136,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirUtilisateurPseudoParId method to ensure it returns the UtilisateurDTO object with only the pseudo field if the Utilisateur exists.
      */
     @Test
-    void obtenirUtilisateurPseudoParId_ReturnsUtilisateurDTOPseudoIfExists() {
+    void obtenirUtilisateurPseudoParIdReturnsUtilisateurDTOPseudoIfExists() {
         Long id = 1L;
         Utilisateur utilisateur = new Utilisateur(
                 "user123", "mdp", "Doe.John@mail.com", "Doe", "John"
@@ -155,7 +155,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirUtilisateurPseudoParId method to ensure it returns null if the Utilisateur object does not exist.
      */
     @Test
-    void obtenirUtilisateurPseudoParId_ReturnsNullIfNotExists() {
+    void obtenirUtilisateurPseudoParIdReturnsNullIfNotExists() {
         Long id = 1L;
         when(utilisateurRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -169,7 +169,7 @@ class UtilisateurServiceTest {
      * Tests the mettreAJourUtilisateur method to ensure it saves and returns the updated Utilisateur object.
      */
     @Test
-    void mettreAJourUtilisateur_SavesAndReturnsUpdatedUtilisateur() {
+    void mettreAJourUtilisateurSavesAndReturnsUpdatedUtilisateur() {
         Long id = 1L;
         Utilisateur utilisateur = new Utilisateur();
         when(utilisateurRepository.existsById(id)).thenReturn(true);
@@ -185,7 +185,7 @@ class UtilisateurServiceTest {
      * Tests the mettreAJourUtilisateur method to ensure it returns null if the Utilisateur object does not exist.
      */
     @Test
-    void mettreAJourUtilisateur_ReturnsNullIfNotExists() {
+    void mettreAJourUtilisateurReturnsNullIfNotExists() {
         Long id = 1L;
         Utilisateur utilisateur = new Utilisateur();
         when(utilisateurRepository.existsById(id)).thenReturn(false);
@@ -200,7 +200,7 @@ class UtilisateurServiceTest {
      * Tests the login method to ensure it returns a Token object if the credentials are valid.
      */
     @Test
-    void login_ReturnsTokenIfCredentialsAreValid() {
+    void loginReturnsTokenIfCredentialsAreValid() {
         Credentials credentials = new Credentials("user@example.com", "password");
         Utilisateur utilisateur = new Utilisateur();
         when(utilisateurRepository.findByMailAndMdp(credentials.getMail(), credentials.getMdp())).thenReturn(Optional.of(utilisateur));
@@ -218,7 +218,7 @@ class UtilisateurServiceTest {
      * Tests the login method to ensure it returns null if the credentials are invalid.
      */
     @Test
-    void login_ReturnsNullIfCredentialsAreInvalid() {
+    void loginReturnsNullIfCredentialsAreInvalid() {
         Credentials credentials = new Credentials("user@example.com", "wrongpassword");
         when(utilisateurRepository.findByMailAndMdp(credentials.getMail(), credentials.getMdp())).thenReturn(Optional.empty());
 
@@ -233,7 +233,7 @@ class UtilisateurServiceTest {
      * Tests the verifyToken method to ensure it returns true if the token is valid.
      */
     @Test
-    void verifyToken_ReturnsTrueIfTokenIsValid() {
+    void verifyTokenReturnsTrueIfTokenIsValid() {
         String tokenString = "validToken";
         Token token = new Token();
         token.setExpirationDate(new Date(System.currentTimeMillis() + 10000));
@@ -249,7 +249,7 @@ class UtilisateurServiceTest {
      * Tests the verifyToken method to ensure it returns false if the token is invalid.
      */
     @Test
-    void verifyToken_ReturnsFalseIfTokenIsInvalid() {
+    void verifyTokenReturnsFalseIfTokenIsInvalid() {
         String tokenString = "invalidToken";
         when(tokenRepository.findByToken(tokenString)).thenReturn(Optional.empty());
 
@@ -263,7 +263,7 @@ class UtilisateurServiceTest {
      * Tests the disconnect method to ensure it invalidates the token.
      */
     @Test
-    void disconnect_InvalidatesToken() {
+    void disconnectInvalidatesToken() {
         String tokenString = "validToken";
         Token token = new Token();
         when(tokenRepository.findByToken(tokenString)).thenReturn(Optional.of(token));
@@ -279,7 +279,7 @@ class UtilisateurServiceTest {
      * Tests the supprimerUtilisateur method to ensure it deletes the Utilisateur object.
      */
     @Test
-    void supprimerUtilisateur_DeletesUtilisateur() {
+    void supprimerUtilisateurDeletesUtilisateur() {
         Long id = 1L;
 
         utilisateurService.supprimerUtilisateur(id);
@@ -291,7 +291,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirUtilisateurParMail method to ensure it returns the Utilisateur object if it exists.
      */
     @Test
-    void obtenirUtilisateurParMail_ReturnsUtilisateurIfExists() {
+    void obtenirUtilisateurParMailReturnsUtilisateurIfExists() {
         String mail = "user@example.com";
         Utilisateur utilisateur = new Utilisateur();
         when(utilisateurRepository.findByMail(mail)).thenReturn(Optional.of(utilisateur));
@@ -306,7 +306,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirUtilisateurParMail method to ensure it returns null if the Utilisateur object does not exist.
      */
     @Test
-    void obtenirUtilisateurParMail_ReturnsNullIfNotExists() {
+    void obtenirUtilisateurParMailReturnsNullIfNotExists() {
         String mail = "user@example.com";
         when(utilisateurRepository.findByMail(mail)).thenReturn(Optional.empty());
 
@@ -320,7 +320,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirUtilisateurParToken method to ensure it returns the Utilisateur object if the token exists.
      */
     @Test
-    void obtenirUtilisateurParToken_ReturnsUtilisateurIfTokenExists() {
+    void obtenirUtilisateurParTokenReturnsUtilisateurIfTokenExists() {
         String mail = "user@example.com";
         String mdp = "password";
         Token token = new Token(mail, mdp);
@@ -342,7 +342,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirUtilisateurParToken method to ensure it returns null if the token does not exist.
      */
     @Test
-    void obtenirUtilisateurParToken_ReturnsNullIfTokenNotExists() {
+    void obtenirUtilisateurParTokenReturnsNullIfTokenNotExists() {
         String tokenString = "invalidToken";
         when(tokenRepository.findByToken(tokenString)).thenReturn(Optional.empty());
 
@@ -357,7 +357,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirUtilisateurInfoParToken method to ensure it returns the UtilisateurDTO object if the token exists.
      */
     @Test
-    void obtenirUtilisateurInfoParToken_ReturnsUtilisateurDTOIfTokenExists() {
+    void obtenirUtilisateurInfoParTokenReturnsUtilisateurDTOIfTokenExists() {
         Utilisateur utilisateur = new Utilisateur(
                 "user123", "mdp", "Doe.John@mail.com", "Doe", "John"
         );
@@ -381,7 +381,7 @@ class UtilisateurServiceTest {
      * Tests the obtenirUtilisateurInfoParToken method to ensure it returns null if the token does not exist.
      */
     @Test
-    void obtenirUtilisateurInfoParToken_ReturnsNullIfTokenNotExists() {
+    void obtenirUtilisateurInfoParTokenReturnsNullIfTokenNotExists() {
         String tokenString = "invalidToken";
         when(tokenRepository.findByToken(tokenString)).thenReturn(Optional.empty());
 

@@ -15,7 +15,7 @@ class TokenCredentialDTOTest {
      * Tests the constructor with parameters to ensure it sets the token field correctly.
      */
     @Test
-    void constructorWithParameters_SetsToken() {
+    void constructorWithParametersSetsToken() {
         String token = "sampleToken";
         TokenCredentialDTO tokenCredentialDTO = new TokenCredentialDTO(token);
 
@@ -26,7 +26,7 @@ class TokenCredentialDTOTest {
      * Tests the setToken method to ensure it updates the token field.
      */
     @Test
-    void setToken_UpdatesToken() {
+    void setTokenUpdatesToken() {
         TokenCredentialDTO tokenCredentialDTO = new TokenCredentialDTO("initialToken");
         String newToken = "updatedToken";
         tokenCredentialDTO.setToken(newToken);
@@ -38,7 +38,7 @@ class TokenCredentialDTOTest {
      * Tests the getToken method to ensure it returns the token field.
      */
     @Test
-    void getToken_ReturnsToken() {
+    void getTokenReturnsToken() {
         String token = "sampleToken";
         TokenCredentialDTO tokenCredentialDTO = new TokenCredentialDTO(token);
 

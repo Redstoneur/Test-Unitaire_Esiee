@@ -43,7 +43,7 @@ class EchangeControllerTest {
      * Tests the creerEchange method to ensure it returns the created Echange.
      */
     @Test
-    void creerEchange_ReturnsCreatedEchange() {
+    void creerEchangeReturnsCreatedEchange() {
         Echange echange = new Echange();
         when(echangeService.creerEchange(echange)).thenReturn(echange);
 
@@ -57,7 +57,7 @@ class EchangeControllerTest {
      * Tests the obtenirTousLesEchanges method to ensure it returns all Echanges.
      */
     @Test
-    void obtenirTousLesEchanges_ReturnsAllEchanges() {
+    void obtenirTousLesEchangesReturnsAllEchanges() {
         List<Echange> echanges = Arrays.asList(new Echange(), new Echange());
         when(echangeService.obtenirTousLesEchanges()).thenReturn(echanges);
 
@@ -71,7 +71,7 @@ class EchangeControllerTest {
      * Tests the obtenirUnEchange method to ensure it returns the Echange if the token is valid.
      */
     @Test
-    void obtenirUnEchange_ReturnsEchangeIfTokenValid() {
+    void obtenirUnEchangeReturnsEchangeIfTokenValid() {
         Long id = 1L;
         String authToken = "validToken";
         Echange echange = new Echange();
@@ -89,7 +89,7 @@ class EchangeControllerTest {
      * Tests the obtenirUnEchange method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void obtenirUnEchange_ThrowsForbiddenIfTokenInvalid() {
+    void obtenirUnEchangeThrowsForbiddenIfTokenInvalid() {
         Long id = 1L;
         String authToken = "invalidToken";
         when(utilisateurService.verifyToken(authToken)).thenReturn(false);
@@ -107,7 +107,7 @@ class EchangeControllerTest {
      * Tests the mettreAJourEchange method to ensure it returns the updated Echange if valid.
      */
     @Test
-    void mettreAJourEchange_ReturnsUpdatedEchangeIfValid() {
+    void mettreAJourEchangeReturnsUpdatedEchangeIfValid() {
         String authToken = "validToken";
         Echange echange = new Echange();
         echange.setId(1L);
@@ -127,7 +127,7 @@ class EchangeControllerTest {
      * Tests the mettreAJourEchange method to ensure it throws an exception if the ID is null.
      */
     @Test
-    void mettreAJourEchange_ThrowsExceptionIfIdNull() {
+    void mettreAJourEchangeThrowsExceptionIfIdNull() {
         String authToken = "validToken";
         Echange echange = new Echange();
         when(utilisateurService.verifyToken(authToken)).thenReturn(true);
@@ -146,7 +146,7 @@ class EchangeControllerTest {
      * Tests the mettreAJourEchange method to ensure it throws an Unauthorized exception if the Echange does not exist.
      */
     @Test
-    void mettreAJourEchange_ThrowsUnauthorizedIfEchangeNotExist() {
+    void mettreAJourEchangeThrowsUnauthorizedIfEchangeNotExist() {
         String authToken = "validToken";
         Echange echange = new Echange();
         echange.setId(1L);
@@ -168,7 +168,7 @@ class EchangeControllerTest {
      * Tests the mettreAJourEchange method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void mettreAJourEchange_ThrowsForbiddenIfTokenInvalid() {
+    void mettreAJourEchangeThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
         Echange echange = new Echange();
         echange.setId(1L);
