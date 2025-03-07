@@ -1,5 +1,6 @@
 package fr.knap.testunitaire_esiee.services;
 
+import fr.knap.testunitaire_esiee.dto.UtilisateurDTO;
 import fr.knap.testunitaire_esiee.model.Credentials;
 import fr.knap.testunitaire_esiee.model.Token;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
@@ -39,6 +40,8 @@ public class UtilisateurService {
      * @return A list of all Utilisateur entities.
      */
     public List<Utilisateur> obtenirTousLesUtilisateurs() {
+
+
         return utilisateurRepository.findAll();
     }
 
@@ -50,6 +53,23 @@ public class UtilisateurService {
      */
     public Utilisateur obtenirUtilisateurParId(Long id) {
         return utilisateurRepository.findById(id).orElse(null);
+    }
+
+    public UtilisateurDTO obtenirUtilisateurInfoParId(Long id) {
+        Optional<Utilisateur> utilisateur = utilisateurRepository.findById(id);
+        if (utilisateur.isPresent()) {
+            Utilisateur u = utilisateur.get();
+            return new UtilisateurDTO(u.getPseudo(), u.getNom(), u.getPrenom());
+        }
+        return null;
+    }
+    public UtilisateurDTO obtenirUtilisateurPseudoParId(Long id) {
+        Optional<Utilisateur> utilisateur = utilisateurRepository.findById(id);
+        if (utilisateur.isPresent()) {
+            Utilisateur u = utilisateur.get();
+            return new UtilisateurDTO(u.getPseudo());
+        }
+        return null;
     }
 
     /**
