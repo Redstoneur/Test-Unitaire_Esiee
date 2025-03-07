@@ -1,19 +1,29 @@
 package fr.knap.testunitaire_esiee.services;
 
+import fr.knap.testunitaire_esiee.dto.ObjetDTO;
 import fr.knap.testunitaire_esiee.model.Objet;
+import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.repository.ObjetRepository;
+import fr.knap.testunitaire_esiee.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing Objet entities.
  */
 @Service
 public class ObjetService {
+
     @Autowired
     private ObjetRepository objetRepository;
+
+    @Autowired
+    private UtilisateurRepository utilisateurRepository;
 
     /**
      * Creates a new Objet.
@@ -30,8 +40,17 @@ public class ObjetService {
      *
      * @return A list of all Objet entities.
      */
-    public List<Objet> obtenirTousLesObjets() {
-        return objetRepository.findAll();
+    public List<ObjetDTO> obtenirTousLesObjets() {
+        List<Objet> objets = objetRepository.findAll();
+
+        List<ObjetDTO> tousLesObjets = new ArrayList<>();
+
+        objets.forEach(o -> {
+            Utilisateur utilisateur = o.getUtilisateur();
+            tousLesObjets.add(new ObjetDTO(o.getNom(), o.getDescription(), o.getCategorie(), utilisateur.getPseudo(), utilisateur.getId(), o.getDateCreation()));
+        });
+
+        return tousLesObjets;
     }
 
     /**
@@ -47,7 +66,7 @@ public class ObjetService {
     /**
      * Updates an existing Objet entity.
      *
-     * @param id The ID of the Objet entity to be updated.
+     * @param id    The ID of the Objet entity to be updated.
      * @param objet The Objet entity with updated information.
      * @return The updated Objet entity, or null if the entity does not exist.
      */
@@ -73,7 +92,16 @@ public class ObjetService {
      * @param idUtilisateur The ID of the user.
      * @return A list of Objet entities associated with the specified user ID.
      */
-    public List<Objet> obtenirObjetsParUtilisateur(Long idUtilisateur) {
-        return objetRepository.findByUtilisateurId(idUtilisateur);
+    public List<ObjetDTO> obtenirObjetsParUtilisateur(Long idUtilisateur) {
+        Optional<Utilisateur> utilisateur = utilisateurRepository.findById(idUtilisateur);
+
+        if (utilisateur.isPresent()) {
+            Utilisateur u = utilisateur.get();
+            List<Objet> objets = objetRepository.findByUtilisateurId(idUtilisateur);
+            return objets.stream()
+                    .map(o -> new ObjetDTO(o.getNom(), o.getDescription(), o.getCategorie(), u.getPseudo(), u.getId(), o.getDateCreation()))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 }

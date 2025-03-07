@@ -40,8 +40,6 @@ public class UtilisateurService {
      * @return A list of all Utilisateur entities.
      */
     public List<Utilisateur> obtenirTousLesUtilisateurs() {
-
-
         return utilisateurRepository.findAll();
     }
 
@@ -55,6 +53,12 @@ public class UtilisateurService {
         return utilisateurRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Retrieves a UtilisateurDTO by its ID.
+     *
+     * @param id The ID of the Utilisateur entity.
+     * @return The UtilisateurDTO with the specified ID, or null if not found.
+     */
     public UtilisateurDTO obtenirUtilisateurInfoParId(Long id) {
         Optional<Utilisateur> utilisateur = utilisateurRepository.findById(id);
         if (utilisateur.isPresent()) {
@@ -63,6 +67,13 @@ public class UtilisateurService {
         }
         return null;
     }
+
+    /**
+     * Retrieves a UtilisateurDTO with only the pseudo by its ID.
+     *
+     * @param id The ID of the Utilisateur entity.
+     * @return The UtilisateurDTO with the specified ID, or null if not found.
+     */
     public UtilisateurDTO obtenirUtilisateurPseudoParId(Long id) {
         Optional<Utilisateur> utilisateur = utilisateurRepository.findById(id);
         if (utilisateur.isPresent()) {
@@ -75,7 +86,7 @@ public class UtilisateurService {
     /**
      * Updates an existing Utilisateur entity.
      *
-     * @param id The ID of the Utilisateur entity to be updated.
+     * @param id          The ID of the Utilisateur entity to be updated.
      * @param utilisateur The Utilisateur entity with updated information.
      * @return The updated Utilisateur entity, or null if the entity does not exist.
      */
@@ -135,5 +146,44 @@ public class UtilisateurService {
      */
     public void supprimerUtilisateur(Long id) {
         utilisateurRepository.deleteById(id);
+    }
+
+    /**
+     * Retrieves a Utilisateur entity by its email.
+     *
+     * @param mail The email of the Utilisateur entity.
+     * @return The Utilisateur entity with the specified email, or null if not found.
+     */
+    public Utilisateur obtenirUtilisateurParMail(String mail) {
+        Optional<Utilisateur> utilisateur = utilisateurRepository.findByMail(mail);
+        return utilisateur.orElse(null);
+    }
+
+    /**
+     * Retrieves a Utilisateur entity by its token.
+     *
+     * @param token The token of the Utilisateur entity.
+     * @return The Utilisateur entity with the specified token, or null if not found.
+     */
+    public Utilisateur obtenirUtilisateurParToken(String token) {
+        Optional<Token> tokenEntity = tokenRepository.findByToken(token);
+        if (tokenEntity.isPresent()) {
+            return obtenirUtilisateurParMail(Token.getEmail(token));
+        }
+        return null;
+    }
+
+    /**
+     * Retrieves a UtilisateurDTO by its token.
+     *
+     * @param token The token of the Utilisateur entity.
+     * @return The UtilisateurDTO with the specified token, or null if not found.
+     */
+    public UtilisateurDTO obtenirUtilisateurInfoParToken(String token) {
+        Utilisateur u = obtenirUtilisateurParToken(token);
+        if (u == null) {
+            return null;
+        }
+        return new UtilisateurDTO(u.getPseudo(), u.getNom(), u.getPrenom());
     }
 }

@@ -1,12 +1,16 @@
 package fr.knap.testunitaire_esiee.controller;
 
-import fr.knap.testunitaire_esiee.model.*;
+import fr.knap.testunitaire_esiee.dto.TokenCredentialDTO;
+import fr.knap.testunitaire_esiee.model.Credentials;
+import fr.knap.testunitaire_esiee.model.Token;
+import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,6 +19,7 @@ import static org.mockito.Mockito.*;
 /**
  * Unit tests for the CredentialsController class.
  */
+@SpringBootTest
 class CredentialsControllerTest {
 
     @Mock
@@ -24,65 +29,134 @@ class CredentialsControllerTest {
     private CredentialsController credentialsController;
 
     /**
-     * Sets up the test environment before each test.
-     * Initializes mocks and injects them into the controller.
+     * Initializes mocks for the test class.
      */
-    @BeforeEach
-    void setUp() {
+    public CredentialsControllerTest() {
         MockitoAnnotations.openMocks(this);
     }
 
-    //    TODO: Fix the test
-    //   /**
-    //     * Tests the createUtilisateur method of the CredentialsController.
-    //     * Verifies that a ResponseStatusException is thrown when the user already exists.
-    //     */
-    //    @Test
-    //    void testCreerUtilisateur() {
-    //        Utilisateur utilisateur = new Utilisateur("ddd","test","test@gmail.com","nulle","nulle", new ArrayList<>());
-    //        System.out.println(credentialsController.creerUtilisateur(utilisateur));
-    //        assertTrue(false);
-    //        //assertEquals(TokenCredential.class, credentialsController.creerUtilisateur(utilisateur).getClass());
-    //
-    //    }
-
-    //    TODO: Fix the test
-    //    /**
-    //     * Tests the getConnexionToken method of the CredentialsController.
-    //     * Verifies that a ResponseStatusException is thrown when the credentials are invalid.
-    //     */
-    //    @Test
-    //    void testGetConnexionToken() {
-    //        Credentials credentials = new Credentials("aaaaaa", "aaaa");
-    //        assertEquals(Token.class,credentialsController.getConnexionToken(credentials).getClass());
-    //    }
-
     /**
-     * Tests the disconnect method of the CredentialsController.
-     * Verifies that a ResponseStatusException is thrown when the token is valid.
+     * Tests the creerUtilisateur method to ensure it returns a TokenCredentialDTO.
      */
     @Test
-    void testDisconnect() {
-        Token token = new Token("test@mail.com", "password");
-        when(utilisateurService.verifyToken(token.getToken())).thenReturn(true);
-        doNothing().when(utilisateurService).disconnect(token.getToken());
-        assertThrows(
-                ResponseStatusException.class,
-                () -> credentialsController.disconnect(new TokenCredential(token.getToken()))
-        );
+    void creerUtilisateur_ReturnsTokenCredentialDTO() {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setMail("user@example.com");
+        utilisateur.setMdp("password");
+        Token token = new Token();
+        token.setToken("sampleToken");
+
+        when(utilisateurService.creerUtilisateur(utilisateur)).thenReturn(utilisateur);
+        when(utilisateurService.login(any(Credentials.class))).thenReturn(token);
+
+        TokenCredentialDTO result = credentialsController.creerUtilisateur(utilisateur);
+
+        assertEquals("sampleToken", result.getToken());
+        verify(utilisateurService, times(1)).creerUtilisateur(utilisateur);
+        verify(utilisateurService, times(1)).login(any(Credentials.class));
     }
 
     /**
-     * Tests the verifyToken method of the CredentialsController.
-     * Verifies that a ResponseStatusException is thrown when the token is valid.
+     * Tests the getConnexionToken method to ensure it returns a TokenCredentialDTO if credentials are valid.
      */
     @Test
-    void testVerifyToken() {
-        Token token = new Token("test@mail.com", "password");
-        when(utilisateurService.verifyToken(token.getToken())).thenReturn(true);
-        assertThrows(
-                ResponseStatusException.class,
-                () -> credentialsController.verifyToken(new TokenCredential(token.getToken()))
-        );
+    void getConnexionToken_ReturnsTokenCredentialDTOIfValid() {
+        Credentials credentials = new Credentials("user@example.com", "password");
+        Token token = new Token();
+        token.setToken("sampleToken");
+
+        when(utilisateurService.login(credentials)).thenReturn(token);
+
+        TokenCredentialDTO result = credentialsController.getConnexionToken(credentials);
+
+        assertEquals("sampleToken", result.getToken());
+        verify(utilisateurService, times(1)).login(credentials);
+    }
+
+    /**
+     * Tests the getConnexionToken method to ensure it throws an exception if credentials are invalid.
+     */
+    @Test
+    void getConnexionToken_ThrowsExceptionIfInvalid() {
+        Credentials credentials = new Credentials("user@example.com", "wrongpassword");
+
+        when(utilisateurService.login(credentials)).thenReturn(null);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            credentialsController.getConnexionToken(credentials);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        verify(utilisateurService, times(1)).login(credentials);
+    }
+
+    /**
+     * Tests the disconnect method to ensure it invalidates the token if it is valid.
+     */
+    @Test
+    void disconnect_InvalidatesTokenIfValid() {
+        TokenCredentialDTO tokenDTO = new TokenCredentialDTO("validToken");
+
+        when(utilisateurService.verifyToken(tokenDTO.getToken())).thenReturn(true);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            credentialsController.disconnect(tokenDTO);
+        });
+
+        assertEquals(HttpStatus.OK, exception.getStatusCode());
+        verify(utilisateurService, times(1)).verifyToken(tokenDTO.getToken());
+        verify(utilisateurService, times(1)).disconnect(tokenDTO.getToken());
+    }
+
+    /**
+     * Tests the disconnect method to ensure it throws an exception if the token is invalid.
+     */
+    @Test
+    void disconnect_ThrowsExceptionIfInvalid() {
+        TokenCredentialDTO tokenDTO = new TokenCredentialDTO("invalidToken");
+
+        when(utilisateurService.verifyToken(tokenDTO.getToken())).thenReturn(false);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            credentialsController.disconnect(tokenDTO);
+        });
+
+        assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatusCode());
+        verify(utilisateurService, times(1)).verifyToken(tokenDTO.getToken());
+        verify(utilisateurService, times(0)).disconnect(tokenDTO.getToken());
+    }
+
+    /**
+     * Tests the verifyToken method to ensure it returns OK if the token is valid.
+     */
+    @Test
+    void verifyToken_ReturnsOkIfValid() {
+        TokenCredentialDTO tokenDTO = new TokenCredentialDTO("validToken");
+
+        when(utilisateurService.verifyToken(tokenDTO.getToken())).thenReturn(true);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            credentialsController.verifyToken(tokenDTO);
+        });
+
+        assertEquals(HttpStatus.OK, exception.getStatusCode());
+        verify(utilisateurService, times(1)).verifyToken(tokenDTO.getToken());
+    }
+
+    /**
+     * Tests the verifyToken method to ensure it throws an exception if the token is invalid.
+     */
+    @Test
+    void verifyToken_ThrowsExceptionIfInvalid() {
+        TokenCredentialDTO tokenDTO = new TokenCredentialDTO("invalidToken");
+
+        when(utilisateurService.verifyToken(tokenDTO.getToken())).thenReturn(false);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            credentialsController.verifyToken(tokenDTO);
+        });
+
+        assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatusCode());
+        verify(utilisateurService, times(1)).verifyToken(tokenDTO.getToken());
     }
 }

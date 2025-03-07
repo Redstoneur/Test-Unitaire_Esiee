@@ -1,4 +1,4 @@
-package fr.knap.testunitaire_esiee.model;
+package fr.knap.testunitaire_esiee.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class TokenCredential {
+public class TokenCredentialDTO {
 
     /**
      * The token string.
@@ -16,11 +16,11 @@ public class TokenCredential {
     private String token;
 
     /**
-     * Constructs a new TokenCredential object with the specified token.
+     * Constructs a new TokenCredentialDTO object with the specified token.
      *
      * @param token The token string.
      */
-    public TokenCredential(String token) {
+    public TokenCredentialDTO(String token) {
         this.token = token;
     }
 

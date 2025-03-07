@@ -1,12 +1,23 @@
 package fr.knap.testunitaire_esiee.controller;
 
+import fr.knap.testunitaire_esiee.dto.ObjetBufferDTO;
+import fr.knap.testunitaire_esiee.dto.ObjetDTO;
+import fr.knap.testunitaire_esiee.model.CategorieObjet;
 import fr.knap.testunitaire_esiee.model.Objet;
+import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.services.ObjetService;
-import org.junit.jupiter.api.BeforeEach;
+import fr.knap.testunitaire_esiee.services.UtilisateurService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -14,83 +25,225 @@ import static org.mockito.Mockito.*;
 /**
  * Unit tests for the ObjetController class.
  */
+@SpringBootTest
 class ObjetControllerTest {
 
     @Mock
     private ObjetService objetService;
 
+    @Mock
+    private UtilisateurService utilisateurService;
+
     @InjectMocks
     private ObjetController objetController;
 
     /**
-     * Sets up the test environment before each test.
-     * Initializes mocks and injects them into the controller.
+     * Initializes mocks for the test class.
      */
-    @BeforeEach
-    void setUp() {
+    public ObjetControllerTest() {
         MockitoAnnotations.openMocks(this);
     }
 
     /**
-     * Tests the creerObjet method of the ObjetController.
-     * Verifies that the created Objet entity is returned correctly.
+     * Tests the creerObjet method to ensure it returns the created Objet if the token is valid.
      */
     @Test
-    void testCreerObjet() {
-        Objet objet = new Objet();
-        when(objetService.creerObjet(objet)).thenReturn(objet);
-        assertEquals(objet, objetController.creerObjet(objet));
+    void creerObjet_ReturnsCreatedObjetIfTokenValid() {
+        String authToken = "validToken";
+        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
+        Utilisateur utilisateur = new Utilisateur();
+        Objet objet = new Objet(utilisateur, "Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
+
+        when(utilisateurService.verifyToken(authToken)).thenReturn(true);
+        when(utilisateurService.obtenirUtilisateurParToken(authToken)).thenReturn(utilisateur);
+        when(objetService.creerObjet(any(Objet.class))).thenReturn(objet);
+
+        Objet result = objetController.creerObjet(authToken, objetBufferDTO);
+
+        assertEquals(objet, result);
+        verify(utilisateurService, times(1)).verifyToken(authToken);
+        verify(utilisateurService, times(1)).obtenirUtilisateurParToken(authToken);
+        verify(objetService, times(1)).creerObjet(any(Objet.class));
     }
 
     /**
-     * Tests the obtenirTousLesObjets method of the ObjetController.
-     * Verifies that the obtenirTousLesObjets method of the ObjetService is called once.
+     * Tests the creerObjet method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void testObtenirTousLesObjets() {
-        objetController.obtenirTousLesObjets();
+    void creerObjet_ThrowsForbiddenIfTokenInvalid() {
+        String authToken = "invalidToken";
+        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
+
+        when(utilisateurService.verifyToken(authToken)).thenReturn(false);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            objetController.creerObjet(authToken, objetBufferDTO);
+        });
+
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        verify(utilisateurService, times(1)).verifyToken(authToken);
+        verify(utilisateurService, times(0)).obtenirUtilisateurParToken(anyString());
+        verify(objetService, times(0)).creerObjet(any(Objet.class));
+    }
+
+    /**
+     * Tests the obtenirTousLesObjets method to ensure it returns all Objets.
+     */
+    @Test
+    void obtenirTousLesObjets_ReturnsAllObjets() {
+        List<ObjetDTO> objets = Arrays.asList(
+                new ObjetDTO(
+                        "Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE,
+                        "John Doe", 1L, LocalDateTime.now()
+                ),
+                new ObjetDTO(
+                        "Smartphone", "A high-end smartphone", CategorieObjet.INFORMATIQUE,
+                        "Jane Doe", 2L, LocalDateTime.now()
+                )
+        );
+        when(objetService.obtenirTousLesObjets()).thenReturn(objets);
+
+        List<ObjetDTO> result = objetController.obtenirTousLesObjets();
+
+        assertEquals(objets, result);
         verify(objetService, times(1)).obtenirTousLesObjets();
     }
 
     /**
-     * Tests the obtenirObjetsParUtilisateur method of the ObjetController.
-     * Verifies that the obtenirObjetsParUtilisateur method of the ObjetService is called once.
+     * Tests the obtenirObjetsParUtilisateur method to ensure it returns Objets if the token is valid.
      */
     @Test
-    void testObtenirObjetsParUtilisateur() {
-        objetController.obtenirObjetsParUtilisateur(1L);
-        verify(objetService, times(1)).obtenirObjetsParUtilisateur(1L);
+    void obtenirObjetsParUtilisateur_ReturnsObjetsIfTokenValid() {
+        String authToken = "validToken";
+        Long idUtilisateur = 1L;
+        List<ObjetDTO> objets = Arrays.asList(
+                new ObjetDTO(
+                        "Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE,
+                        "John Doe", 1L, LocalDateTime.now()
+                ),
+                new ObjetDTO(
+                        "Smartphone", "A high-end smartphone", CategorieObjet.INFORMATIQUE,
+                        "Jane Doe", 2L, LocalDateTime.now()
+                )
+        );
+
+        when(utilisateurService.verifyToken(authToken)).thenReturn(true);
+        when(objetService.obtenirObjetsParUtilisateur(idUtilisateur)).thenReturn(objets);
+
+        List<ObjetDTO> result = objetController.obtenirObjetsParUtilisateur(authToken, idUtilisateur);
+
+        assertEquals(objets, result);
+        verify(utilisateurService, times(1)).verifyToken(authToken);
+        verify(objetService, times(1)).obtenirObjetsParUtilisateur(idUtilisateur);
     }
 
     /**
-     * Tests the obtenirObjetParId method of the ObjetController.
-     * Verifies that the correct Objet entity is returned for the given ID.
+     * Tests the obtenirObjetsParUtilisateur method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void testObtenirObjetParId() {
+    void obtenirObjetsParUtilisateur_ThrowsForbiddenIfTokenInvalid() {
+        String authToken = "invalidToken";
+        Long idUtilisateur = 1L;
+
+        when(utilisateurService.verifyToken(authToken)).thenReturn(false);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            objetController.obtenirObjetsParUtilisateur(authToken, idUtilisateur);
+        });
+
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        verify(utilisateurService, times(1)).verifyToken(authToken);
+        verify(objetService, times(0)).obtenirObjetsParUtilisateur(anyLong());
+    }
+
+    /**
+     * Tests the obtenirObjetParId method to ensure it returns the Objet if it exists.
+     */
+    @Test
+    void obtenirObjetParId_ReturnsObjetIfExists() {
+        Long id = 1L;
         Objet objet = new Objet();
-        when(objetService.obtenirObjetParId(1L)).thenReturn(objet);
-        assertEquals(objet, objetController.obtenirObjetParId(1L));
+        when(objetService.obtenirObjetParId(id)).thenReturn(objet);
+
+        Objet result = objetController.obtenirObjetParId(id);
+
+        assertEquals(objet, result);
+        verify(objetService, times(1)).obtenirObjetParId(id);
     }
 
     /**
-     * Tests the mettreAJourObjet method of the ObjetController.
-     * Verifies that the updated Objet entity is returned correctly.
+     * Tests the mettreAJourObjet method to ensure it returns the updated Objet if the token is valid.
      */
     @Test
-    void testMettreAJourObjet() {
+    void mettreAJourObjet_ReturnsUpdatedObjetIfTokenValid() {
+        String authToken = "validToken";
+        Long id = 1L;
         Objet objet = new Objet();
-        when(objetService.mettreAJourObjet(1L, objet)).thenReturn(objet);
-        assertEquals(objet, objetController.mettreAJourObjet(1L, objet));
+        when(utilisateurService.verifyToken(authToken)).thenReturn(true);
+        when(objetService.mettreAJourObjet(id, objet)).thenReturn(objet);
+
+        Objet result = objetController.mettreAJourObjet(authToken, id, objet);
+
+        assertEquals(objet, result);
+        verify(utilisateurService, times(1)).verifyToken(authToken);
+        verify(objetService, times(1)).mettreAJourObjet(id, objet);
     }
 
     /**
-     * Tests the supprimerObjet method of the ObjetController.
-     * Verifies that the supprimerObjet method of the ObjetService is called once.
+     * Tests the mettreAJourObjet method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void testSupprimerObjet() {
-        objetController.supprimerObjet(1L);
-        verify(objetService, times(1)).supprimerObjet(1L);
+    void mettreAJourObjet_ThrowsForbiddenIfTokenInvalid() {
+        String authToken = "invalidToken";
+        Long id = 1L;
+        Objet objet = new Objet();
+
+        when(utilisateurService.verifyToken(authToken)).thenReturn(false);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            objetController.mettreAJourObjet(authToken, id, objet);
+        });
+
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        verify(utilisateurService, times(1)).verifyToken(authToken);
+        verify(objetService, times(0)).mettreAJourObjet(anyLong(), any(Objet.class));
+    }
+
+    /**
+     * Tests the supprimerObjet method to ensure it deletes the Objet if the token is valid.
+     */
+    @Test
+    void supprimerObjet_DeletesObjetIfTokenValid() {
+        String authToken = "validToken";
+        Long id = 1L;
+
+        when(utilisateurService.verifyToken(authToken)).thenReturn(true);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            objetController.supprimerObjet(authToken, id);
+        });
+
+        assertEquals(HttpStatus.OK, exception.getStatusCode());
+        verify(utilisateurService, times(1)).verifyToken(authToken);
+        verify(objetService, times(1)).supprimerObjet(id);
+    }
+
+    /**
+     * Tests the supprimerObjet method to ensure it throws a Forbidden exception if the token is invalid.
+     */
+    @Test
+    void supprimerObjet_ThrowsForbiddenIfTokenInvalid() {
+        String authToken = "invalidToken";
+        Long id = 1L;
+
+        when(utilisateurService.verifyToken(authToken)).thenReturn(false);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            objetController.supprimerObjet(authToken, id);
+        });
+
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        verify(utilisateurService, times(1)).verifyToken(authToken);
+        verify(objetService, times(0)).supprimerObjet(anyLong());
     }
 }

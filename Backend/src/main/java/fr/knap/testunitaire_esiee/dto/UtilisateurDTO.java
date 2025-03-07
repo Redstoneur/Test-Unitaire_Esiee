@@ -1,42 +1,49 @@
 package fr.knap.testunitaire_esiee.dto;
 
-    public class UtilisateurDTO {
-        private String pseudo;
-        private String nom;
-        private String prenom;
+import lombok.Getter;
+import lombok.Setter;
 
-        public UtilisateurDTO(String pseudo, String nom, String prenom) {
-            this.pseudo = pseudo;
-            this.nom = nom;
-            this.prenom = prenom;
-        }
+/**
+ * Data Transfer Object (DTO) representing a user.
+ */
+@Getter
+@Setter
+public class UtilisateurDTO {
 
-        public UtilisateurDTO(String pseudo) {
-            this.pseudo = pseudo;
-        }
+    /**
+     * The pseudo of the user.
+     */
+    private String pseudo;
 
-        // Getters and setters
-        public String getPseudo() {
-            return pseudo;
-        }
+    /**
+     * The last name of the user.
+     */
+    private String nom;
 
-        public void setPseudo(String pseudo) {
-            this.pseudo = pseudo;
-        }
+    /**
+     * The first name of the user.
+     */
+    private String prenom;
 
-        public String getNom() {
-            return nom;
-        }
-
-        public void setNom(String nom) {
-            this.nom = nom;
-        }
-
-        public String getPrenom() {
-            return prenom;
-        }
-
-        public void setPrenom(String prenom) {
-            this.prenom = prenom;
-        }
+    /**
+     * Constructs a new UtilisateurDTO with the specified pseudo, last name, and first name.
+     *
+     * @param pseudo the pseudo of the user
+     * @param nom the last name of the user
+     * @param prenom the first name of the user
+     */
+    public UtilisateurDTO(String pseudo, String nom, String prenom) {
+        this.pseudo = pseudo;
+        this.nom = nom;
+        this.prenom = prenom;
     }
+
+    /**
+     * Constructs a new UtilisateurDTO with the specified pseudo.
+     *
+     * @param pseudo the pseudo of the user
+     */
+    public UtilisateurDTO(String pseudo) {
+        this.pseudo = pseudo;
+    }
+}
