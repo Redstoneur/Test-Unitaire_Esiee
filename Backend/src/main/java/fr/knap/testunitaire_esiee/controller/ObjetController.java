@@ -107,8 +107,10 @@ public class ObjetController {
      */
     @DeleteMapping("/{id}")
     public void supprimerObjet(@RequestHeader("Authorization") String authToken, @PathVariable Long id) {
-        if(utilisateurService.verifyToken(authToken))
+        if(utilisateurService.verifyToken(authToken)){
             objetService.supprimerObjet(id);
+            throw new ResponseStatusException(HttpStatus.OK, "Object deleted");
+        }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
     }
 

@@ -94,8 +94,10 @@ public class UtilisateurController {
      */
     @DeleteMapping("/{id}")
     public void supprimerUtilisateur(@RequestHeader("Authorization") String authToken, @PathVariable Long id) {
-        if (utilisateurService.verifyToken(authToken))
+        if (utilisateurService.verifyToken(authToken)){
             utilisateurService.supprimerUtilisateur(id);
+            throw new ResponseStatusException(HttpStatus.OK, "User deleted");
+        }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid token");
     }
 }
