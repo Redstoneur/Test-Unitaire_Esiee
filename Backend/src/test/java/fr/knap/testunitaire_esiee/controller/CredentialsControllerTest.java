@@ -16,6 +16,9 @@ import org.springframework.web.server.ResponseStatusException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the CredentialsController class.
+ */
 @SpringBootTest
 class CredentialsControllerTest {
 
@@ -25,10 +28,16 @@ class CredentialsControllerTest {
     @InjectMocks
     private CredentialsController credentialsController;
 
+    /**
+     * Initializes mocks for the test class.
+     */
     public CredentialsControllerTest() {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Tests the creerUtilisateur method to ensure it returns a TokenCredentialDTO.
+     */
     @Test
     void creerUtilisateur_ReturnsTokenCredentialDTO() {
         Utilisateur utilisateur = new Utilisateur();
@@ -47,6 +56,9 @@ class CredentialsControllerTest {
         verify(utilisateurService, times(1)).login(any(Credentials.class));
     }
 
+    /**
+     * Tests the getConnexionToken method to ensure it returns a TokenCredentialDTO if credentials are valid.
+     */
     @Test
     void getConnexionToken_ReturnsTokenCredentialDTOIfValid() {
         Credentials credentials = new Credentials("user@example.com", "password");
@@ -61,6 +73,9 @@ class CredentialsControllerTest {
         verify(utilisateurService, times(1)).login(credentials);
     }
 
+    /**
+     * Tests the getConnexionToken method to ensure it throws an exception if credentials are invalid.
+     */
     @Test
     void getConnexionToken_ThrowsExceptionIfInvalid() {
         Credentials credentials = new Credentials("user@example.com", "wrongpassword");
@@ -75,6 +90,9 @@ class CredentialsControllerTest {
         verify(utilisateurService, times(1)).login(credentials);
     }
 
+    /**
+     * Tests the disconnect method to ensure it invalidates the token if it is valid.
+     */
     @Test
     void disconnect_InvalidatesTokenIfValid() {
         TokenCredentialDTO tokenDTO = new TokenCredentialDTO("validToken");
@@ -90,6 +108,9 @@ class CredentialsControllerTest {
         verify(utilisateurService, times(1)).disconnect(tokenDTO.getToken());
     }
 
+    /**
+     * Tests the disconnect method to ensure it throws an exception if the token is invalid.
+     */
     @Test
     void disconnect_ThrowsExceptionIfInvalid() {
         TokenCredentialDTO tokenDTO = new TokenCredentialDTO("invalidToken");
@@ -105,6 +126,9 @@ class CredentialsControllerTest {
         verify(utilisateurService, times(0)).disconnect(tokenDTO.getToken());
     }
 
+    /**
+     * Tests the verifyToken method to ensure it returns OK if the token is valid.
+     */
     @Test
     void verifyToken_ReturnsOkIfValid() {
         TokenCredentialDTO tokenDTO = new TokenCredentialDTO("validToken");
@@ -119,6 +143,9 @@ class CredentialsControllerTest {
         verify(utilisateurService, times(1)).verifyToken(tokenDTO.getToken());
     }
 
+    /**
+     * Tests the verifyToken method to ensure it throws an exception if the token is invalid.
+     */
     @Test
     void verifyToken_ThrowsExceptionIfInvalid() {
         TokenCredentialDTO tokenDTO = new TokenCredentialDTO("invalidToken");

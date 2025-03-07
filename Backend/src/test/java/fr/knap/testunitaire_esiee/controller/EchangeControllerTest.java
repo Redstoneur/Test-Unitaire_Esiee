@@ -17,6 +17,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the EchangeController class.
+ */
 @SpringBootTest
 class EchangeControllerTest {
 
@@ -29,10 +32,16 @@ class EchangeControllerTest {
     @InjectMocks
     private EchangeController echangeController;
 
+    /**
+     * Initializes mocks for the test class.
+     */
     public EchangeControllerTest() {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Tests the creerEchange method to ensure it returns the created Echange.
+     */
     @Test
     void creerEchange_ReturnsCreatedEchange() {
         Echange echange = new Echange();
@@ -44,6 +53,9 @@ class EchangeControllerTest {
         verify(echangeService, times(1)).creerEchange(echange);
     }
 
+    /**
+     * Tests the obtenirTousLesEchanges method to ensure it returns all Echanges.
+     */
     @Test
     void obtenirTousLesEchanges_ReturnsAllEchanges() {
         List<Echange> echanges = Arrays.asList(new Echange(), new Echange());
@@ -55,6 +67,9 @@ class EchangeControllerTest {
         verify(echangeService, times(1)).obtenirTousLesEchanges();
     }
 
+    /**
+     * Tests the obtenirUnEchange method to ensure it returns the Echange if the token is valid.
+     */
     @Test
     void obtenirUnEchange_ReturnsEchangeIfTokenValid() {
         Long id = 1L;
@@ -70,6 +85,9 @@ class EchangeControllerTest {
         verify(echangeService, times(1)).obtenirEchangeParId(id);
     }
 
+    /**
+     * Tests the obtenirUnEchange method to ensure it throws a Forbidden exception if the token is invalid.
+     */
     @Test
     void obtenirUnEchange_ThrowsForbiddenIfTokenInvalid() {
         Long id = 1L;
@@ -85,6 +103,9 @@ class EchangeControllerTest {
         verify(echangeService, times(0)).obtenirEchangeParId(id);
     }
 
+    /**
+     * Tests the mettreAJourEchange method to ensure it returns the updated Echange if valid.
+     */
     @Test
     void mettreAJourEchange_ReturnsUpdatedEchangeIfValid() {
         String authToken = "validToken";
@@ -102,6 +123,9 @@ class EchangeControllerTest {
         verify(echangeService, times(1)).mettreAJourEchange(echange);
     }
 
+    /**
+     * Tests the mettreAJourEchange method to ensure it throws an exception if the ID is null.
+     */
     @Test
     void mettreAJourEchange_ThrowsExceptionIfIdNull() {
         String authToken = "validToken";
@@ -118,6 +142,9 @@ class EchangeControllerTest {
         verify(echangeService, times(0)).mettreAJourEchange(any(Echange.class));
     }
 
+    /**
+     * Tests the mettreAJourEchange method to ensure it throws an Unauthorized exception if the Echange does not exist.
+     */
     @Test
     void mettreAJourEchange_ThrowsUnauthorizedIfEchangeNotExist() {
         String authToken = "validToken";
@@ -137,6 +164,9 @@ class EchangeControllerTest {
         verify(echangeService, times(0)).mettreAJourEchange(any(Echange.class));
     }
 
+    /**
+     * Tests the mettreAJourEchange method to ensure it throws a Forbidden exception if the token is invalid.
+     */
     @Test
     void mettreAJourEchange_ThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";

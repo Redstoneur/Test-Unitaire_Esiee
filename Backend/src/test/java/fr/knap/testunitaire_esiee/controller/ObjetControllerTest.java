@@ -22,6 +22,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the ObjetController class.
+ */
 @SpringBootTest
 class ObjetControllerTest {
 
@@ -34,10 +37,16 @@ class ObjetControllerTest {
     @InjectMocks
     private ObjetController objetController;
 
+    /**
+     * Initializes mocks for the test class.
+     */
     public ObjetControllerTest() {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Tests the creerObjet method to ensure it returns the created Objet if the token is valid.
+     */
     @Test
     void creerObjet_ReturnsCreatedObjetIfTokenValid() {
         String authToken = "validToken";
@@ -57,6 +66,9 @@ class ObjetControllerTest {
         verify(objetService, times(1)).creerObjet(any(Objet.class));
     }
 
+    /**
+     * Tests the creerObjet method to ensure it throws a Forbidden exception if the token is invalid.
+     */
     @Test
     void creerObjet_ThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
@@ -74,6 +86,9 @@ class ObjetControllerTest {
         verify(objetService, times(0)).creerObjet(any(Objet.class));
     }
 
+    /**
+     * Tests the obtenirTousLesObjets method to ensure it returns all Objets.
+     */
     @Test
     void obtenirTousLesObjets_ReturnsAllObjets() {
         List<ObjetDTO> objets = Arrays.asList(
@@ -94,6 +109,9 @@ class ObjetControllerTest {
         verify(objetService, times(1)).obtenirTousLesObjets();
     }
 
+    /**
+     * Tests the obtenirObjetsParUtilisateur method to ensure it returns Objets if the token is valid.
+     */
     @Test
     void obtenirObjetsParUtilisateur_ReturnsObjetsIfTokenValid() {
         String authToken = "validToken";
@@ -119,6 +137,9 @@ class ObjetControllerTest {
         verify(objetService, times(1)).obtenirObjetsParUtilisateur(idUtilisateur);
     }
 
+    /**
+     * Tests the obtenirObjetsParUtilisateur method to ensure it throws a Forbidden exception if the token is invalid.
+     */
     @Test
     void obtenirObjetsParUtilisateur_ThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
@@ -135,6 +156,9 @@ class ObjetControllerTest {
         verify(objetService, times(0)).obtenirObjetsParUtilisateur(anyLong());
     }
 
+    /**
+     * Tests the obtenirObjetParId method to ensure it returns the Objet if it exists.
+     */
     @Test
     void obtenirObjetParId_ReturnsObjetIfExists() {
         Long id = 1L;
@@ -147,6 +171,9 @@ class ObjetControllerTest {
         verify(objetService, times(1)).obtenirObjetParId(id);
     }
 
+    /**
+     * Tests the mettreAJourObjet method to ensure it returns the updated Objet if the token is valid.
+     */
     @Test
     void mettreAJourObjet_ReturnsUpdatedObjetIfTokenValid() {
         String authToken = "validToken";
@@ -162,6 +189,9 @@ class ObjetControllerTest {
         verify(objetService, times(1)).mettreAJourObjet(id, objet);
     }
 
+    /**
+     * Tests the mettreAJourObjet method to ensure it throws a Forbidden exception if the token is invalid.
+     */
     @Test
     void mettreAJourObjet_ThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
@@ -179,6 +209,9 @@ class ObjetControllerTest {
         verify(objetService, times(0)).mettreAJourObjet(anyLong(), any(Objet.class));
     }
 
+    /**
+     * Tests the supprimerObjet method to ensure it deletes the Objet if the token is valid.
+     */
     @Test
     void supprimerObjet_DeletesObjetIfTokenValid() {
         String authToken = "validToken";
@@ -195,6 +228,9 @@ class ObjetControllerTest {
         verify(objetService, times(1)).supprimerObjet(id);
     }
 
+    /**
+     * Tests the supprimerObjet method to ensure it throws a Forbidden exception if the token is invalid.
+     */
     @Test
     void supprimerObjet_ThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
