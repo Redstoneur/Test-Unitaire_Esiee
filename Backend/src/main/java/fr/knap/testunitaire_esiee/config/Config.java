@@ -73,12 +73,11 @@ public class Config {
             utilisateurRepository.save(user4);
             utilisateurRepository.save(user5);
 
-            for (int i = 0; i < 5; i++) {
                 Objet objet = new Objet(
                         utilisateurService.obtenirUtilisateurParId(1L), "NVIDIA RTX 4070SUPER", "Carte graphique Nvidia RTX 4070SUPER",
                         CategorieObjet.GAMING, LocalDateTime.now());
                 objetRepository.save(objet);
-            }
+
             Objet objet1 = new Objet(
                     utilisateurService.obtenirUtilisateurParId(1L), "Fauteuil IKEA Markus", "Fauteuil de bureau ergonomique avec support lombaire.",
                     CategorieObjet.MOBILIER, LocalDateTime.now());
