@@ -15,6 +15,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the EchangeService class.
+ */
 @SpringBootTest
 class EchangeServiceTest {
 
@@ -24,10 +27,16 @@ class EchangeServiceTest {
     @InjectMocks
     private EchangeService echangeService;
 
+    /**
+     * Initializes mocks for the test class.
+     */
     public EchangeServiceTest() {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Tests the creerEchange method to ensure it saves and returns the Echange object.
+     */
     @Test
     void creerEchange_SavesAndReturnsEchange() {
         Echange echange = new Echange();
@@ -39,6 +48,9 @@ class EchangeServiceTest {
         verify(echangeRepository, times(1)).save(echange);
     }
 
+    /**
+     * Tests the obtenirTousLesEchanges method to ensure it returns all Echange objects.
+     */
     @Test
     void obtenirTousLesEchanges_ReturnsAllEchanges() {
         List<Echange> echanges = Arrays.asList(new Echange(), new Echange());
@@ -50,6 +62,9 @@ class EchangeServiceTest {
         verify(echangeRepository, times(1)).findAll();
     }
 
+    /**
+     * Tests the obtenirEchangeParId method to ensure it returns the Echange object if it exists.
+     */
     @Test
     void obtenirEchangeParId_ReturnsEchangeIfExists() {
         Long id = 1L;
@@ -62,6 +77,9 @@ class EchangeServiceTest {
         verify(echangeRepository, times(1)).findById(id);
     }
 
+    /**
+     * Tests the obtenirEchangeParId method to ensure it returns null if the Echange object does not exist.
+     */
     @Test
     void obtenirEchangeParId_ReturnsNullIfNotExists() {
         Long id = 1L;
@@ -73,6 +91,9 @@ class EchangeServiceTest {
         verify(echangeRepository, times(1)).findById(id);
     }
 
+    /**
+     * Tests the mettreAJourEchange method to ensure it saves and returns the updated Echange object.
+     */
     @Test
     void mettreAJourEchange_SavesAndReturnsUpdatedEchange() {
         Echange echange = new Echange();
@@ -84,6 +105,9 @@ class EchangeServiceTest {
         verify(echangeRepository, times(1)).save(echange);
     }
 
+    /**
+     * Tests the echangeExist method to ensure it returns true if the Echange object exists.
+     */
     @Test
     void echangeExist_ReturnsTrueIfExists() {
         Long id = 1L;
@@ -95,6 +119,9 @@ class EchangeServiceTest {
         verify(echangeRepository, times(1)).existsById(id);
     }
 
+    /**
+     * Tests the echangeExist method to ensure it returns false if the Echange object does not exist.
+     */
     @Test
     void echangeExist_ReturnsFalseIfNotExists() {
         Long id = 1L;

@@ -20,6 +20,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the ObjetService class.
+ */
 @SpringBootTest
 class ObjetServiceTest {
 
@@ -32,10 +35,16 @@ class ObjetServiceTest {
     @InjectMocks
     private ObjetService objetService;
 
+    /**
+     * Initializes mocks for the test class.
+     */
     public ObjetServiceTest() {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Tests the creerObjet method to ensure it saves and returns the Objet object.
+     */
     @Test
     void creerObjet_SavesAndReturnsObjet() {
         Objet objet = new Objet();
@@ -47,6 +56,9 @@ class ObjetServiceTest {
         verify(objetRepository, times(1)).save(objet);
     }
 
+    /**
+     * Tests the obtenirTousLesObjets method to ensure it returns all Objet objects.
+     */
     @Test
     void obtenirTousLesObjets_ReturnsAllObjets() {
         Utilisateur utilisateur = new Utilisateur();
@@ -66,6 +78,9 @@ class ObjetServiceTest {
         verify(objetRepository, times(1)).findAll();
     }
 
+    /**
+     * Tests the obtenirObjetParId method to ensure it returns the Objet object if it exists.
+     */
     @Test
     void obtenirObjetParId_ReturnsObjetIfExists() {
         Long id = 1L;
@@ -78,6 +93,9 @@ class ObjetServiceTest {
         verify(objetRepository, times(1)).findById(id);
     }
 
+    /**
+     * Tests the obtenirObjetParId method to ensure it returns null if the Objet object does not exist.
+     */
     @Test
     void obtenirObjetParId_ReturnsNullIfNotExists() {
         Long id = 1L;
@@ -89,6 +107,9 @@ class ObjetServiceTest {
         verify(objetRepository, times(1)).findById(id);
     }
 
+    /**
+     * Tests the mettreAJourObjet method to ensure it saves and returns the updated Objet object.
+     */
     @Test
     void mettreAJourObjet_SavesAndReturnsUpdatedObjet() {
         Long id = 1L;
@@ -102,6 +123,9 @@ class ObjetServiceTest {
         verify(objetRepository, times(1)).save(objet);
     }
 
+    /**
+     * Tests the mettreAJourObjet method to ensure it returns null if the Objet object does not exist.
+     */
     @Test
     void mettreAJourObjet_ReturnsNullIfNotExists() {
         Long id = 1L;
@@ -114,6 +138,9 @@ class ObjetServiceTest {
         verify(objetRepository, times(0)).save(objet);
     }
 
+    /**
+     * Tests the supprimerObjet method to ensure it deletes the Objet object.
+     */
     @Test
     void supprimerObjet_DeletesObjet() {
         Long id = 1L;
@@ -123,6 +150,9 @@ class ObjetServiceTest {
         verify(objetRepository, times(1)).deleteById(id);
     }
 
+    /**
+     * Tests the obtenirObjetsParUtilisateur method to ensure it returns the Objet objects if the user exists.
+     */
     @Test
     void obtenirObjetsParUtilisateur_ReturnsObjetsIfUserExists() {
         Long idUtilisateur = 1L;
@@ -130,8 +160,8 @@ class ObjetServiceTest {
         utilisateur.setPseudo("user123");
         utilisateur.setId(idUtilisateur);
 
-        Objet objet1 = new Objet(utilisateur,"Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
-        Objet objet2 = new Objet(utilisateur,"Smartphone", "A brand new smartphone", CategorieObjet.ELECTROMENAGER, LocalDateTime.now());
+        Objet objet1 = new Objet(utilisateur, "Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
+        Objet objet2 = new Objet(utilisateur, "Smartphone", "A brand new smartphone", CategorieObjet.ELECTROMENAGER, LocalDateTime.now());
 
         when(utilisateurRepository.findById(idUtilisateur)).thenReturn(Optional.of(utilisateur));
         when(objetRepository.findByUtilisateurId(idUtilisateur)).thenReturn(Arrays.asList(objet1, objet2));
@@ -145,6 +175,9 @@ class ObjetServiceTest {
         verify(objetRepository, times(1)).findByUtilisateurId(idUtilisateur);
     }
 
+    /**
+     * Tests the obtenirObjetsParUtilisateur method to ensure it returns null if the user does not exist.
+     */
     @Test
     void obtenirObjetsParUtilisateur_ReturnsNullIfUserNotExists() {
         Long idUtilisateur = 1L;
