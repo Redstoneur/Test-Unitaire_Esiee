@@ -33,7 +33,6 @@ public class Config {
             EchangeRepository echangeRepository,
             UtilisateurService utilisateurService,
             ObjetService objetService) {
-
         return args -> {
             List<Utilisateur> utilisateurs = new ArrayList<>();
 
