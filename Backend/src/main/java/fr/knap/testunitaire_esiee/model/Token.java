@@ -1,5 +1,6 @@
 package fr.knap.testunitaire_esiee.model;
 
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -43,6 +44,11 @@ public class Token {
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     /**
+     * The separator used to separate the email and password in the token subject.
+     */
+    private static final String separator = "#";
+
+    /**
      * Constructs a new Token object with the specified email and password.
      * Generates a token string and sets the expiration date to 1 hour from the current time.
      *
@@ -52,7 +58,7 @@ public class Token {
     public Token(String mail, String mdp) {
         this.expirationDate = new Date(System.currentTimeMillis() + 3600000); // 1 hour expiration
         this.token = Jwts.builder()
-                .setSubject(mail + mdp)
+                .setSubject(mail + separator + mdp)
                 .setIssuedAt(new Date())
                 .setExpiration(this.expirationDate)
                 .signWith(key)
@@ -97,7 +103,7 @@ public class Token {
      * @return The email of the token.
      */
     public static String getEmail(String token) {
-        return getSubject(token).split(" ")[0];
+        return getSubject(token).split(separator)[0];
     }
 
     /**
