@@ -49,13 +49,6 @@ public class Utilisateur {
     private String prenom;
 
     /**
-     * The list of objects associated with the user.
-     */
-    @OneToMany
-    @JoinColumn(name = "OBJET_ID")
-    private List<Objet> objets;
-
-    /**
      * Constructs a new Utilisateur object with the specified details.
      *
      * @param pseudo The username of the user.
@@ -70,26 +63,6 @@ public class Utilisateur {
         this.mail = mail;
         this.nom = nom;
         this.prenom = prenom;
-        this.objets = new ArrayList<>();
-    }
-
-    /**
-     * Constructs a new Utilisateur object with the specified details and list of objects.
-     *
-     * @param pseudo The username of the user.
-     * @param mdp    The password of the user.
-     * @param mail   The email of the user.
-     * @param nom    The last name of the user.
-     * @param prenom The first name of the user.
-     * @param objets The list of objects associated with the user.
-     */
-    public Utilisateur(String pseudo, String mdp, String mail, String nom, String prenom, List<Objet> objets) {
-        this.pseudo = pseudo;
-        this.mdp = mdp;
-        this.mail = mail;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.objets = objets;
     }
 
     /**

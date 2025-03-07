@@ -32,8 +32,6 @@ class UtilisateurTest {
         assertEquals(mail, utilisateur.getMail());
         assertEquals(nom, utilisateur.getNom());
         assertEquals(prenom, utilisateur.getPrenom());
-        assertNotNull(utilisateur.getObjets());
-        assertTrue(utilisateur.getObjets().isEmpty());
     }
 
     /**
@@ -46,17 +44,14 @@ class UtilisateurTest {
         String mail = "user@example.com";
         String nom = "Doe";
         String prenom = "John";
-        List<Objet> objets = new ArrayList<>();
-        objets.add(new Objet());
 
-        Utilisateur utilisateur = new Utilisateur(pseudo, mdp, mail, nom, prenom, objets);
+        Utilisateur utilisateur = new Utilisateur(pseudo, mdp, mail, nom, prenom);
 
         assertEquals(pseudo, utilisateur.getPseudo());
         assertEquals(mdp, utilisateur.getMdp());
         assertEquals(mail, utilisateur.getMail());
         assertEquals(nom, utilisateur.getNom());
         assertEquals(prenom, utilisateur.getPrenom());
-        assertEquals(objets, utilisateur.getObjets());
     }
 
     /**
@@ -71,7 +66,6 @@ class UtilisateurTest {
         assertNull(utilisateur.getMail());
         assertNull(utilisateur.getNom());
         assertNull(utilisateur.getPrenom());
-        assertNull(utilisateur.getObjets());
     }
 
     /**
@@ -132,18 +126,5 @@ class UtilisateurTest {
         utilisateur.setPrenom(prenom);
 
         assertEquals(prenom, utilisateur.getPrenom());
-    }
-
-    /**
-     * Tests the setObjets method to ensure it updates the objets field.
-     */
-    @Test
-    void setObjets_UpdatesObjets() {
-        Utilisateur utilisateur = new Utilisateur();
-        List<Objet> objets = new ArrayList<>();
-        objets.add(new Objet());
-        utilisateur.setObjets(objets);
-
-        assertEquals(objets, utilisateur.getObjets());
     }
 }
