@@ -136,4 +136,29 @@ public class UtilisateurService {
     public void supprimerUtilisateur(Long id) {
         utilisateurRepository.deleteById(id);
     }
+
+    /**
+     * Retrieves a Utilisateur entity by its email.
+     *
+     * @param mail The email of the Utilisateur entity.
+     * @return The Utilisateur entity with the specified email, or null if not found.
+     */
+    public Utilisateur obtenirUtilisateurParMail(String mail) {
+        Optional<Utilisateur> utilisateur = utilisateurRepository.findByMail(mail);
+        return utilisateur.orElse(null);
+    }
+
+    /**
+     * Retrieves a Utilisateur entity by its token.
+     *
+     * @param token The token of the Utilisateur entity.
+     * @return The Utilisateur entity with the specified token, or null if not found.
+     */
+    public Utilisateur obtenirUtilisateurParToken(String token) {
+        Optional<Token> tokenEntity = tokenRepository.findByToken(token);
+        if (tokenEntity.isPresent()) {
+            return obtenirUtilisateurParMail(Token.getEmail(token));
+        }
+        return null;
+    }
 }

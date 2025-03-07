@@ -91,6 +91,16 @@ public class Token {
     }
 
     /**
+     * Retrieves the email from the specified token.
+     *
+     * @param token The token from which to retrieve the email.
+     * @return The email of the token.
+     */
+    public static String getEmail(String token) {
+        return getSubject(token).split(" ")[0];
+    }
+
+    /**
      * Disconnects the token by setting its expiration date to the current time.
      */
     public void disconnect() {

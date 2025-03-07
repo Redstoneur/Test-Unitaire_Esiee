@@ -1,7 +1,10 @@
 package fr.knap.testunitaire_esiee.controller;
 
 import fr.knap.testunitaire_esiee.model.Objet;
+import fr.knap.testunitaire_esiee.model.ObjetBuffer;
+import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.services.ObjetService;
+import fr.knap.testunitaire_esiee.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,10 @@ public class ObjetController {
     @Autowired
     private ObjetService objetService;
 
+    @Autowired
+    private UtilisateurService utilisateurService;
+
+
     /**
      * Creates a new object.
      *
@@ -24,7 +31,16 @@ public class ObjetController {
      * @return The created object.
      */
     @PostMapping
-    public Objet creerObjet(@RequestBody Objet objet) {
+    public Objet creerObjet(@RequestHeader("Authorization") String authToken, @RequestBody ObjetBuffer objetBuffer) {
+        Utilisateur utilisateur = utilisateurService.obtenirUtilisateurParToken(authToken);
+
+        Objet objet = new Objet(
+                utilisateur,
+                objetBuffer.getNom(),
+                objetBuffer.getDescription(),
+                objetBuffer.getCategorie(),
+                objetBuffer.getDateCreation()
+        );
         return objetService.creerObjet(objet);
     }
 
@@ -63,7 +79,7 @@ public class ObjetController {
     /**
      * Updates an existing object.
      *
-     * @param id The ID of the object to update.
+     * @param id    The ID of the object to update.
      * @param objet The updated object data.
      * @return The updated object.
      */

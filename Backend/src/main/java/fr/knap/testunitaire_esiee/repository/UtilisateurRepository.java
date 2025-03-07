@@ -21,4 +21,12 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
      * @return An Optional containing the found Utilisateur, or empty if not found.
      */
     Optional<Utilisateur> findByMailAndMdp(String mail, String mdp);
+
+    /**
+     * Finds a user by email.
+     *
+     * @param mail The email of the user.
+     * @return An Optional containing the found Utilisateur, or empty if not found.
+     */
+    Optional<Utilisateur> findByMail(String mail);
 }
