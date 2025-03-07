@@ -1,72 +1,73 @@
 package fr.knap.testunitaire_esiee.model;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Unit tests for the Token class.
- */
+import java.util.Date;
+
 @SpringBootTest
 class TokenTest {
 
-    private static Token token;
-
-    /**
-     * Sets up the test environment before all tests.
-     * Initializes the Token instance with test data.
-     */
-    @BeforeAll
-    static void setUp() {
-        token = new Token("test@mail.com", "password");
-    }
-
-    /**
-     * Tests the token creation.
-     * Verifies that the token is not null after creation.
-     */
     @Test
-    void testTokenCreation() {
+    void constructorWithParameters_SetsTokenAndExpirationDate() {
+        String mail = "user@example.com";
+        String mdp = "password123";
+        Token token = new Token(mail, mdp);
+
         assertNotNull(token.getToken());
+        assertNotNull(token.getExpirationDate());
+        assertTrue(token.getExpirationDate().after(new Date()));
     }
 
-    /**
-     * Tests the token validation.
-     * Verifies that a valid token is correctly validated.
-     */
     @Test
-    void testTokenValidation() {
+    void defaultConstructor_SetsFieldsToNull() {
+        Token token = new Token();
+
+        assertNull(token.getToken());
+        assertNull(token.getExpirationDate());
+    }
+
+    @Test
+    void validateToken_ValidToken_ReturnsTrue() {
+        String mail = "user@example.com";
+        String mdp = "password123";
+        Token token = new Token(mail, mdp);
+
         assertTrue(Token.validateToken(token.getToken()));
     }
 
-    /**
-     * Tests the token invalidation.
-     * Verifies that an invalid token is correctly invalidated.
-     */
     @Test
-    void testTokenInvalidation() {
+    void validateToken_InvalidToken_ReturnsFalse() {
         assertFalse(Token.validateToken("invalidToken"));
     }
 
-    /**
-     * Tests the token subject retrieval.
-     * Verifies that the subject of the token is returned correctly.
-     */
     @Test
-    void testTokenSubject() {
-        assertEquals("test@mail.compassword", Token.getSubject(token.getToken()));
+    void getSubject_ValidToken_ReturnsSubject() {
+        String mail = "user@example.com";
+        String mdp = "password123";
+        Token token = new Token(mail, mdp);
+
+        assertEquals(mail + "#" + mdp, Token.getSubject(token.getToken()));
     }
 
-    // TODO: Fix the test
-    // /**
-    //  * Tests the token disconnection.
-    //  * Verifies that the token is disconnected correctly.
-    //  */
-    // @Test
-    // void testTokenDisconnect() {
-    //     token.disconnect();
-    //     assertNull(token.getToken());
-    // }
+    @Test
+    void getEmail_ValidToken_ReturnsEmail() {
+        String mail = "user@example.com";
+        String mdp = "password123";
+        Token token = new Token(mail, mdp);
+
+        assertEquals(mail, Token.getEmail(token.getToken()));
+    }
+
+    @Test
+    void disconnect_SetsExpirationDateToCurrentTime() {
+        String mail = "user@example.com";
+        String mdp = "password123";
+        Token token = new Token(mail, mdp);
+        token.disconnect();
+
+        assertTrue(token.getExpirationDate().before(new Date()) || token.getExpirationDate().equals(new Date()));
+    }
 }

@@ -1,117 +1,118 @@
 package fr.knap.testunitaire_esiee.model;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Unit tests for the Utilisateur class.
- */
 @SpringBootTest
 class UtilisateurTest {
 
-    private static Utilisateur utilisateur;
-    private static Utilisateur utilisateur2;
-    private static Utilisateur utilisateur3;
-
-    /**
-     * Sets up the test environment before all tests.
-     * Initializes the Utilisateur instances with test data.
-     */
-    @BeforeAll
-    static void setUp() {
-        utilisateur = new Utilisateur();
-        utilisateur.setPseudo("testPseudo");
-        utilisateur.setMdp("testMdp");
-        utilisateur.setMail("test@mail.com");
-        utilisateur.setNom("TestNom");
-        utilisateur.setPrenom("TestPrenom");
-        utilisateur.setObjets(new ArrayList<>());
-
-        utilisateur2 = new Utilisateur(
-                "testPseudo2",
-                "testMdp2",
-                "test2@mail.com",
-                "TestNom2",
-                "TestPrenom2"
-        );
-
-        utilisateur3 = new Utilisateur(
-                "testPseudo3",
-                "testMdp3",
-                "test3@mail.com",
-                "TestNom3",
-                "TestPrenom3",
-                new ArrayList<>()
-        );
-    }
-
-    /**
-     * Tests the getPseudo method of the Utilisateur class.
-     * Verifies that the pseudonyms are returned correctly.
-     */
     @Test
-    void testUtilisateurPseudo() {
-        assertEquals("testPseudo", utilisateur.getPseudo());
-        assertEquals("testPseudo2", utilisateur2.getPseudo());
-        assertEquals("testPseudo3", utilisateur3.getPseudo());
-    }
+    void constructorWithParameters_SetsAllFields() {
+        String pseudo = "user123";
+        String mdp = "password123";
+        String mail = "user@example.com";
+        String nom = "Doe";
+        String prenom = "John";
 
-    /**
-     * Tests the getMdp method of the Utilisateur class.
-     * Verifies that the passwords are returned correctly.
-     */
-    @Test
-    void testUtilisateurMdp() {
-        assertEquals("testMdp", utilisateur.getMdp());
-        assertEquals("testMdp2", utilisateur2.getMdp());
-        assertEquals("testMdp3", utilisateur3.getMdp());
-    }
+        Utilisateur utilisateur = new Utilisateur(pseudo, mdp, mail, nom, prenom);
 
-    /**
-     * Tests the getMail method of the Utilisateur class.
-     * Verifies that the email addresses are returned correctly.
-     */
-    @Test
-    void testUtilisateurMail() {
-        assertEquals("test@mail.com", utilisateur.getMail());
-        assertEquals("test2@mail.com", utilisateur2.getMail());
-        assertEquals("test3@mail.com", utilisateur3.getMail());
-    }
-
-    /**
-     * Tests the getNom method of the Utilisateur class.
-     * Verifies that the last names are returned correctly.
-     */
-    @Test
-    void testUtilisateurNom() {
-        assertEquals("TestNom", utilisateur.getNom());
-        assertEquals("TestNom2", utilisateur2.getNom());
-        assertEquals("TestNom3", utilisateur3.getNom());
-    }
-
-    /**
-     * Tests the getPrenom method of the Utilisateur class.
-     * Verifies that the first names are returned correctly.
-     */
-    @Test
-    void testUtilisateurPrenom() {
-        assertEquals("TestPrenom", utilisateur.getPrenom());
-        assertEquals("TestPrenom2", utilisateur2.getPrenom());
-        assertEquals("TestPrenom3", utilisateur3.getPrenom());
-    }
-
-    /**
-     * Tests the getObjets method of the Utilisateur class.
-     * Verifies that the objects list is not null.
-     */
-    @Test
-    void testUtilisateurObjets() {
+        assertEquals(pseudo, utilisateur.getPseudo());
+        assertEquals(mdp, utilisateur.getMdp());
+        assertEquals(mail, utilisateur.getMail());
+        assertEquals(nom, utilisateur.getNom());
+        assertEquals(prenom, utilisateur.getPrenom());
         assertNotNull(utilisateur.getObjets());
-        assertNotNull(utilisateur3.getObjets());
+        assertTrue(utilisateur.getObjets().isEmpty());
+    }
+
+    @Test
+    void constructorWithParametersAndObjects_SetsAllFields() {
+        String pseudo = "user123";
+        String mdp = "password123";
+        String mail = "user@example.com";
+        String nom = "Doe";
+        String prenom = "John";
+        List<Objet> objets = new ArrayList<>();
+        objets.add(new Objet());
+
+        Utilisateur utilisateur = new Utilisateur(pseudo, mdp, mail, nom, prenom, objets);
+
+        assertEquals(pseudo, utilisateur.getPseudo());
+        assertEquals(mdp, utilisateur.getMdp());
+        assertEquals(mail, utilisateur.getMail());
+        assertEquals(nom, utilisateur.getNom());
+        assertEquals(prenom, utilisateur.getPrenom());
+        assertEquals(objets, utilisateur.getObjets());
+    }
+
+    @Test
+    void defaultConstructor_SetsFieldsToNull() {
+        Utilisateur utilisateur = new Utilisateur();
+
+        assertNull(utilisateur.getPseudo());
+        assertNull(utilisateur.getMdp());
+        assertNull(utilisateur.getMail());
+        assertNull(utilisateur.getNom());
+        assertNull(utilisateur.getPrenom());
+        assertNull(utilisateur.getObjets());
+    }
+
+    @Test
+    void setPseudo_UpdatesPseudo() {
+        Utilisateur utilisateur = new Utilisateur();
+        String pseudo = "newUser123";
+        utilisateur.setPseudo(pseudo);
+
+        assertEquals(pseudo, utilisateur.getPseudo());
+    }
+
+    @Test
+    void setMdp_UpdatesMdp() {
+        Utilisateur utilisateur = new Utilisateur();
+        String mdp = "newPassword123";
+        utilisateur.setMdp(mdp);
+
+        assertEquals(mdp, utilisateur.getMdp());
+    }
+
+    @Test
+    void setMail_UpdatesMail() {
+        Utilisateur utilisateur = new Utilisateur();
+        String mail = "newuser@example.com";
+        utilisateur.setMail(mail);
+
+        assertEquals(mail, utilisateur.getMail());
+    }
+
+    @Test
+    void setNom_UpdatesNom() {
+        Utilisateur utilisateur = new Utilisateur();
+        String nom = "Smith";
+        utilisateur.setNom(nom);
+
+        assertEquals(nom, utilisateur.getNom());
+    }
+
+    @Test
+    void setPrenom_UpdatesPrenom() {
+        Utilisateur utilisateur = new Utilisateur();
+        String prenom = "Jane";
+        utilisateur.setPrenom(prenom);
+
+        assertEquals(prenom, utilisateur.getPrenom());
+    }
+
+    @Test
+    void setObjets_UpdatesObjets() {
+        Utilisateur utilisateur = new Utilisateur();
+        List<Objet> objets = new ArrayList<>();
+        objets.add(new Objet());
+        utilisateur.setObjets(objets);
+
+        assertEquals(objets, utilisateur.getObjets());
     }
 }
