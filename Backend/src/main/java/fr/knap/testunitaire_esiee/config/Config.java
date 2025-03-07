@@ -38,32 +38,27 @@ public class Config {
             List<Utilisateur> utilisateurs = new ArrayList<>();
 
             utilisateurs.add(new Utilisateur(
-                    "Nicolas", "testnicolas",
-                    "nicolas@test.testa",
+                    "Nicolas", "testnicolas", "nicolas@test.testa",
                     "Test", "Nicolas"
             ));
 
             utilisateurs.add(new Utilisateur(
-                    "Sophie", "sophietest",
-                    "sophie@test.com",
+                    "Sophie", "sophietest", "sophie@test.com",
                     "Test", "Sophie"
             ));
 
             utilisateurs.add(new Utilisateur(
-                    "Jean", "jeanpierre",
-                    "jean.pierre@test.net",
+                    "Jean", "jeanpierre", "jean.pierre@test.net",
                     "Pierre", "Jean"
             ));
 
             utilisateurs.add(new Utilisateur(
-                    "Laura", "lauratest",
-                    "laura@test.org",
+                    "Laura", "lauratest", "laura@test.org",
                     "Test", "Laura"
             ));
 
             utilisateurs.add(new Utilisateur(
-                    "David", "david123",
-                    "david@test.fr",
+                    "David", "david123", "david@test.fr",
                     "Test", "David"
             ));
 
