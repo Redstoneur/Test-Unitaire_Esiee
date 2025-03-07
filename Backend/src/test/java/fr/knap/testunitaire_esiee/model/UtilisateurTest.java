@@ -18,7 +18,7 @@ class UtilisateurTest {
      * Tests the constructor with parameters to ensure it sets all fields correctly.
      */
     @Test
-    void constructorWithParameters_SetsAllFields() {
+    void constructorWithParametersSetsAllFields() {
         String pseudo = "user123";
         String mdp = "password123";
         String mail = "user@example.com";
@@ -38,7 +38,7 @@ class UtilisateurTest {
      * Tests the constructor with parameters and objects to ensure it sets all fields correctly.
      */
     @Test
-    void constructorWithParametersAndObjects_SetsAllFields() {
+    void constructorWithParametersAndObjectsSetsAllFields() {
         String pseudo = "user123";
         String mdp = "password123";
         String mail = "user@example.com";
@@ -58,7 +58,7 @@ class UtilisateurTest {
      * Tests the default constructor to ensure it sets all fields to null.
      */
     @Test
-    void defaultConstructor_SetsFieldsToNull() {
+    void defaultConstructorSetsFieldsToNull() {
         Utilisateur utilisateur = new Utilisateur();
 
         assertNull(utilisateur.getPseudo());
@@ -72,7 +72,7 @@ class UtilisateurTest {
      * Tests the setPseudo method to ensure it updates the pseudo field.
      */
     @Test
-    void setPseudo_UpdatesPseudo() {
+    void setPseudoUpdatesPseudo() {
         Utilisateur utilisateur = new Utilisateur();
         String pseudo = "newUser123";
         utilisateur.setPseudo(pseudo);
@@ -84,7 +84,7 @@ class UtilisateurTest {
      * Tests the setMdp method to ensure it updates the mdp field.
      */
     @Test
-    void setMdp_UpdatesMdp() {
+    void setMdpUpdatesMdp() {
         Utilisateur utilisateur = new Utilisateur();
         String mdp = "newPassword123";
         utilisateur.setMdp(mdp);
@@ -96,7 +96,7 @@ class UtilisateurTest {
      * Tests the setMail method to ensure it updates the mail field.
      */
     @Test
-    void setMail_UpdatesMail() {
+    void setMailUpdatesMail() {
         Utilisateur utilisateur = new Utilisateur();
         String mail = "newuser@example.com";
         utilisateur.setMail(mail);
@@ -108,7 +108,7 @@ class UtilisateurTest {
      * Tests the setNom method to ensure it updates the nom field.
      */
     @Test
-    void setNom_UpdatesNom() {
+    void setNomUpdatesNom() {
         Utilisateur utilisateur = new Utilisateur();
         String nom = "Smith";
         utilisateur.setNom(nom);
@@ -120,7 +120,7 @@ class UtilisateurTest {
      * Tests the setPrenom method to ensure it updates the prenom field.
      */
     @Test
-    void setPrenom_UpdatesPrenom() {
+    void setPrenomUpdatesPrenom() {
         Utilisateur utilisateur = new Utilisateur();
         String prenom = "Jane";
         utilisateur.setPrenom(prenom);

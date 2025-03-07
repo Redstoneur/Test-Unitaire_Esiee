@@ -15,7 +15,7 @@ class CredentialsTest {
      * Tests the constructor with parameters to ensure it sets the mail and mdp fields correctly.
      */
     @Test
-    void constructorWithParameters_SetsMailAndMdp() {
+    void constructorWithParametersSetsMailAndMdp() {
         Credentials credentials = new Credentials("user@example.com", "password123");
         assertEquals("user@example.com", credentials.getMail());
         assertEquals("password123", credentials.getMdp());
@@ -25,7 +25,7 @@ class CredentialsTest {
      * Tests the default constructor to ensure it sets the mail and mdp fields to null.
      */
     @Test
-    void defaultConstructor_SetsMailAndMdpToNull() {
+    void defaultConstructorSetsMailAndMdpToNull() {
         Credentials credentials = new Credentials();
         assertNull(credentials.getMail());
         assertNull(credentials.getMdp());
@@ -35,7 +35,7 @@ class CredentialsTest {
      * Tests the setMail method to ensure it updates the mail field.
      */
     @Test
-    void setMail_UpdatesMail() {
+    void setMailUpdatesMail() {
         Credentials credentials = new Credentials();
         credentials.setMail("newuser@example.com");
         assertEquals("newuser@example.com", credentials.getMail());
@@ -45,7 +45,7 @@ class CredentialsTest {
      * Tests the setMdp method to ensure it updates the mdp field.
      */
     @Test
-    void setMdp_UpdatesMdp() {
+    void setMdpUpdatesMdp() {
         Credentials credentials = new Credentials();
         credentials.setMdp("newpassword123");
         assertEquals("newpassword123", credentials.getMdp());

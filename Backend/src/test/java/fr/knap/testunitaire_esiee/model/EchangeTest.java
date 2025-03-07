@@ -17,7 +17,7 @@ class EchangeTest {
      * Tests the constructor with parameters to ensure it sets all fields correctly.
      */
     @Test
-    void constructorWithParameters_SetsAllFields() {
+    void constructorWithParametersSetsAllFields() {
         Objet objetPropose = new Objet();
         Objet objetDemande = new Objet();
         LocalDateTime dateProposition = LocalDateTime.now();
@@ -37,7 +37,7 @@ class EchangeTest {
      * Tests the default constructor to ensure it sets all fields to null.
      */
     @Test
-    void defaultConstructor_SetsFieldsToNull() {
+    void defaultConstructorSetsFieldsToNull() {
         Echange echange = new Echange();
 
         assertNull(echange.getObjetPropose());
@@ -51,7 +51,7 @@ class EchangeTest {
      * Tests the setObjetPropose method to ensure it updates the objetPropose field.
      */
     @Test
-    void setObjetPropose_UpdatesObjetPropose() {
+    void setObjetProposeUpdatesObjetPropose() {
         Echange echange = new Echange();
         Objet objetPropose = new Objet();
         echange.setObjetPropose(objetPropose);
@@ -63,7 +63,7 @@ class EchangeTest {
      * Tests the setObjetDemande method to ensure it updates the objetDemande field.
      */
     @Test
-    void setObjetDemande_UpdatesObjetDemande() {
+    void setObjetDemandeUpdatesObjetDemande() {
         Echange echange = new Echange();
         Objet objetDemande = new Objet();
         echange.setObjetDemande(objetDemande);
@@ -75,7 +75,7 @@ class EchangeTest {
      * Tests the setDateProposition method to ensure it updates the dateProposition field.
      */
     @Test
-    void setDateProposition_UpdatesDateProposition() {
+    void setDatePropositionUpdatesDateProposition() {
         Echange echange = new Echange();
         LocalDateTime dateProposition = LocalDateTime.now();
         echange.setDateProposition(dateProposition);
@@ -87,7 +87,7 @@ class EchangeTest {
      * Tests the setEtatEchange method to ensure it updates the etatEchange field.
      */
     @Test
-    void setEtatEchange_UpdatesEtatEchange() {
+    void setEtatEchangeUpdatesEtatEchange() {
         Echange echange = new Echange();
         Etat etatEchange = Etat.ATTENTE;
         echange.setEtatEchange(etatEchange);
@@ -99,7 +99,7 @@ class EchangeTest {
      * Tests the setDateCloture method to ensure it updates the dateCloture field.
      */
     @Test
-    void setDateCloture_UpdatesDateCloture() {
+    void setDateClotureUpdatesDateCloture() {
         Echange echange = new Echange();
         LocalDateTime dateCloture = LocalDateTime.now().plusDays(1);
         echange.setDateCloture(dateCloture);

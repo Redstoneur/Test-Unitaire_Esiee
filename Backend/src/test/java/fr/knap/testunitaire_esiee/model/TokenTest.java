@@ -17,7 +17,7 @@ class TokenTest {
      * Tests the constructor with parameters to ensure it sets the token and expiration date fields correctly.
      */
     @Test
-    void constructorWithParameters_SetsTokenAndExpirationDate() {
+    void constructorWithParametersSetsTokenAndExpirationDate() {
         String mail = "user@example.com";
         String mdp = "password123";
         Token token = new Token(mail, mdp);
@@ -31,7 +31,7 @@ class TokenTest {
      * Tests the default constructor to ensure it sets the token and expiration date fields to null.
      */
     @Test
-    void defaultConstructor_SetsFieldsToNull() {
+    void defaultConstructorSetsFieldsToNull() {
         Token token = new Token();
 
         assertNull(token.getToken());
@@ -42,7 +42,7 @@ class TokenTest {
      * Tests the validateToken method with a valid token to ensure it returns true.
      */
     @Test
-    void validateToken_ValidToken_ReturnsTrue() {
+    void validateTokenValidTokenReturnsTrue() {
         String mail = "user@example.com";
         String mdp = "password123";
         Token token = new Token(mail, mdp);
@@ -54,7 +54,7 @@ class TokenTest {
      * Tests the validateToken method with an invalid token to ensure it returns false.
      */
     @Test
-    void validateToken_InvalidToken_ReturnsFalse() {
+    void validateTokenInvalidTokenReturnsFalse() {
         assertFalse(Token.validateToken("invalidToken"));
     }
 
@@ -62,7 +62,7 @@ class TokenTest {
      * Tests the getSubject method with a valid token to ensure it returns the correct subject.
      */
     @Test
-    void getSubject_ValidToken_ReturnsSubject() {
+    void getSubjectValidTokenReturnsSubject() {
         String mail = "user@example.com";
         String mdp = "password123";
         Token token = new Token(mail, mdp);
@@ -74,7 +74,7 @@ class TokenTest {
      * Tests the getEmail method with a valid token to ensure it returns the correct email.
      */
     @Test
-    void getEmail_ValidToken_ReturnsEmail() {
+    void getEmailValidTokenReturnsEmail() {
         String mail = "user@example.com";
         String mdp = "password123";
         Token token = new Token(mail, mdp);
@@ -86,7 +86,7 @@ class TokenTest {
      * Tests the disconnect method to ensure it sets the expiration date to the current time.
      */
     @Test
-    void disconnect_SetsExpirationDateToCurrentTime() {
+    void disconnectSetsExpirationDateToCurrentTime() {
         String mail = "user@example.com";
         String mdp = "password123";
         Token token = new Token(mail, mdp);

@@ -48,7 +48,7 @@ class ObjetControllerTest {
      * Tests the creerObjet method to ensure it returns the created Objet if the token is valid.
      */
     @Test
-    void creerObjet_ReturnsCreatedObjetIfTokenValid() {
+    void creerObjetReturnsCreatedObjetIfTokenValid() {
         String authToken = "validToken";
         ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
         Utilisateur utilisateur = new Utilisateur();
@@ -70,7 +70,7 @@ class ObjetControllerTest {
      * Tests the creerObjet method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void creerObjet_ThrowsForbiddenIfTokenInvalid() {
+    void creerObjetThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
         ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
 
@@ -90,7 +90,7 @@ class ObjetControllerTest {
      * Tests the obtenirTousLesObjets method to ensure it returns all Objets.
      */
     @Test
-    void obtenirTousLesObjets_ReturnsAllObjets() {
+    void obtenirTousLesObjetsReturnsAllObjets() {
         List<ObjetDTO> objets = Arrays.asList(
                 new ObjetDTO(
                         "Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE,
@@ -113,7 +113,7 @@ class ObjetControllerTest {
      * Tests the obtenirObjetsParUtilisateur method to ensure it returns Objets if the token is valid.
      */
     @Test
-    void obtenirObjetsParUtilisateur_ReturnsObjetsIfTokenValid() {
+    void obtenirObjetsParUtilisateurReturnsObjetsIfTokenValid() {
         String authToken = "validToken";
         Long idUtilisateur = 1L;
         List<ObjetDTO> objets = Arrays.asList(
@@ -141,7 +141,7 @@ class ObjetControllerTest {
      * Tests the obtenirObjetsParUtilisateur method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void obtenirObjetsParUtilisateur_ThrowsForbiddenIfTokenInvalid() {
+    void obtenirObjetsParUtilisateurThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
         Long idUtilisateur = 1L;
 
@@ -160,7 +160,7 @@ class ObjetControllerTest {
      * Tests the obtenirObjetParId method to ensure it returns the Objet if it exists.
      */
     @Test
-    void obtenirObjetParId_ReturnsObjetIfExists() {
+    void obtenirObjetParIdReturnsObjetIfExists() {
         Long id = 1L;
         Objet objet = new Objet();
         when(objetService.obtenirObjetParId(id)).thenReturn(objet);
@@ -175,7 +175,7 @@ class ObjetControllerTest {
      * Tests the mettreAJourObjet method to ensure it returns the updated Objet if the token is valid.
      */
     @Test
-    void mettreAJourObjet_ReturnsUpdatedObjetIfTokenValid() {
+    void mettreAJourObjetReturnsUpdatedObjetIfTokenValid() {
         String authToken = "validToken";
         Long id = 1L;
         Objet objet = new Objet();
@@ -193,7 +193,7 @@ class ObjetControllerTest {
      * Tests the mettreAJourObjet method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void mettreAJourObjet_ThrowsForbiddenIfTokenInvalid() {
+    void mettreAJourObjetThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
         Long id = 1L;
         Objet objet = new Objet();
@@ -213,7 +213,7 @@ class ObjetControllerTest {
      * Tests the supprimerObjet method to ensure it deletes the Objet if the token is valid.
      */
     @Test
-    void supprimerObjet_DeletesObjetIfTokenValid() {
+    void supprimerObjetDeletesObjetIfTokenValid() {
         String authToken = "validToken";
         Long id = 1L;
 
@@ -232,7 +232,7 @@ class ObjetControllerTest {
      * Tests the supprimerObjet method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void supprimerObjet_ThrowsForbiddenIfTokenInvalid() {
+    void supprimerObjetThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
         Long id = 1L;
 

@@ -18,7 +18,7 @@ class ObjetDTOTest {
      * Tests the constructor with parameters to ensure it sets all fields correctly.
      */
     @Test
-    void constructorWithParameters_SetsAllFields() {
+    void constructorWithParametersSetsAllFields() {
         String nom = "Laptop";
         String description = "A high-end gaming laptop";
         CategorieObjet categorie = CategorieObjet.INFORMATIQUE;
@@ -40,7 +40,7 @@ class ObjetDTOTest {
      * Tests the setNom method to ensure it updates the nom field.
      */
     @Test
-    void setNom_UpdatesNom() {
+    void setNomUpdatesNom() {
         ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
         String newNom = "Smartphone";
         objetDTO.setNom(newNom);
@@ -52,7 +52,7 @@ class ObjetDTOTest {
      * Tests the setDescription method to ensure it updates the description field.
      */
     @Test
-    void setDescription_UpdatesDescription() {
+    void setDescriptionUpdatesDescription() {
         ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
         String newDescription = "A brand new smartphone";
         objetDTO.setDescription(newDescription);
@@ -64,7 +64,7 @@ class ObjetDTOTest {
      * Tests the setCategorie method to ensure it updates the categorie field.
      */
     @Test
-    void setCategorie_UpdatesCategorie() {
+    void setCategorieUpdatesCategorie() {
         ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
         CategorieObjet newCategorie = CategorieObjet.ELECTROMENAGER;
         objetDTO.setCategorie(newCategorie);
@@ -76,7 +76,7 @@ class ObjetDTOTest {
      * Tests the setUtilisateur method to ensure it updates the utilisateur field.
      */
     @Test
-    void setUtilisateur_UpdatesUtilisateur() {
+    void setUtilisateurUpdatesUtilisateur() {
         ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
         String newUtilisateur = "user456";
         objetDTO.setUtilisateur(newUtilisateur);
@@ -88,7 +88,7 @@ class ObjetDTOTest {
      * Tests the setIdUtilisateur method to ensure it updates the idUtilisateur field.
      */
     @Test
-    void setIdUtilisateur_UpdatesIdUtilisateur() {
+    void setIdUtilisateurUpdatesIdUtilisateur() {
         ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
         Long newIdUtilisateur = 2L;
         objetDTO.setIdUtilisateur(newIdUtilisateur);
@@ -100,7 +100,7 @@ class ObjetDTOTest {
      * Tests the setDateCreation method to ensure it updates the dateCreation field.
      */
     @Test
-    void setDateCreation_UpdatesDateCreation() {
+    void setDateCreationUpdatesDateCreation() {
         ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
         LocalDateTime newDateCreation = LocalDateTime.now().plusDays(1);
         objetDTO.setDateCreation(newDateCreation);

@@ -18,7 +18,7 @@ class ObjetBufferDTOTest {
      * Tests the constructor with parameters to ensure it sets all fields correctly.
      */
     @Test
-    void constructorWithParameters_SetsAllFields() {
+    void constructorWithParametersSetsAllFields() {
         String nom = "Laptop";
         String description = "A high-end gaming laptop";
         CategorieObjet categorie = CategorieObjet.INFORMATIQUE;
@@ -36,7 +36,7 @@ class ObjetBufferDTOTest {
      * Tests the setNom method to ensure it updates the nom field.
      */
     @Test
-    void setNom_UpdatesNom() {
+    void setNomUpdatesNom() {
         ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
         String newNom = "Smartphone";
         objetBufferDTO.setNom(newNom);
@@ -48,7 +48,7 @@ class ObjetBufferDTOTest {
      * Tests the setDescription method to ensure it updates the description field.
      */
     @Test
-    void setDescription_UpdatesDescription() {
+    void setDescriptionUpdatesDescription() {
         ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
         String newDescription = "A brand new smartphone";
         objetBufferDTO.setDescription(newDescription);
@@ -60,7 +60,7 @@ class ObjetBufferDTOTest {
      * Tests the setCategorie method to ensure it updates the categorie field.
      */
     @Test
-    void setCategorie_UpdatesCategorie() {
+    void setCategorieUpdatesCategorie() {
         ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
         CategorieObjet newCategorie = CategorieObjet.ELECTROMENAGER;
         objetBufferDTO.setCategorie(newCategorie);
@@ -72,7 +72,7 @@ class ObjetBufferDTOTest {
      * Tests the setDateCreation method to ensure it updates the dateCreation field.
      */
     @Test
-    void setDateCreation_UpdatesDateCreation() {
+    void setDateCreationUpdatesDateCreation() {
         ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
         LocalDateTime newDateCreation = LocalDateTime.now().plusDays(1);
         objetBufferDTO.setDateCreation(newDateCreation);

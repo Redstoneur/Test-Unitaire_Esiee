@@ -39,7 +39,7 @@ class CredentialsControllerTest {
      * Tests the creerUtilisateur method to ensure it returns a TokenCredentialDTO.
      */
     @Test
-    void creerUtilisateur_ReturnsTokenCredentialDTO() {
+    void creerUtilisateurReturnsTokenCredentialDTO() {
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setMail("user@example.com");
         utilisateur.setMdp("password");
@@ -60,7 +60,7 @@ class CredentialsControllerTest {
      * Tests the getConnexionToken method to ensure it returns a TokenCredentialDTO if credentials are valid.
      */
     @Test
-    void getConnexionToken_ReturnsTokenCredentialDTOIfValid() {
+    void getConnexionTokenReturnsTokenCredentialDTOIfValid() {
         Credentials credentials = new Credentials("user@example.com", "password");
         Token token = new Token();
         token.setToken("sampleToken");
@@ -77,7 +77,7 @@ class CredentialsControllerTest {
      * Tests the getConnexionToken method to ensure it throws an exception if credentials are invalid.
      */
     @Test
-    void getConnexionToken_ThrowsExceptionIfInvalid() {
+    void getConnexionTokenThrowsExceptionIfInvalid() {
         Credentials credentials = new Credentials("user@example.com", "wrongpassword");
 
         when(utilisateurService.login(credentials)).thenReturn(null);
@@ -94,7 +94,7 @@ class CredentialsControllerTest {
      * Tests the disconnect method to ensure it invalidates the token if it is valid.
      */
     @Test
-    void disconnect_InvalidatesTokenIfValid() {
+    void disconnectInvalidatesTokenIfValid() {
         TokenCredentialDTO tokenDTO = new TokenCredentialDTO("validToken");
 
         when(utilisateurService.verifyToken(tokenDTO.getToken())).thenReturn(true);
@@ -112,7 +112,7 @@ class CredentialsControllerTest {
      * Tests the disconnect method to ensure it throws an exception if the token is invalid.
      */
     @Test
-    void disconnect_ThrowsExceptionIfInvalid() {
+    void disconnectThrowsExceptionIfInvalid() {
         TokenCredentialDTO tokenDTO = new TokenCredentialDTO("invalidToken");
 
         when(utilisateurService.verifyToken(tokenDTO.getToken())).thenReturn(false);
@@ -130,7 +130,7 @@ class CredentialsControllerTest {
      * Tests the verifyToken method to ensure it returns OK if the token is valid.
      */
     @Test
-    void verifyToken_ReturnsOkIfValid() {
+    void verifyTokenReturnsOkIfValid() {
         TokenCredentialDTO tokenDTO = new TokenCredentialDTO("validToken");
 
         when(utilisateurService.verifyToken(tokenDTO.getToken())).thenReturn(true);
@@ -147,7 +147,7 @@ class CredentialsControllerTest {
      * Tests the verifyToken method to ensure it throws an exception if the token is invalid.
      */
     @Test
-    void verifyToken_ThrowsExceptionIfInvalid() {
+    void verifyTokenThrowsExceptionIfInvalid() {
         TokenCredentialDTO tokenDTO = new TokenCredentialDTO("invalidToken");
 
         when(utilisateurService.verifyToken(tokenDTO.getToken())).thenReturn(false);

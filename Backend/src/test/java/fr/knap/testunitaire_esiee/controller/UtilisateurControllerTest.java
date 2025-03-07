@@ -40,7 +40,7 @@ class UtilisateurControllerTest {
      * Tests the obtenirTousLesUtilisateurs method to ensure it returns all Utilisateurs.
      */
     @Test
-    void obtenirTousLesUtilisateurs_ReturnsAllUtilisateurs() {
+    void obtenirTousLesUtilisateursReturnsAllUtilisateurs() {
         List<Utilisateur> utilisateurs = Arrays.asList(new Utilisateur(), new Utilisateur());
         when(utilisateurService.obtenirTousLesUtilisateurs()).thenReturn(utilisateurs);
 
@@ -54,7 +54,7 @@ class UtilisateurControllerTest {
      * Tests the obtenirUtilisateurInfoParId method to ensure it returns UtilisateurDTO if the token is valid.
      */
     @Test
-    void obtenirUtilisateurInfoParId_ReturnsUtilisateurDTOIfTokenValid() {
+    void obtenirUtilisateurInfoParIdReturnsUtilisateurDTOIfTokenValid() {
         String authToken = "validToken";
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO(
                 "pseudo",
@@ -75,7 +75,7 @@ class UtilisateurControllerTest {
      * Tests the obtenirUtilisateurInfoParId method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void obtenirUtilisateurInfoParId_ThrowsForbiddenIfTokenInvalid() {
+    void obtenirUtilisateurInfoParIdThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
         when(utilisateurService.verifyToken(authToken)).thenReturn(false);
 
@@ -92,7 +92,7 @@ class UtilisateurControllerTest {
      * Tests the obtenirUtilisateurParId method to ensure it returns Utilisateur if the token is valid.
      */
     @Test
-    void obtenirUtilisateurParId_ReturnsUtilisateurIfTokenValid() {
+    void obtenirUtilisateurParIdReturnsUtilisateurIfTokenValid() {
         String authToken = "validToken";
         Long id = 1L;
         Utilisateur utilisateur = new Utilisateur();
@@ -110,7 +110,7 @@ class UtilisateurControllerTest {
      * Tests the obtenirUtilisateurParId method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void obtenirUtilisateurParId_ThrowsForbiddenIfTokenInvalid() {
+    void obtenirUtilisateurParIdThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
         Long id = 1L;
         when(utilisateurService.verifyToken(authToken)).thenReturn(false);
@@ -128,7 +128,7 @@ class UtilisateurControllerTest {
      * Tests the obtenirUtilisateurPseudoParId method to ensure it returns UtilisateurDTO if the token is valid.
      */
     @Test
-    void obtenirUtilisateurPseudoParId_ReturnsUtilisateurDTOIfTokenValid() {
+    void obtenirUtilisateurPseudoParIdReturnsUtilisateurDTOIfTokenValid() {
         String authToken = "validToken";
         Long id = 1L;
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO(
@@ -150,7 +150,7 @@ class UtilisateurControllerTest {
      * Tests the obtenirUtilisateurPseudoParId method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void obtenirUtilisateurPseudoParId_ThrowsForbiddenIfTokenInvalid() {
+    void obtenirUtilisateurPseudoParIdThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
         Long id = 1L;
         when(utilisateurService.verifyToken(authToken)).thenReturn(false);
@@ -168,7 +168,7 @@ class UtilisateurControllerTest {
      * Tests the mettreAJourUtilisateur method to ensure it returns the updated Utilisateur if the token is valid.
      */
     @Test
-    void mettreAJourUtilisateur_ReturnsUpdatedUtilisateurIfTokenValid() {
+    void mettreAJourUtilisateurReturnsUpdatedUtilisateurIfTokenValid() {
         String authToken = "validToken";
         Long id = 1L;
         Utilisateur utilisateur = new Utilisateur();
@@ -186,7 +186,7 @@ class UtilisateurControllerTest {
      * Tests the mettreAJourUtilisateur method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void mettreAJourUtilisateur_ThrowsForbiddenIfTokenInvalid() {
+    void mettreAJourUtilisateurThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
         Long id = 1L;
         Utilisateur utilisateur = new Utilisateur();
@@ -206,7 +206,7 @@ class UtilisateurControllerTest {
      * Tests the supprimerUtilisateur method to ensure it deletes the Utilisateur if the token is valid.
      */
     @Test
-    void supprimerUtilisateur_DeletesUtilisateurIfTokenValid() {
+    void supprimerUtilisateurDeletesUtilisateurIfTokenValid() {
         String authToken = "validToken";
         Long id = 1L;
 
@@ -225,7 +225,7 @@ class UtilisateurControllerTest {
      * Tests the supprimerUtilisateur method to ensure it throws a Forbidden exception if the token is invalid.
      */
     @Test
-    void supprimerUtilisateur_ThrowsForbiddenIfTokenInvalid() {
+    void supprimerUtilisateurThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
         Long id = 1L;
 
