@@ -50,8 +50,8 @@ public class EchangeController {
      * @return The exchange with the specified ID.
      */
     @GetMapping("/{id}")
-    public Echange obtenirUnEchange(@RequestHeader("Authorization") String authToken,@PathVariable Long id) {
-        if(utilisateurService.verifyToken(authToken))
+    public Echange obtenirUnEchange(@RequestHeader("Authorization") String authToken, @PathVariable Long id) {
+        if (utilisateurService.verifyToken(authToken))
             return echangeService.obtenirEchangeParId(id);
         throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
@@ -62,17 +62,17 @@ public class EchangeController {
      * @param echange The exchange to update.
      * @return The updated exchange.
      * @throws IllegalArgumentException if the exchange ID is null.
-     * @throws ResponseStatusException if the exchange does not exist.
+     * @throws ResponseStatusException  if the exchange does not exist.
      */
     @PutMapping("/update")
     public Echange mettreAJourEchange(@RequestHeader("Authorization") String authToken, @RequestBody Echange echange) {
-        if(utilisateurService.verifyToken(authToken)) {
-            if(echange.getId() == null)
+        if (utilisateurService.verifyToken(authToken)) {
+            if (echange.getId() == null)
                 throw new IllegalArgumentException("L'id de l'échange ne peut pas être null");
             if (echangeService.echangeExist(echange.getId()))
                 return echangeService.mettreAJourEchange(echange);
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange is not valid");
         }
-       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
     }
 }

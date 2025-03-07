@@ -26,11 +26,11 @@ public class ObjetController {
     @Autowired
     private UtilisateurService utilisateurService;
 
-
     /**
      * Creates a new object.
      *
-     * @param objet The object to be created.
+     * @param authToken The authorization token of the user.
+     * @param objetBufferDTO The data transfer object containing the details of the object to be created.
      * @return The created object.
      */
     @PostMapping
@@ -62,6 +62,7 @@ public class ObjetController {
     /**
      * Retrieves objects by user ID.
      *
+     * @param authToken The authorization token of the user.
      * @param idUtilisateur The ID of the user whose objects are to be retrieved.
      * @return A list of objects belonging to the specified user.
      */
@@ -86,7 +87,8 @@ public class ObjetController {
     /**
      * Updates an existing object.
      *
-     * @param id    The ID of the object to update.
+     * @param authToken The authorization token of the user.
+     * @param id The ID of the object to update.
      * @param objet The updated object data.
      * @return The updated object.
      */
@@ -100,6 +102,7 @@ public class ObjetController {
     /**
      * Deletes an object by its ID.
      *
+     * @param authToken The authorization token of the user.
      * @param id The ID of the object to delete.
      */
     @DeleteMapping("/{id}")

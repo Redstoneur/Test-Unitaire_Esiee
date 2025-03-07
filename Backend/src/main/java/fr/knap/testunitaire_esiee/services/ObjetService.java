@@ -47,7 +47,7 @@ public class ObjetService {
 
         objets.forEach(o -> {
             Utilisateur utilisateur = o.getUtilisateur();
-            tousLesObjets.add(new ObjetDTO(o.getNom(), o.getDescription(), o.getCategorie(), utilisateur.getPseudo(),utilisateur.getId(), o.getDateCreation()));
+            tousLesObjets.add(new ObjetDTO(o.getNom(), o.getDescription(), o.getCategorie(), utilisateur.getPseudo(), utilisateur.getId(), o.getDateCreation()));
         });
 
         return tousLesObjets;
@@ -99,27 +99,8 @@ public class ObjetService {
             Utilisateur u = utilisateur.get();
             List<Objet> objets = objetRepository.findByUtilisateurId(idUtilisateur);
             return objets.stream()
-                    .map(o -> new ObjetDTO(o.getNom(), o.getDescription(), o.getCategorie(), u.getPseudo(),u.getId(), o.getDateCreation()))
+                    .map(o -> new ObjetDTO(o.getNom(), o.getDescription(), o.getCategorie(), u.getPseudo(), u.getId(), o.getDateCreation()))
                     .collect(Collectors.toList());
-        }
-        return null;
-    }
-
-    /**
-     * Retrieves a list of Objet entities by the user ID.
-     *
-     * @param idUtilisateur The ID of the user.
-     * @return A list of Objet entities associated with the specified user ID.
-     */
-    public ObjetDTO obtenirObjetUnUtilisateur(Long idUtilisateur) {
-        Optional<Utilisateur> utilisateur = utilisateurRepository.findById(idUtilisateur);
-        Optional<Objet> objet = objetRepository.findById(idUtilisateur);
-
-        if (utilisateur.isPresent() && objet.isPresent()) {
-            Utilisateur u = utilisateur.get();
-            Objet o = objet.get();
-
-            return new ObjetDTO(o.getNom(), o.getDescription(), o.getCategorie(), u.getPseudo(),u.getId(), o.getDateCreation());
         }
         return null;
     }

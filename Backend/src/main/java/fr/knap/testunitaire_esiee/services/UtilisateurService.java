@@ -40,8 +40,6 @@ public class UtilisateurService {
      * @return A list of all Utilisateur entities.
      */
     public List<Utilisateur> obtenirTousLesUtilisateurs() {
-
-
         return utilisateurRepository.findAll();
     }
 
@@ -55,6 +53,12 @@ public class UtilisateurService {
         return utilisateurRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Retrieves a UtilisateurDTO by its ID.
+     *
+     * @param id The ID of the Utilisateur entity.
+     * @return The UtilisateurDTO with the specified ID, or null if not found.
+     */
     public UtilisateurDTO obtenirUtilisateurInfoParId(Long id) {
         Optional<Utilisateur> utilisateur = utilisateurRepository.findById(id);
         if (utilisateur.isPresent()) {
@@ -64,6 +68,12 @@ public class UtilisateurService {
         return null;
     }
 
+    /**
+     * Retrieves a UtilisateurDTO with only the pseudo by its ID.
+     *
+     * @param id The ID of the Utilisateur entity.
+     * @return The UtilisateurDTO with the specified ID, or null if not found.
+     */
     public UtilisateurDTO obtenirUtilisateurPseudoParId(Long id) {
         Optional<Utilisateur> utilisateur = utilisateurRepository.findById(id);
         if (utilisateur.isPresent()) {
@@ -164,10 +174,10 @@ public class UtilisateurService {
     }
 
     /**
-     * Retrieves a Utilisateur entity by its token.
+     * Retrieves a UtilisateurDTO by its token.
      *
      * @param token The token of the Utilisateur entity.
-     * @return The Utilisateur entity with the specified token, or null if not found.
+     * @return The UtilisateurDTO with the specified token, or null if not found.
      */
     public UtilisateurDTO obtenirUtilisateurInfoParToken(String token) {
         Utilisateur u = obtenirUtilisateurParToken(token);

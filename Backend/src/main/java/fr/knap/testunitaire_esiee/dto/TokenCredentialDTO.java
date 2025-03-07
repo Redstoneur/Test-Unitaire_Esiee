@@ -16,7 +16,7 @@ public class TokenCredentialDTO {
     private String token;
 
     /**
-     * Constructs a new TokenCredential object with the specified token.
+     * Constructs a new TokenCredentialDTO object with the specified token.
      *
      * @param token The token string.
      */
