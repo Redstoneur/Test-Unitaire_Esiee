@@ -11,6 +11,11 @@ import lombok.Setter;
 public class UtilisateurDTO {
 
     /**
+     * The unique identifier for the user.
+     */
+    private Long id;
+
+    /**
      * The pseudo of the user.
      */
     private String pseudo;
@@ -32,7 +37,8 @@ public class UtilisateurDTO {
      * @param nom the last name of the user
      * @param prenom the first name of the user
      */
-    public UtilisateurDTO(String pseudo, String nom, String prenom) {
+    public UtilisateurDTO(Long id, String pseudo, String nom, String prenom) {
+        this.id = id;
         this.pseudo = pseudo;
         this.nom = nom;
         this.prenom = prenom;

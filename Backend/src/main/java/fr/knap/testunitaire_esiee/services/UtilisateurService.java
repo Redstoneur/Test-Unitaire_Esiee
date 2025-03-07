@@ -63,7 +63,7 @@ public class UtilisateurService {
         Optional<Utilisateur> utilisateur = utilisateurRepository.findById(id);
         if (utilisateur.isPresent()) {
             Utilisateur u = utilisateur.get();
-            return new UtilisateurDTO(u.getPseudo(), u.getNom(), u.getPrenom());
+            return new UtilisateurDTO(u.getId(),u.getPseudo(), u.getNom(), u.getPrenom());
         }
         return null;
     }
@@ -184,6 +184,6 @@ public class UtilisateurService {
         if (u == null) {
             return null;
         }
-        return new UtilisateurDTO(u.getPseudo(), u.getNom(), u.getPrenom());
+        return new UtilisateurDTO(u.getId(),u.getPseudo(), u.getNom(), u.getPrenom());
     }
 }
