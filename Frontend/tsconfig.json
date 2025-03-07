@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "esnext",  // Utilise la dernière version de JavaScript
+    "module": "esnext",  // Utilise les modules ES
+    "moduleResolution": "node",  // Résolution des modules compatible avec Node.js
+    "esModuleInterop": true,  // Pour une meilleure compatibilité avec les modules CommonJS
+    "jsx": "preserve", // Si vous utilisez JSX avec Vue
+    "strict": true,  // Active toutes les vérifications de type strictes
+    "skipLibCheck": true,  // Permet de passer la vérification des types des fichiers de déclaration
+    "forceConsistentCasingInFileNames": true  // Assure la cohérence des majuscules/minuscules des noms de fichiers
+  },
+  "include": [
+    "src/**/*.ts",  // Inclut tous les fichiers TypeScript dans le dossier src
+    "src/**/*.d.ts",  // Inclut tous les fichiers de définition de type
+    "src/**/*.tsx"   // Si vous utilisez JSX avec TypeScript
+  ],
+  "exclude": [
+    "node_modules"  // Exclut le dossier node_modules
+  ]
+}
