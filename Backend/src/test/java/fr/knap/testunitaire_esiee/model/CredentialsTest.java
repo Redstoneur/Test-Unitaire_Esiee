@@ -5,9 +5,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the Credentials class.
+ */
 @SpringBootTest
 class CredentialsTest {
 
+    /**
+     * Tests the constructor with parameters to ensure it sets the mail and mdp fields correctly.
+     */
     @Test
     void constructorWithParameters_SetsMailAndMdp() {
         Credentials credentials = new Credentials("user@example.com", "password123");
@@ -15,6 +21,9 @@ class CredentialsTest {
         assertEquals("password123", credentials.getMdp());
     }
 
+    /**
+     * Tests the default constructor to ensure it sets the mail and mdp fields to null.
+     */
     @Test
     void defaultConstructor_SetsMailAndMdpToNull() {
         Credentials credentials = new Credentials();
@@ -22,6 +31,9 @@ class CredentialsTest {
         assertNull(credentials.getMdp());
     }
 
+    /**
+     * Tests the setMail method to ensure it updates the mail field.
+     */
     @Test
     void setMail_UpdatesMail() {
         Credentials credentials = new Credentials();
@@ -29,6 +41,9 @@ class CredentialsTest {
         assertEquals("newuser@example.com", credentials.getMail());
     }
 
+    /**
+     * Tests the setMdp method to ensure it updates the mdp field.
+     */
     @Test
     void setMdp_UpdatesMdp() {
         Credentials credentials = new Credentials();

@@ -4,12 +4,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Unit tests for the Utilisateur class.
+ */
 @SpringBootTest
 class UtilisateurTest {
 
+    /**
+     * Tests the constructor with parameters to ensure it sets all fields correctly.
+     */
     @Test
     void constructorWithParameters_SetsAllFields() {
         String pseudo = "user123";
@@ -29,6 +36,9 @@ class UtilisateurTest {
         assertTrue(utilisateur.getObjets().isEmpty());
     }
 
+    /**
+     * Tests the constructor with parameters and objects to ensure it sets all fields correctly.
+     */
     @Test
     void constructorWithParametersAndObjects_SetsAllFields() {
         String pseudo = "user123";
@@ -49,6 +59,9 @@ class UtilisateurTest {
         assertEquals(objets, utilisateur.getObjets());
     }
 
+    /**
+     * Tests the default constructor to ensure it sets all fields to null.
+     */
     @Test
     void defaultConstructor_SetsFieldsToNull() {
         Utilisateur utilisateur = new Utilisateur();
@@ -61,6 +74,9 @@ class UtilisateurTest {
         assertNull(utilisateur.getObjets());
     }
 
+    /**
+     * Tests the setPseudo method to ensure it updates the pseudo field.
+     */
     @Test
     void setPseudo_UpdatesPseudo() {
         Utilisateur utilisateur = new Utilisateur();
@@ -70,6 +86,9 @@ class UtilisateurTest {
         assertEquals(pseudo, utilisateur.getPseudo());
     }
 
+    /**
+     * Tests the setMdp method to ensure it updates the mdp field.
+     */
     @Test
     void setMdp_UpdatesMdp() {
         Utilisateur utilisateur = new Utilisateur();
@@ -79,6 +98,9 @@ class UtilisateurTest {
         assertEquals(mdp, utilisateur.getMdp());
     }
 
+    /**
+     * Tests the setMail method to ensure it updates the mail field.
+     */
     @Test
     void setMail_UpdatesMail() {
         Utilisateur utilisateur = new Utilisateur();
@@ -88,6 +110,9 @@ class UtilisateurTest {
         assertEquals(mail, utilisateur.getMail());
     }
 
+    /**
+     * Tests the setNom method to ensure it updates the nom field.
+     */
     @Test
     void setNom_UpdatesNom() {
         Utilisateur utilisateur = new Utilisateur();
@@ -97,6 +122,9 @@ class UtilisateurTest {
         assertEquals(nom, utilisateur.getNom());
     }
 
+    /**
+     * Tests the setPrenom method to ensure it updates the prenom field.
+     */
     @Test
     void setPrenom_UpdatesPrenom() {
         Utilisateur utilisateur = new Utilisateur();
@@ -106,6 +134,9 @@ class UtilisateurTest {
         assertEquals(prenom, utilisateur.getPrenom());
     }
 
+    /**
+     * Tests the setObjets method to ensure it updates the objets field.
+     */
     @Test
     void setObjets_UpdatesObjets() {
         Utilisateur utilisateur = new Utilisateur();

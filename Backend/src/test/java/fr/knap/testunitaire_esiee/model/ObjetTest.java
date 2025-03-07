@@ -4,11 +4,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the Objet class.
+ */
 @SpringBootTest
 class ObjetTest {
 
+    /**
+     * Tests the constructor with parameters to ensure it sets all fields correctly.
+     */
     @Test
     void constructorWithParameters_SetsAllFields() {
         Utilisateur utilisateur = new Utilisateur();
@@ -26,6 +33,9 @@ class ObjetTest {
         assertEquals(dateCreation, objet.getDateCreation());
     }
 
+    /**
+     * Tests the default constructor to ensure it sets all fields to null.
+     */
     @Test
     void defaultConstructor_SetsFieldsToNull() {
         Objet objet = new Objet();
@@ -37,6 +47,9 @@ class ObjetTest {
         assertNull(objet.getDateCreation());
     }
 
+    /**
+     * Tests the setUtilisateur method to ensure it updates the utilisateur field.
+     */
     @Test
     void setUtilisateur_UpdatesUtilisateur() {
         Objet objet = new Objet();
@@ -46,6 +59,9 @@ class ObjetTest {
         assertEquals(utilisateur, objet.getUtilisateur());
     }
 
+    /**
+     * Tests the setNom method to ensure it updates the nom field.
+     */
     @Test
     void setNom_UpdatesNom() {
         Objet objet = new Objet();
@@ -55,6 +71,9 @@ class ObjetTest {
         assertEquals(nom, objet.getNom());
     }
 
+    /**
+     * Tests the setDescription method to ensure it updates the description field.
+     */
     @Test
     void setDescription_UpdatesDescription() {
         Objet objet = new Objet();
@@ -64,6 +83,9 @@ class ObjetTest {
         assertEquals(description, objet.getDescription());
     }
 
+    /**
+     * Tests the setCategorie method to ensure it updates the categorie field.
+     */
     @Test
     void setCategorie_UpdatesCategorie() {
         Objet objet = new Objet();
@@ -73,6 +95,9 @@ class ObjetTest {
         assertEquals(categorie, objet.getCategorie());
     }
 
+    /**
+     * Tests the setDateCreation method to ensure it updates the dateCreation field.
+     */
     @Test
     void setDateCreation_UpdatesDateCreation() {
         Objet objet = new Objet();
