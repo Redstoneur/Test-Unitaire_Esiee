@@ -1,5 +1,6 @@
 package fr.knap.testunitaire_esiee.controller;
 
+import fr.knap.testunitaire_esiee.dto.UtilisateurDTO;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,19 @@ public class UtilisateurController {
      * @return The user with the specified ID.
      */
     @GetMapping("/{id}")
-    public Utilisateur obtenirUtilisateurParId(@PathVariable Long id) {
-        return utilisateurService.obtenirUtilisateurParId(id);
+    public UtilisateurDTO obtenirUtilisateurInfoParId(@PathVariable Long id) {
+        return utilisateurService.obtenirUtilisateurInfoParId(id);
+    }
+
+    /**
+     * Retrieves a specific user by their ID.
+     *
+     * @param id The ID of the user to retrieve.
+     * @return The user with the specified ID.
+     */
+    @GetMapping("/{id}")
+    public UtilisateurDTO obtenirUtilisateurPseudoParId(@PathVariable Long id) {
+        return utilisateurService.obtenirUtilisateurPseudoParId(id);
     }
 
     /**

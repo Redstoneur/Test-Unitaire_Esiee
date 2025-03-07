@@ -51,7 +51,7 @@ class UtilisateurControllerTest {
     void testObtenirUtilisateurParId() {
         Utilisateur utilisateur = new Utilisateur();
         when(utilisateurService.obtenirUtilisateurParId(1L)).thenReturn(utilisateur);
-        assertEquals(utilisateur, utilisateurController.obtenirUtilisateurParId(1L));
+        assertEquals(utilisateur, utilisateurController.obtenirUtilisateurInfoParId(1L));
     }
 
     /**
