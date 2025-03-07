@@ -1,6 +1,7 @@
-package fr.knap.testunitaire_esiee.model;
+package fr.knap.testunitaire_esiee.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import fr.knap.testunitaire_esiee.model.CategorieObjet;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
@@ -14,7 +15,8 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-public class ObjetBuffer {
+public class ObjetBufferDTO {
+
     /**
      * The name of the object.
      */
@@ -37,7 +39,8 @@ public class ObjetBuffer {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateCreation;
 
-    public ObjetBuffer(String nom, String description, CategorieObjet categorie, LocalDateTime dateCreation) {
+    public ObjetBufferDTO(String nom, String description, CategorieObjet categorie, LocalDateTime dateCreation) {
+
         this.nom = nom;
         this.description = description;
         this.categorie = categorie;

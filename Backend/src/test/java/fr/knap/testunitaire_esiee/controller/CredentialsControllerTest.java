@@ -1,5 +1,6 @@
 package fr.knap.testunitaire_esiee.controller;
 
+import fr.knap.testunitaire_esiee.dto.TokenCredentialDTO;
 import fr.knap.testunitaire_esiee.model.*;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,7 +69,7 @@ class CredentialsControllerTest {
         doNothing().when(utilisateurService).disconnect(token.getToken());
         assertThrows(
                 ResponseStatusException.class,
-                () -> credentialsController.disconnect(new TokenCredential(token.getToken()))
+                () -> credentialsController.disconnect(new TokenCredentialDTO(token.getToken()))
         );
     }
 
@@ -82,7 +83,7 @@ class CredentialsControllerTest {
         when(utilisateurService.verifyToken(token.getToken())).thenReturn(true);
         assertThrows(
                 ResponseStatusException.class,
-                () -> credentialsController.verifyToken(new TokenCredential(token.getToken()))
+                () -> credentialsController.verifyToken(new TokenCredentialDTO(token.getToken()))
         );
     }
 }

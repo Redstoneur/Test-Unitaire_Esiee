@@ -18,4 +18,5 @@ public interface ObjetRepository extends JpaRepository<Objet, Long> {
      * @return A list of objects associated with the specified user ID.
      */
     List<Objet> findByUtilisateurId(Long idUtilisateur);
+
 }

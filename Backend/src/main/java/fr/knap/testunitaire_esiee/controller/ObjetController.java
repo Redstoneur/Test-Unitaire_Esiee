@@ -1,12 +1,15 @@
 package fr.knap.testunitaire_esiee.controller;
 
+import fr.knap.testunitaire_esiee.dto.ObjetDTO;
 import fr.knap.testunitaire_esiee.model.Objet;
-import fr.knap.testunitaire_esiee.model.ObjetBuffer;
+import fr.knap.testunitaire_esiee.dto.ObjetBufferDTO;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.services.ObjetService;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -31,15 +34,17 @@ public class ObjetController {
      * @return The created object.
      */
     @PostMapping
-    public Objet creerObjet(@RequestHeader("Authorization") String authToken, @RequestBody ObjetBuffer objetBuffer) {
+    public Objet creerObjet(@RequestHeader("Authorization") String authToken, @RequestBody ObjetBufferDTO objetBufferDTO) {
+        if(!utilisateurService.verifyToken(authToken))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
         Utilisateur utilisateur = utilisateurService.obtenirUtilisateurParToken(authToken);
 
         Objet objet = new Objet(
                 utilisateur,
-                objetBuffer.getNom(),
-                objetBuffer.getDescription(),
-                objetBuffer.getCategorie(),
-                objetBuffer.getDateCreation()
+                objetBufferDTO.getNom(),
+                objetBufferDTO.getDescription(),
+                objetBufferDTO.getCategorie(),
+                objetBufferDTO.getDateCreation()
         );
         return objetService.creerObjet(objet);
     }
@@ -50,7 +55,7 @@ public class ObjetController {
      * @return A list of all objects.
      */
     @GetMapping
-    public List<Objet> obtenirTousLesObjets() {
+    public List<ObjetDTO> obtenirTousLesObjets() {
         return objetService.obtenirTousLesObjets();
     }
 
@@ -61,8 +66,10 @@ public class ObjetController {
      * @return A list of objects belonging to the specified user.
      */
     @GetMapping("/{idUtilisateur}")
-    public List<Objet> obtenirObjetsParUtilisateur(@PathVariable Long idUtilisateur) {
-        return objetService.obtenirObjetsParUtilisateur(idUtilisateur);
+    public List<ObjetDTO> obtenirObjetsParUtilisateur(@RequestHeader("Authorization") String authToken, @PathVariable Long idUtilisateur) {
+        if(utilisateurService.verifyToken(authToken))
+            return objetService.obtenirObjetsParUtilisateur(idUtilisateur);
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
     }
 
     /**
@@ -84,8 +91,10 @@ public class ObjetController {
      * @return The updated object.
      */
     @PutMapping("/{id}")
-    public Objet mettreAJourObjet(@PathVariable Long id, @RequestBody Objet objet) {
-        return objetService.mettreAJourObjet(id, objet);
+    public Objet mettreAJourObjet(@RequestHeader("Authorization") String authToken, @PathVariable Long id, @RequestBody Objet objet) {
+        if(utilisateurService.verifyToken(authToken))
+            return objetService.mettreAJourObjet(id, objet);
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
     }
 
     /**
@@ -94,8 +103,10 @@ public class ObjetController {
      * @param id The ID of the object to delete.
      */
     @DeleteMapping("/{id}")
-    public void supprimerObjet(@PathVariable Long id) {
-        objetService.supprimerObjet(id);
+    public void supprimerObjet(@RequestHeader("Authorization") String authToken, @PathVariable Long id) {
+        if(utilisateurService.verifyToken(authToken))
+            objetService.supprimerObjet(id);
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
     }
 
 }

@@ -2,6 +2,7 @@ package fr.knap.testunitaire_esiee.controller;
 
 import fr.knap.testunitaire_esiee.model.Echange;
 import fr.knap.testunitaire_esiee.services.EchangeService;
+import fr.knap.testunitaire_esiee.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,8 @@ public class EchangeController {
 
     @Autowired
     private EchangeService echangeService;
+    @Autowired
+    private UtilisateurService utilisateurService;
 
     /**
      * Creates a new exchange.
@@ -47,8 +50,10 @@ public class EchangeController {
      * @return The exchange with the specified ID.
      */
     @GetMapping("/{id}")
-    public Echange obtenirUnEchange(@PathVariable Long id) {
-        return echangeService.obtenirEchangeParId(id);
+    public Echange obtenirUnEchange(@RequestHeader("Authorization") String authToken,@PathVariable Long id) {
+        if(utilisateurService.verifyToken(authToken))
+            return echangeService.obtenirEchangeParId(id);
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -60,11 +65,14 @@ public class EchangeController {
      * @throws ResponseStatusException if the exchange does not exist.
      */
     @PutMapping("/update")
-    public Echange mettreAJourEchange(@RequestBody Echange echange) {
-        if(echange.getId() == null)
-            throw new IllegalArgumentException("L'id de l'échange ne peut pas être null");
-        if (echangeService.echangeExist(echange.getId()))
-            return echangeService.mettreAJourEchange(echange);
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange is not valid");
+    public Echange mettreAJourEchange(@RequestHeader("Authorization") String authToken, @RequestBody Echange echange) {
+        if(utilisateurService.verifyToken(authToken)) {
+            if(echange.getId() == null)
+                throw new IllegalArgumentException("L'id de l'échange ne peut pas être null");
+            if (echangeService.echangeExist(echange.getId()))
+                return echangeService.mettreAJourEchange(echange);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange is not valid");
+        }
+       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
     }
 }

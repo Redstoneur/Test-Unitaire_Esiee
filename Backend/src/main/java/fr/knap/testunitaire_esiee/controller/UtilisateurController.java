@@ -4,7 +4,10 @@ import fr.knap.testunitaire_esiee.dto.UtilisateurDTO;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -34,9 +37,11 @@ public class UtilisateurController {
      * @param id The ID of the user to retrieve.
      * @return The user with the specified ID.
      */
-    @GetMapping("/{id}")
-    public UtilisateurDTO obtenirUtilisateurInfoParId(@PathVariable Long id) {
-        return utilisateurService.obtenirUtilisateurInfoParId(id);
+    @GetMapping("/trans")
+    public UtilisateurDTO obtenirUtilisateurInfoParId(@RequestHeader("Authorization") String authToken) {
+        if(utilisateurService.verifyToken(authToken))
+            return utilisateurService.obtenirUtilisateurInfoParToken(authToken);
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
     }
 
     /**
@@ -46,8 +51,23 @@ public class UtilisateurController {
      * @return The user with the specified ID.
      */
     @GetMapping("/{id}")
-    public UtilisateurDTO obtenirUtilisateurPseudoParId(@PathVariable Long id) {
-        return utilisateurService.obtenirUtilisateurPseudoParId(id);
+    public Utilisateur obtenirUtilisateurParId(@RequestHeader("Authorization") String authToken,@PathVariable Long id) {
+        if(utilisateurService.verifyToken(authToken))
+            return utilisateurService.obtenirUtilisateurParId(id);
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
+    }
+
+    /**
+     * Retrieves a specific user by their ID.
+     *
+     * @param id The ID of the user to retrieve.
+     * @return The user with the specified ID.
+     */
+    @GetMapping("/pseudo/{id}")
+    public UtilisateurDTO obtenirUtilisateurPseudoParId(@RequestHeader("Authorization") String authToken, @PathVariable Long id) {
+        if(utilisateurService.verifyToken(authToken))
+            return utilisateurService.obtenirUtilisateurPseudoParId(id);
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
     }
 
     /**
@@ -58,8 +78,10 @@ public class UtilisateurController {
      * @return The updated user.
      */
     @PutMapping("/{id}")
-    public Utilisateur mettreAJourUtilisateur(@PathVariable Long id, @RequestBody Utilisateur utilisateur) {
-        return utilisateurService.mettreAJourUtilisateur(id, utilisateur);
+    public Utilisateur mettreAJourUtilisateur(@RequestHeader("Authorization") String authToken, @PathVariable Long id, @RequestBody Utilisateur utilisateur) {
+        if(utilisateurService.verifyToken(authToken))
+            return utilisateurService.mettreAJourUtilisateur(id, utilisateur);
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
     }
 
     /**
@@ -68,7 +90,9 @@ public class UtilisateurController {
      * @param id The ID of the user to delete.
      */
     @DeleteMapping("/{id}")
-    public void supprimerUtilisateur(@PathVariable Long id) {
-        utilisateurService.supprimerUtilisateur(id);
+    public void supprimerUtilisateur(@RequestHeader("Authorization") String authToken, @PathVariable Long id) {
+        if(utilisateurService.verifyToken(authToken))
+            utilisateurService.supprimerUtilisateur(id);
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid token");
     }
 }

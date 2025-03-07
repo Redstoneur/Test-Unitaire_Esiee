@@ -63,6 +63,7 @@ public class UtilisateurService {
         }
         return null;
     }
+
     public UtilisateurDTO obtenirUtilisateurPseudoParId(Long id) {
         Optional<Utilisateur> utilisateur = utilisateurRepository.findById(id);
         if (utilisateur.isPresent()) {
@@ -75,7 +76,7 @@ public class UtilisateurService {
     /**
      * Updates an existing Utilisateur entity.
      *
-     * @param id The ID of the Utilisateur entity to be updated.
+     * @param id          The ID of the Utilisateur entity to be updated.
      * @param utilisateur The Utilisateur entity with updated information.
      * @return The updated Utilisateur entity, or null if the entity does not exist.
      */
@@ -160,5 +161,16 @@ public class UtilisateurService {
             return obtenirUtilisateurParMail(Token.getEmail(token));
         }
         return null;
+    }
+
+    /**
+     * Retrieves a Utilisateur entity by its token.
+     *
+     * @param token The token of the Utilisateur entity.
+     * @return The Utilisateur entity with the specified token, or null if not found.
+     */
+    public UtilisateurDTO obtenirUtilisateurInfoParToken(String token) {
+        Utilisateur u = obtenirUtilisateurParToken(token);
+        return new UtilisateurDTO(u.getPseudo(), u.getNom(), u.getPrenom());
     }
 }
