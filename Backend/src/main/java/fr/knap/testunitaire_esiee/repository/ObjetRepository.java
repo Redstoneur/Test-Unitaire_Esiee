@@ -1,4 +1,4 @@
-package fr.knap.testunitaire_esiee.respository;
+package fr.knap.testunitaire_esiee.repository;
 
 import fr.knap.testunitaire_esiee.model.Objet;
 import org.springframework.data.jpa.repository.JpaRepository;

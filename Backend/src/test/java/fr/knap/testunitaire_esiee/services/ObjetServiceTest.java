@@ -1,7 +1,7 @@
 package fr.knap.testunitaire_esiee.services;
 
 import fr.knap.testunitaire_esiee.model.Objet;
-import fr.knap.testunitaire_esiee.respository.ObjetRepository;
+import fr.knap.testunitaire_esiee.repository.ObjetRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

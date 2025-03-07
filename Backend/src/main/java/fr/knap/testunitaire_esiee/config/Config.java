@@ -1,9 +1,9 @@
 package fr.knap.testunitaire_esiee.config;
 
 import fr.knap.testunitaire_esiee.model.*;
-import fr.knap.testunitaire_esiee.respository.EchangeRepository;
-import fr.knap.testunitaire_esiee.respository.ObjetRepository;
-import fr.knap.testunitaire_esiee.respository.UtilisateurRepository;
+import fr.knap.testunitaire_esiee.repository.EchangeRepository;
+import fr.knap.testunitaire_esiee.repository.ObjetRepository;
+import fr.knap.testunitaire_esiee.repository.UtilisateurRepository;
 import fr.knap.testunitaire_esiee.services.ObjetService;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
 import org.springframework.boot.CommandLineRunner;

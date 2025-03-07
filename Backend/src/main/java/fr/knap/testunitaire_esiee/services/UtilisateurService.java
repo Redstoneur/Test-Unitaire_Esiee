@@ -3,8 +3,8 @@ package fr.knap.testunitaire_esiee.services;
 import fr.knap.testunitaire_esiee.model.Credentials;
 import fr.knap.testunitaire_esiee.model.Token;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
-import fr.knap.testunitaire_esiee.respository.UtilisateurRepository;
-import fr.knap.testunitaire_esiee.respository.TokenRepository;
+import fr.knap.testunitaire_esiee.repository.UtilisateurRepository;
+import fr.knap.testunitaire_esiee.repository.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

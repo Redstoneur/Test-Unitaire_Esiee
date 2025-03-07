@@ -1,9 +1,7 @@
 package fr.knap.testunitaire_esiee.services;
 
-import fr.knap.testunitaire_esiee.model.Credentials;
-import fr.knap.testunitaire_esiee.model.Token;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
-import fr.knap.testunitaire_esiee.respository.UtilisateurRepository;
+import fr.knap.testunitaire_esiee.repository.UtilisateurRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

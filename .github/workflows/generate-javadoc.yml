@@ -42,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: javadoc
-          path: Backend/target/site/apidocs
+          path: ./Backend/target/reports/apidocs
