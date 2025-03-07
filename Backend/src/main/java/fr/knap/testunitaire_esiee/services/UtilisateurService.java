@@ -181,6 +181,9 @@ public class UtilisateurService {
      */
     public UtilisateurDTO obtenirUtilisateurInfoParToken(String token) {
         Utilisateur u = obtenirUtilisateurParToken(token);
+        if (u == null) {
+            return null;
+        }
         return new UtilisateurDTO(u.getPseudo(), u.getNom(), u.getPrenom());
     }
 }
