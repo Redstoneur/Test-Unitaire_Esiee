@@ -32,6 +32,8 @@ const fetchUtilisateurId = async () => {
   }
 }
 /**
+ *  todo: delete commentaires
+ *
  * /**
  *  *   Règles d'affichage pour un objet
  *  * Si l'objet fait partie d'un échange
@@ -151,12 +153,22 @@ onMounted(async () => {
   padding: 20px;
 }
 
+/*
 .grid {
   display: flex;
   overflow-x: auto;
   gap: 20px;
   padding-bottom: 10px;
 }
+*/
+/**/
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding-bottom: 10px;
+}
+/**/
 
 /* Style des cartes */
 .card {

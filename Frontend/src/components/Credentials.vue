@@ -2,6 +2,7 @@
 import {ref, onMounted} from 'vue';
 import ObjetScreen from './ObjetScreen.vue';
 import {useRouter} from 'vue-router';
+import HelloWorld from "./HelloWorld.vue";
 
 // Déclaration des variables réactives
 const isLoginMode = ref(true);
@@ -127,13 +128,15 @@ onMounted(() => {
       </div>
     </div>
     <div v-if="isAuthenticated" class="welcome">
-      <h2>Bienvenue ! Vous êtes connecté.</h2>
-      <h3 class="objet-title">Liste des objets</h3>
-      <router-link class="addObjet" to="/add-object">Ajouter un objet</router-link>
-      <button class="disconected" @click="logout">Déconnexion</button>
-      <div>
+      <header>
+        <h2>Bienvenue ! Vous êtes connecté.</h2>
+        <h3 class="objet-title">Liste des objets</h3>
+        <router-link class="addObjet" to="/add-object">Ajouter un objet</router-link>
+        <button class="disconected" @click="logout">Déconnexion</button>
+      </header>
+      <main>
         <ObjetScreen/>
-      </div>
+      </main>
     </div>
   </div>
 </template>
@@ -145,6 +148,34 @@ onMounted(() => {
   align-items: center;
   height: 100vh;
   background: #f1f1f1f1;
+}
+
+.welcome {
+  text-align: center;
+  padding: 20px;
+  font-size: 20px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+header {
+  top: 0;
+  width: 100%;
+  background: white;
+  z-index: 1000;
+  padding: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+main {
+  margin-top: 1em;
+  padding: 0.5em;
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
 }
 
 .disconected {
@@ -217,12 +248,6 @@ button:hover {
 .error {
   color: red;
   margin-top: 10px;
-}
-
-.welcome {
-  text-align: center;
-  padding: 20px;
-  font-size: 20px;
 }
 
 .objet-title {
