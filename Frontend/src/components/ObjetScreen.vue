@@ -1,12 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import {ref, onMounted} from 'vue';
 
-const objets = ref<{ id: number; nom: string; description: string; categorie: string; showInput: boolean; enEchange: boolean; idUtilisateur: string }[]>([]);
+const objets = ref<{
+  id: number;
+  nom: string;
+  description: string;
+  categorie: string;
+  showInput: boolean;
+  enEchange: boolean;
+  idUtilisateur: string
+}[]>([]);
 const errorMessage = ref('');
 const utilisateurId = ref(''); // ID réel de l'utilisateur connecté
 
 // Récupérer l'ID de l'utilisateur connecté
-const authToken = localStorage.getItem('authToken');
+const authToken: string = localStorage.getItem('authToken') || '';
 const fetchUtilisateurId = async () => {
   try {
     const response = await fetch('http://localhost:3000/api/utilisateurs/trans', {
@@ -89,7 +97,7 @@ const handleProposerEchange = (objetId: number) => {
 // Fonction pour supprimer un objet
 const handleSupprimerObjet = async (objetId: number) => {
   try {
-    await fetch(`http://localhost:3000/api/objets/${objetId}`, { method: 'DELETE' });
+    await fetch(`http://localhost:3000/api/objets/${objetId}`, {method: 'DELETE'});
     objets.value = objets.value.filter(o => o.id !== objetId);
   } catch (error) {
     errorMessage.value = 'Erreur lors de la suppression';
@@ -118,12 +126,14 @@ onMounted(async () => {
         </template>
 
         <template v-else>
-          <button v-if="objet.idUtilisateur === utilisateurId" class="delete-btn" @click="handleSupprimerObjet(objet.id)">Supprimer l'objet</button>
+          <button v-if="objet.idUtilisateur === utilisateurId" class="delete-btn"
+                  @click="handleSupprimerObjet(objet.id)">Supprimer l'objet
+          </button>
           <button v-else class="exchange-btn" @click="handleProposerEchange(objet.id)">Proposer à l'échange</button>
         </template>
 
         <div class="input-container" v-if="objet.showInput">
-          <input type="text" placeholder="Entrez votre proposition" class="exchange-input" />
+          <input type="text" placeholder="Entrez votre proposition" class="exchange-input"/>
         </div>
       </div>
     </div>

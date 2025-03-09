@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import {ref, onMounted} from 'vue';
 import ObjetScreen from './ObjetScreen.vue';
-import { useRouter } from 'vue-router';
+import {useRouter} from 'vue-router';
 
 // Déclaration des variables réactives
 const isLoginMode = ref(true);
@@ -36,7 +36,7 @@ const register = async () => {
   try {
     const response = await fetch('http://localhost:3000/api/credentials/register', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         pseudo: pseudo.value,
         mdp: mdp.value,
@@ -59,8 +59,8 @@ const register = async () => {
 
     // Redirection vers la page d'accueil
     router.push('/');
-  } catch (error) {
-    errorMessage.value = error.message;
+  } catch (error: any) {
+    errorMessage.value = (error as Error).message;
   }
 };
 
@@ -69,8 +69,8 @@ const login = async () => {
   try {
     const response = await fetch('http://localhost:3000/api/credentials/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mail: mail.value, mdp: mdp.value }),
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({mail: mail.value, mdp: mdp.value}),
     });
 
     if (!response.ok) throw new Error('Échec de la connexion');
@@ -85,8 +85,8 @@ const login = async () => {
 
     // Redirection vers la page d'accueil
     router.push('/');
-  } catch (error) {
-    errorMessage.value = error.message;
+  } catch (error: any) {
+    errorMessage.value = (error as Error).message;
   }
 };
 
@@ -113,13 +113,13 @@ onMounted(() => {
         <h2>{{ isLoginMode ? 'Connexion' : 'Inscription' }}</h2>
         <form @submit.prevent="isLoginMode ? login() : register()">
           <div v-if="!isLoginMode">
-            <input type="text" v-model="pseudo" placeholder="Pseudo" required />
-            <input type="text" v-model="nom" placeholder="Nom" required />
-            <input type="text" v-model="prenom" placeholder="Prénom" required />
+            <input type="text" v-model="pseudo" placeholder="Pseudo" required/>
+            <input type="text" v-model="nom" placeholder="Nom" required/>
+            <input type="text" v-model="prenom" placeholder="Prénom" required/>
           </div>
 
-          <input type="email" v-model="mail" placeholder="Email" required />
-          <input type="password" v-model="mdp" placeholder="Mot de passe" required />
+          <input type="email" v-model="mail" placeholder="Email" required/>
+          <input type="password" v-model="mdp" placeholder="Mot de passe" required/>
           <button type="submit">{{ isLoginMode ? 'Se connecter' : 'S\'inscrire' }}</button>
         </form>
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
@@ -129,10 +129,10 @@ onMounted(() => {
     <div v-if="isAuthenticated" class="welcome">
       <h2>Bienvenue ! Vous êtes connecté.</h2>
       <h3 class="objet-title">Liste des objets</h3>
-      <router-link class="addObjet"  to="/add-object">Ajouter un objet</router-link>
+      <router-link class="addObjet" to="/add-object">Ajouter un objet</router-link>
       <button class="disconected" @click="logout">Déconnexion</button>
       <div>
-        <ObjetScreen />
+        <ObjetScreen/>
       </div>
     </div>
   </div>
@@ -146,20 +146,25 @@ onMounted(() => {
   height: 100vh;
   background: #f1f1f1f1;
 }
+
 .disconected {
   margin-left: 20px;
   transition: 0.5s ease-in-out;
 }
+
 .disconected:hover {
   transition: background-color 0.3s ease-in-out;
 }
+
 .addObjet {
-  color:black;
+  color: black;
 }
+
 .addObjet:hover {
   color: blue;
   transition: 0.5s ease-in-out;
 }
+
 .card {
   padding: 2rem;
   border-radius: 10px;

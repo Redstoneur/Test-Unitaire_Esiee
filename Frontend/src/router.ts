@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 import Credentions from './components/Credentials.vue';
 import AddObjectScreen from './components/addObjetScreen.vue';
 
-const requireAuth = (to, from, next) => {
+const requireAuth = (to: any, from: any, next: any) => {
     const token = localStorage.getItem('authToken');
     if (!token) {
         next('/');

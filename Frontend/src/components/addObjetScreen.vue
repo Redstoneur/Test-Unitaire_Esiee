@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {ref} from 'vue';
 
 const nomObjet = ref('');
 const descriptionObjet = ref('');
@@ -20,7 +20,7 @@ const categories = [
   'ELECTROMENAGER',
   'AUTRE'
 ]; // Liste des catégories mises à jour
-const authToken = localStorage.getItem('authToken');
+const authToken: string = localStorage.getItem('authToken') || '';
 const handleSubmit = async () => {
   const objet = {
     nom: nomObjet.value,
@@ -42,7 +42,7 @@ const handleSubmit = async () => {
       throw new Error('Erreur lors de l\'ajout de l\'objet');
     }
     const data = await response.json();
-    console.log("datt",data)
+    console.log("datt", data)
     successMessage.value = 'Objet ajouté avec succès !';
     // Reset form
     nomObjet.value = '';
@@ -68,7 +68,7 @@ const handleSubmit = async () => {
     <form @submit.prevent="handleSubmit()">
       <div class="form-group">
         <label for="nomObjet">Nom de l'Objet</label>
-        <input v-model="nomObjet" type="text" id="nomObjet" required />
+        <input v-model="nomObjet" type="text" id="nomObjet" required/>
       </div>
 
       <div class="form-group">
