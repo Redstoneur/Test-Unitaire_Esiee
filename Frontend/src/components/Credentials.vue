@@ -58,7 +58,7 @@ const register = async () => {
     resetForm();
 
     // Redirection vers la page d'accueil
-    router.push('/');
+    await router.push('/');
   } catch (error: any) {
     errorMessage.value = (error as Error).message;
   }
@@ -84,7 +84,7 @@ const login = async () => {
     resetForm();
 
     // Redirection vers la page d'accueil
-    router.push('/');
+    await router.push('/');
   } catch (error: any) {
     errorMessage.value = (error as Error).message;
   }
