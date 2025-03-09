@@ -2,16 +2,26 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Credentions from './components/Credentials.vue';
 import AddObjectScreen from './components/addObjetScreen.vue';
 
+const requireAuth = (to, from, next) => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        next('/');
+    } else {
+        next();
+    }
+};
+
 const routes = [
     {
-        path: '/', // Page d'accueil
+        path: '/',
         name: 'home',
-        component: Credentions, // Composant pour l'authentification
+        component: Credentions,
     },
     {
-        path: '/add-object', // Page pour ajouter un objet
+        path: '/add-object',
         name: 'add-object',
-        component: AddObjectScreen, // Composant pour ajouter un objet
+        component: AddObjectScreen,
+        beforeEnter: requireAuth,
     },
 ];
 

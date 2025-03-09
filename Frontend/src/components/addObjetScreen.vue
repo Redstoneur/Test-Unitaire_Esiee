@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const pseudo = ref('');
-const mdp = ref('');
-const mail = ref('');
-const nomUtilisateur = ref('');
-const prenomUtilisateur = ref('');
 const nomObjet = ref('');
 const descriptionObjet = ref('');
 const categorieObjet = ref('');
@@ -25,22 +20,12 @@ const categories = [
   'ELECTROMENAGER',
   'AUTRE'
 ]; // Liste des catégories mises à jour
-
+const authToken = localStorage.getItem('authToken');
 const handleSubmit = async () => {
-  const utilisateur = {
-    pseudo: pseudo.value,
-    mdp: mdp.value,
-    mail: mail.value,
-    nom: nomUtilisateur.value,
-    prenom: prenomUtilisateur.value,
-  };
-
   const objet = {
-    utilisateur,
     nom: nomObjet.value,
     description: descriptionObjet.value,
     categorie: categorieObjet.value,
-    dateCreation: new Date().toISOString(), // Utilisation de la date actuelle
   };
 
   try {
@@ -48,6 +33,7 @@ const handleSubmit = async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': authToken,
       },
       body: JSON.stringify(objet),
     });
@@ -55,14 +41,10 @@ const handleSubmit = async () => {
     if (!response.ok) {
       throw new Error('Erreur lors de l\'ajout de l\'objet');
     }
-
+    const data = await response.json();
+    console.log("datt",data)
     successMessage.value = 'Objet ajouté avec succès !';
     // Reset form
-    pseudo.value = '';
-    mdp.value = '';
-    mail.value = '';
-    nomUtilisateur.value = '';
-    prenomUtilisateur.value = '';
     nomObjet.value = '';
     descriptionObjet.value = '';
     categorieObjet.value = '';
@@ -70,6 +52,7 @@ const handleSubmit = async () => {
     errorMessage.value = (error as Error).message;
   }
 };
+
 </script>
 
 <template>
@@ -82,32 +65,7 @@ const handleSubmit = async () => {
     <p v-if="successMessage" class="success">{{ successMessage }}</p>
 
     <!-- Formulaire d'ajout d'objet -->
-    <form @submit.prevent="handleSubmit">
-      <div class="form-group">
-        <label for="pseudo">Pseudo Utilisateur</label>
-        <input v-model="pseudo" type="text" id="pseudo" required />
-      </div>
-
-      <div class="form-group">
-        <label for="mdp">Mot de Passe</label>
-        <input v-model="mdp" type="password" id="mdp" required />
-      </div>
-
-      <div class="form-group">
-        <label for="mail">Email</label>
-        <input v-model="mail" type="email" id="mail" required />
-      </div>
-
-      <div class="form-group">
-        <label for="nomUtilisateur">Nom Utilisateur</label>
-        <input v-model="nomUtilisateur" type="text" id="nomUtilisateur" required />
-      </div>
-
-      <div class="form-group">
-        <label for="prenomUtilisateur">Prénom Utilisateur</label>
-        <input v-model="prenomUtilisateur" type="text" id="prenomUtilisateur" required />
-      </div>
-
+    <form @submit.prevent="handleSubmit()">
       <div class="form-group">
         <label for="nomObjet">Nom de l'Objet</label>
         <input v-model="nomObjet" type="text" id="nomObjet" required />

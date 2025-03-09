@@ -14,17 +14,21 @@ const errorMessage = ref('');
 const isAuthenticated = ref(false);
 const router = useRouter();
 
-// Vérification si l'utilisateur est déjà authentifié
-onMounted(() => {
-  const token = localStorage.getItem('authToken');
-  if (token) {
-    isAuthenticated.value = true;
-  }
-});
 
 // Changer le mode (connexion/inscription)
 const toggleMode = () => {
   isLoginMode.value = !isLoginMode.value;
+  resetForm(); // Réinitialiser les champs quand on change de mode
+};
+
+// Réinitialiser le formulaire
+const resetForm = () => {
+  pseudo.value = '';
+  mdp.value = '';
+  mail.value = '';
+  nom.value = '';
+  prenom.value = '';
+  errorMessage.value = '';
 };
 
 // Inscription de l'utilisateur
@@ -43,7 +47,18 @@ const register = async () => {
     });
 
     if (!response.ok) throw new Error('Erreur lors de l\'inscription');
-    toggleMode();
+
+    const data = await response.json();
+
+    // Sauvegarde du token et connexion immédiate
+    localStorage.setItem('authToken', data.token);
+    isAuthenticated.value = true;
+
+    // Réinitialiser le formulaire
+    resetForm();
+
+    // Redirection vers la page d'accueil
+    router.push('/');
   } catch (error) {
     errorMessage.value = error.message;
   }
@@ -61,12 +76,15 @@ const login = async () => {
     if (!response.ok) throw new Error('Échec de la connexion');
     const data = await response.json();
 
-    // Sauvegarder le jeton dans localStorage
+    // Sauvegarder le jeton et connexion immédiate
     localStorage.setItem('authToken', data.token);
-
-    // Changer l'état d'authentification
     isAuthenticated.value = true;
-    router.push('/'); // Rediriger vers la page d'accueil après la connexion
+
+    // Réinitialiser le formulaire
+    resetForm();
+
+    // Redirection vers la page d'accueil
+    router.push('/');
   } catch (error) {
     errorMessage.value = error.message;
   }
@@ -78,6 +96,14 @@ const logout = () => {
   isAuthenticated.value = false; // Mettre l'état de l'utilisateur à non authentifié
   router.push('/'); // Rediriger vers la page d'accueil
 };
+
+// Vérification si l'utilisateur est déjà authentifié
+onMounted(() => {
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    isAuthenticated.value = true;
+  }
+});
 </script>
 
 <template>
@@ -91,6 +117,7 @@ const logout = () => {
             <input type="text" v-model="nom" placeholder="Nom" required />
             <input type="text" v-model="prenom" placeholder="Prénom" required />
           </div>
+
           <input type="email" v-model="mail" placeholder="Email" required />
           <input type="password" v-model="mdp" placeholder="Mot de passe" required />
           <button type="submit">{{ isLoginMode ? 'Se connecter' : 'S\'inscrire' }}</button>
@@ -101,8 +128,9 @@ const logout = () => {
     </div>
     <div v-if="isAuthenticated" class="welcome">
       <h2>Bienvenue ! Vous êtes connecté.</h2>
-      <h3 class="objet-titlt">Liste des objets</h3>
-      <router-link to="/add-object">Ajouter un objet</router-link> <button @click="logout">Déconnexion</button>
+      <h3 class="objet-title">Liste des objets</h3>
+      <router-link class="addObjet"  to="/add-object">Ajouter un objet</router-link>
+      <button class="disconected" @click="logout">Déconnexion</button>
       <div>
         <ObjetScreen />
       </div>
@@ -116,15 +144,29 @@ const logout = () => {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #d7cece;
+  background: #f1f1f1f1;
 }
-
+.disconected {
+  margin-left: 20px;
+  transition: 0.5s ease-in-out;
+}
+.disconected:hover {
+  transition: background-color 0.3s ease-in-out;
+}
+.addObjet {
+  color:black;
+}
+.addObjet:hover {
+  color: blue;
+  transition: 0.5s ease-in-out;
+}
 .card {
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
   margin: 0 auto;
+  background: white;
 }
 
 h2 {
@@ -176,5 +218,9 @@ button:hover {
   text-align: center;
   padding: 20px;
   font-size: 20px;
+}
+
+.objet-title {
+  margin-top: 20px;
 }
 </style>
