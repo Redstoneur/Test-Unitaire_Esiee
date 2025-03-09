@@ -14,7 +14,10 @@ const prenom = ref('');
 const errorMessage = ref('');
 const isAuthenticated = ref(false);
 const router = useRouter();
-
+const searchText = ref('');
+const searchCategorie = ref('');
+const searchUser = ref('');
+const filteredObjets = ref([]);
 
 // Changer le mode (connexion/inscription)
 const toggleMode = () => {
@@ -135,7 +138,13 @@ onMounted(() => {
         <button class="disconected" @click="logout">Déconnexion</button>
       </header>
       <main>
-        <ObjetScreen/>
+        <form class="search-bar">
+          <input type="text" v-model="searchText" placeholder="Rechercher par texte"/>
+          <input type="text" v-model="searchCategorie" placeholder="Rechercher par catégorie"/>
+          <input type="text" v-model="searchUser" placeholder="Rechercher par utilisateur"/>
+          <button @click="">Rechercher</button>
+        </form>
+        <ObjetScreen class="object-screen"/>
       </main>
     </div>
   </div>
@@ -154,10 +163,11 @@ onMounted(() => {
   text-align: center;
   padding: 20px;
   font-size: 20px;
-  width: 100%;
+  width: 90%;
   height: 100%;
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
 }
 
 
@@ -175,7 +185,25 @@ main {
   padding: 0.5em;
   flex: 1;
   width: 100%;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.object-screen {
+  margin-top: 1em;
+  padding: 0.5em;
+  width: 100%;
+  display: flex;
+  flex: 1;
+  justify-content: center;
 }
 
 .disconected {
