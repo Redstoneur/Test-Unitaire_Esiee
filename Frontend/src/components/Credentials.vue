@@ -20,7 +20,6 @@ const router = useRouter();
 const searchText = ref('');
 const searchCategorie = ref('');
 const objets = ref<Objet[]>([]);
-const utilisateurId = ref('');
 
 // Liste des catégories d'objets
 const categories = Object.values(CategorieObjet);
@@ -109,26 +108,6 @@ const logout = () => {
   isAuthenticated.value = false; // Mettre l'état de l'utilisateur à non authentifié
   router.push('/'); // Rediriger vers la page d'accueil
 };
-
-// Récupérer l'ID de l'utilisateur connecté
-const fetchUtilisateurId = async () => {
-  try {
-    const token = localStorage.getItem('authToken');
-    if (token && await ApiRequest.BooleanVerifyToken(token)) {
-      isAuthenticated.value = true;
-      const response = await apiRequest.UserInformation(token);
-      if (response instanceof Error || !response.ok)
-        throw new Error('Erreur lors de la récupération de l\'utilisateur');
-
-      const data = await response.json();
-      utilisateurId.value = data.id;
-    } else
-      throw new Error('Vous n\'êtes pas Connecté');
-  } catch (error) {
-    errorMessage.value = (error as Error).message;
-  }
-};
-
 
 // Récupérer les objets et vérifier s'ils sont en échange
 const fetchObjets = async () => {
@@ -226,6 +205,12 @@ const handleSearch = async () => {
   await fetchObjets();
 };
 
+const handleReset = async () => {
+  searchText.value = '';
+  searchCategorie.value = '';
+  await fetchObjets();
+};
+
 </script>
 
 <template>
@@ -262,7 +247,10 @@ const handleSearch = async () => {
             <option value="" disabled selected>Sélectionner une catégorie</option>
             <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
           </select>
-          <button type="submit">Rechercher</button>
+          <div style="display: flex; justify-content: center; gap: 10px;">
+            <button type="submit">Rechercher</button>
+            <button type="reset" @click="handleReset">Réinitialiser</button>
+          </div>
         </form>
         <ObjetScreen :objets="objets" :handleSupprimerObjet="handleSupprimerObjet" class="object-screen"/>
       </main>
