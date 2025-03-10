@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, defineProps } from 'vue';
+import {ref, onMounted, defineProps} from 'vue';
 import Objet from "../Types/Objet";
 import apiRequest from "../Class/ApiRequest";
 
@@ -11,6 +11,7 @@ const errorMessage = ref('');
 const utilisateurId = ref(''); // ID réel de l'utilisateur connecté
 const showModal = ref(false);
 const selectedObjet = ref<Objet | null>(null);
+const exchangeDetails = ref<any>(null);
 
 // Récupérer l'ID de l'utilisateur connecté
 const authToken: string = localStorage.getItem('authToken') || '';
@@ -36,9 +37,23 @@ const handleProposerEchange = (objetId: number) => {
 };
 
 // Fonction pour afficher la modal de consultation d'échange
-const handleVoirEchange = (objet: Objet) => {
+const handleVoirEchange = async (objet: Objet) => {
   selectedObjet.value = objet;
   showModal.value = true;
+  await fetchExchangeDetails(objet.idEchange);
+};
+
+// Fonction pour récupérer les détails de l'échange
+const fetchExchangeDetails = async (exchangeId: number) => {
+  try {
+    const response = await apiRequest.GetEchange(exchangeId, authToken);
+    if (response instanceof Error || !response.ok)
+      throw new Error('Erreur lors de la récupération de l\'échange');
+
+    exchangeDetails.value = await response.json();
+  } catch (error) {
+    errorMessage.value = (error as Error).message;
+  }
 };
 
 onMounted(async () => {
@@ -57,7 +72,9 @@ onMounted(async () => {
         <p class="categorie"><strong>Catégorie :</strong> {{ objet.categorie }}</p>
 
         <template v-if="objet.enEchange">
-          <button v-if="objet.idUtilisateur === utilisateurId" class="view-btn" @click="handleVoirEchange(objet)">Voir l'échange</button>
+          <button v-if="objet.idUtilisateur === utilisateurId" class="view-btn" @click="handleVoirEchange(objet)">Voir
+            l'échange
+          </button>
         </template>
 
         <template v-else>
@@ -80,7 +97,12 @@ onMounted(async () => {
         <p><strong>Nom de l'objet :</strong> {{ selectedObjet?.nom }}</p>
         <p><strong>Description :</strong> {{ selectedObjet?.description }}</p>
         <p><strong>Catégorie :</strong> {{ selectedObjet?.categorie }}</p>
-        <!-- Ajoutez ici les détails supplémentaires de l'échange -->
+        <div v-if="exchangeDetails">
+          <p><strong>ID de l'échange :</strong> {{ exchangeDetails.id }}</p>
+          <p><strong>Objet demandé :</strong> {{ exchangeDetails.objetDemande.nom }}</p>
+          <p><strong>Objet proposé :</strong> {{ exchangeDetails.objetPropose.nom }}</p>
+          <!-- Ajoutez ici les détails supplémentaires de l'échange -->
+        </div>
       </div>
     </div>
   </div>

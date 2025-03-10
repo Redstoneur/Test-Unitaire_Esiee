@@ -167,6 +167,24 @@ class ApiRequest {
             }
         );
     }
+
+    /**
+     * Retrieves an exchange with the specified ID.
+     *
+     * @param {number} id - The ID of the exchange to retrieve.
+     * @param {string} token - The authentication token of the user.
+     * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
+     */
+    public static async GetEchange(id: number, token: string): Promise<Response | Error> {
+        return Request(
+            `${this.baseUrl}/echanges/${id}`,
+            RequestType.GET,
+            {
+                "Content-Type": "application/json",
+                "Authorization": token
+            }
+        );
+    }
 }
 
 export default ApiRequest;
