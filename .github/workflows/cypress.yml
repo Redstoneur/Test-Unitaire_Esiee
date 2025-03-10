@@ -35,12 +35,20 @@ jobs:
           sudo apt-get install -y docker-compose
 
       - name: Set up Docker Compose
-        run: docker-compose up -d
+        run: docker-compose up -d backend
 
       - name: Wait for services to be ready
         run: |
-          docker-compose exec -T backend sh -c 'while ! nc -z localhost 3000; do sleep 1; done'
-          docker-compose exec -T frontend sh -c 'while ! nc -z localhost 8080; do sleep 1; done'
+          for i in {1..10}; do
+            if curl --silent --fail http://localhost:3000/swagger-ui/index.html; then
+              echo "Service is up!"
+              exit 0
+            fi
+            echo "Waiting for service..."
+            sleep 5
+          done
+          echo "Service did not start in time"
+          exit 1
 
       - name: Cypress run
         # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action
@@ -54,6 +62,7 @@ jobs:
           # https://docs.cypress.io/guides/cloud/projects#Set-up-a-project-to-record
           record: true
           parallel: true # Runs test in parallel using settings above
+          working-directory: Frontend
         env:
           # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
           # in GitHub repo → Settings → Secrets → Actions
