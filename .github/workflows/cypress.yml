@@ -1,5 +1,17 @@
 name: Cypress Tests
-on: [push]
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - features/workflow
+      - features/frontend
+  pull_request:
+    branches:
+      - master
+      - dev
+
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
@@ -13,6 +25,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: docker-compose up -d
+
+      - name: Wait for services to be ready
+        run: |
+          docker-compose exec backend sh -c 'while ! nc -z localhost 3000; do sleep 1; done'
+          docker-compose exec frontend sh -c 'while ! nc -z localhost 8080; do sleep 1; done'
+
       - name: Cypress run
         # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action
         uses: cypress-io/github-action@v6
@@ -20,7 +41,7 @@ jobs:
           # Starts web server for E2E tests - replace with your own server invocation
           # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
           start: npm start
-          wait-on: 'http://localhost:3000' # Waits for above
+          wait-on: 'http://localhost:8080'
           # Records to Cypress Cloud
           # https://docs.cypress.io/guides/cloud/projects#Set-up-a-project-to-record
           record: true
@@ -31,3 +52,7 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # Creating a token https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tear down Docker Compose
+        if: always()
+        run: docker-compose down
