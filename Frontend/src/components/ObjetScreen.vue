@@ -72,8 +72,8 @@ onMounted(async () => {
         <p class="categorie"><strong>Catégorie :</strong> {{ objet.categorie }}</p>
 
         <template v-if="objet.enEchange">
-          <button v-if="objet.idUtilisateur === utilisateurId" class="view-btn" @click="handleVoirEchange(objet)">Voir
-            l'échange
+          <button v-if="objet.idUtilisateur === utilisateurId" class="view-btn" @click="handleVoirEchange(objet)">
+            Voir l'échange
           </button>
         </template>
 
@@ -94,18 +94,25 @@ onMounted(async () => {
       <div class="modal-content">
         <span class="close" @click="showModal = false">&times;</span>
         <h2>Détails de l'échange</h2>
-        <p><strong>Nom de l'objet :</strong> {{ selectedObjet?.nom }}</p>
-        <p><strong>Description :</strong> {{ selectedObjet?.description }}</p>
-        <p><strong>Catégorie :</strong> {{ selectedObjet?.categorie }}</p>
-        <div v-if="exchangeDetails">
-          <p><strong>ID de l'échange :</strong> {{ exchangeDetails.id }}</p>
-          <p><strong>Objet demandé :</strong> {{ exchangeDetails.objetDemande.nom }}</p>
-          <p><strong>Objet proposé :</strong> {{ exchangeDetails.objetPropose.nom }}</p>
-          <!-- Ajoutez ici les détails supplémentaires de l'échange -->
+        <p><strong>État de l'échange :</strong> {{ exchangeDetails?.etatEchange }}</p>
+        <div class="exchange-details">
+          <div class="exchange-item">
+            <h3>Objet demandé</h3>
+            <p><strong>Nom :</strong> {{ exchangeDetails?.objetDemande.nom }}</p>
+            <p><strong>Description :</strong> {{ exchangeDetails?.objetDemande.description }}</p>
+            <p><strong>Catégorie :</strong> {{ exchangeDetails?.objetDemande.categorie }}</p>
+          </div>
+          <div class="exchange-item">
+            <h3>Objet proposé</h3>
+            <p><strong>Nom :</strong> {{ exchangeDetails?.objetPropose.nom }}</p>
+            <p><strong>Description :</strong> {{ exchangeDetails?.objetPropose.description }}</p>
+            <p><strong>Catégorie :</strong> {{ exchangeDetails?.objetPropose.categorie }}</p>
+          </div>
         </div>
         <button class="close-btn" @click="showModal = false">Fermer</button>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -163,7 +170,7 @@ h2 {
 }
 
 /* Bouton d'échange */
-.exchange-btn {
+.exchange-btn, .delete-btn, .view-btn {
   background: #4a90e2;
   color: white;
   padding: 10px;
@@ -176,7 +183,7 @@ h2 {
   transition: background 0.3s ease-in-out;
 }
 
-.exchange-btn:hover {
+.exchange-btn:hover, .delete-btn:hover, .view-btn:hover {
   background: #357ab8;
 }
 
@@ -260,5 +267,15 @@ h2 {
 
 .close-btn:hover {
   background: #c0392b;
+}
+
+.exchange-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.exchange-item {
+  width: 45%;
 }
 </style>

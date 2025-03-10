@@ -146,8 +146,23 @@ const fetchObjets = async () => {
       idUtilisateur: objet.idUtilisateur,
       showInput: false,
       enEchange: false,
-      idEchange:null
+      idEchange: null
     }));
+
+    // si la recherche par catégorie est activée
+    // on filtre les objets par catégorie
+    if (searchCategorie.value) {
+      objets.value = objets.value.filter(o => o.categorie === searchCategorie.value);
+    }
+
+    // si la recherche par texte est activée
+    // on filtre les objets par nom ou description
+    if (searchText.value) {
+      objets.value = objets.value.filter(o =>
+          o.nom.toLowerCase().includes(searchText.value.toLowerCase()) ||
+          o.description.toLowerCase().includes(searchText.value.toLowerCase())
+      );
+    }
 
     await fetchEchanges();
   } catch (error) {
