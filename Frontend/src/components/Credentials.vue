@@ -3,6 +3,7 @@ import {ref, onMounted} from 'vue';
 import ObjetScreen from './ObjetScreen.vue';
 import {useRouter} from 'vue-router';
 import ApiRequest from "../Class/ApiRequest";
+import CategorieObjet from "../Types/CategorieObjet";
 
 // Déclaration des variables réactives
 const isLoginMode = ref(true);
@@ -16,8 +17,9 @@ const isAuthenticated = ref(false);
 const router = useRouter();
 const searchText = ref('');
 const searchCategorie = ref('');
-const searchUser = ref('');
-const filteredObjets = ref([]);
+
+// Liste des catégories d'objets
+const categories = Object.values(CategorieObjet);
 
 // Changer le mode (connexion/inscription)
 const toggleMode = () => {
@@ -146,8 +148,10 @@ onMounted(async () => {
       <main>
         <form class="search-bar">
           <input type="text" v-model="searchText" placeholder="Rechercher par texte"/>
-          <input type="text" v-model="searchCategorie" placeholder="Rechercher par catégorie"/>
-          <input type="text" v-model="searchUser" placeholder="Rechercher par utilisateur"/>
+          <select v-model="searchCategorie" placeholder="Rechercher par catégorie">
+            <option value="" disabled selected>Sélectionner une catégorie</option>
+            <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
+          </select>
           <button @click="">Rechercher</button>
         </form>
         <ObjetScreen class="object-screen"/>
@@ -250,7 +254,7 @@ form {
   gap: 10px;
 }
 
-input {
+input, select {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
