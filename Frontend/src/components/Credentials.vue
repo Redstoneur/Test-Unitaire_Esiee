@@ -163,7 +163,6 @@ const fetchEchanges = async () => {
       throw new Error('Erreur lors de la récupération des échanges');
 
     const echanges = await response.json();
-    console.log(echanges)
     objets.value.forEach(objet => {
 
       if (echanges.some((e: any) =>
