@@ -42,74 +42,89 @@ public class Config {
             ObjetService objetService) {
 
         return args -> {
+            Faker faker = new Faker();
             int numberOfUsers = 5;
             int numberOfObjects = 40;
             int numberOfExchanges = 10;
 
-            Faker faker = new Faker();
-
-            List<Utilisateur> utilisateurs = new ArrayList<>();
-            utilisateurs.add(new Utilisateur(
-                    "admin",
-                    "admin",
-                    "admin@mail.fr",
-                    "admin",
-                    "admin"
-            ));
-            for (int i = 0; i < numberOfUsers; i++) {
-                utilisateurs.add(new Utilisateur(
-                        faker.name().firstName(),
-                        faker.internet().password(),
-                        faker.internet().emailAddress(),
-                        faker.name().lastName(),
-                        faker.name().firstName()
-                ));
-            }
+            List<Utilisateur> utilisateurs = createUtilisateurs(faker, numberOfUsers);
             utilisateurRepository.saveAll(utilisateurs);
             numberOfUsers = utilisateurs.size();
 
-            List<Objet> objets = new ArrayList<>();
-            for (int i = 0; i < numberOfObjects; i++) {
-                objets.add(new Objet(
-                        utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                        faker.commerce().productName(),
-                        faker.lorem().sentence(),
-                        CategorieObjet.values()[(int) (Math.random() * CategorieObjet.values().length)],
-                        LocalDateTime.now().minusDays((int) (Math.random() * 60))
-                ));
-            }
+            List<Objet> objets = createObjets(faker, utilisateurService, numberOfObjects, numberOfUsers);
             objetRepository.saveAll(objets);
+            numberOfObjects = objets.size();
 
-            List<Echange> echanges = new ArrayList<>();
-            for (int i = 0; i < numberOfExchanges; i++) {
-                AtomicBoolean isNotUnique = new AtomicBoolean(true);
-                AtomicLong id1 = new AtomicLong();
-                AtomicLong id2 = new AtomicLong();
-                do {
-                    isNotUnique.set(false);
-                    id1.set((long) ((Math.random() * numberOfObjects) + 1));
-                    id2.set((long) ((Math.random() * numberOfObjects) + 1));
-                    echanges.forEach(echange -> {
-                                if (echange.getObjetPropose().getId().equals(id1.get()) ||
-                                        echange.getObjetDemande().getId().equals(id1.get()) ||
-                                        echange.getObjetPropose().getId().equals(id2.get()) ||
-                                        echange.getObjetDemande().getId().equals(id2.get()))
-                                    isNotUnique.set(true);
-                            }
-                    );
-                } while (isNotUnique.get());
-                Etat etat = Etat.values()[(int) (Math.random() * Etat.values().length)];
-                LocalDateTime dateProposition = LocalDateTime.now().minusDays((int) (Math.random() * 30));
-                LocalDateTime dateCloture = etat == Etat.ATTENTE ? null : LocalDateTime.now().minusDays((int) (Math.random() * 10));
-                echanges.add(new Echange(
-                        objetService.obtenirObjetParId(id1.get()),
-                        objetService.obtenirObjetParId(id2.get()),
-                        dateProposition,
-                        etat,
-                        dateCloture
-                ));
-            }
+            List<Echange> echanges = createEchanges(objetService, numberOfObjects, numberOfExchanges);
             echangeRepository.saveAll(echanges);
         };
+    }
+
+    private List<Utilisateur> createUtilisateurs(Faker faker, int numberOfUsers) {
+        List<Utilisateur> utilisateurs = new ArrayList<>();
+        utilisateurs.add(new Utilisateur(
+                "admin",
+                "admin",
+                "admin@mail.fr",
+                "admin",
+                "admin"
+        ));
+        for (int i = 0; i < numberOfUsers; i++) {
+            utilisateurs.add(new Utilisateur(
+                    faker.name().firstName(),
+                    faker.internet().password(),
+                    faker.internet().emailAddress(),
+                    faker.name().lastName(),
+                    faker.name().firstName()
+            ));
+        }
+        return utilisateurs;
+    }
+
+    private List<Objet> createObjets(Faker faker, UtilisateurService utilisateurService, int numberOfObjects, int numberOfUsers) {
+        List<Objet> objets = new ArrayList<>();
+        for (int i = 0; i < numberOfObjects; i++) {
+            objets.add(new Objet(
+                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
+                    faker.commerce().productName(),
+                    faker.lorem().sentence(),
+                    CategorieObjet.values()[(int) (Math.random() * CategorieObjet.values().length)],
+                    LocalDateTime.now().minusDays((int) (Math.random() * 60))
+            ));
+        }
+        return objets;
+    }
+
+    private List<Echange> createEchanges(ObjetService objetService, int numberOfObjects, int numberOfExchanges) {
+        List<Echange> echanges = new ArrayList<>();
+        for (int i = 0; i < numberOfExchanges; i++) {
+            AtomicBoolean isNotUnique = new AtomicBoolean(true);
+            AtomicLong id1 = new AtomicLong();
+            AtomicLong id2 = new AtomicLong();
+            do {
+                isNotUnique.set(false);
+                id1.set((long) ((Math.random() * numberOfObjects) + 1));
+                id2.set((long) ((Math.random() * numberOfObjects) + 1));
+                echanges.forEach(echange -> {
+                            if (echange.getObjetPropose().getId().equals(id1.get()) ||
+                                    echange.getObjetDemande().getId().equals(id1.get()) ||
+                                    echange.getObjetPropose().getId().equals(id2.get()) ||
+                                    echange.getObjetDemande().getId().equals(id2.get()))
+                                isNotUnique.set(true);
+                        }
+                );
+            } while (isNotUnique.get());
+            Etat etat = Etat.values()[(int) (Math.random() * Etat.values().length)];
+            LocalDateTime dateProposition = LocalDateTime.now().minusDays((int) (Math.random() * 30));
+            LocalDateTime dateCloture = etat == Etat.ATTENTE ? null : LocalDateTime.now().minusDays((int) (Math.random() * 10));
+            echanges.add(new Echange(
+                    objetService.obtenirObjetParId(id1.get()),
+                    objetService.obtenirObjetParId(id2.get()),
+                    dateProposition,
+                    etat,
+                    dateCloture
+            ));
+        }
+        return echanges;
     }
 }
