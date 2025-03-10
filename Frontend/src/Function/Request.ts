@@ -17,16 +17,18 @@ const Request = async (url: string, method: RequestType, headers?: any, body?: a
         headers["Content-Type"] = "application/json";
     }
 
-    if (body === undefined) {
-        body = {};
-    }
-
     try {
-        return await fetch(url, {
-            method: method,
-            headers: headers,
-            body: body
-        });
+        if (body === undefined)
+            return await fetch(url, {
+                method: method,
+                headers: headers
+            });
+        else
+            return await fetch(url, {
+                method: method,
+                headers: headers,
+                body: body
+            });
     } catch (error) {
         console.error(error);
         return error as Error;

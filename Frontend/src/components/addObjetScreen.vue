@@ -6,7 +6,7 @@ import CategorieObjet from "../Types/CategorieObjet";
 
 const nomObjet = ref('');
 const descriptionObjet = ref('');
-const categorieObjet = ref('');
+const categorieObjet = ref<CategorieObjet | ''>('');
 
 const errorMessage = ref('');
 const successMessage = ref('');
@@ -14,9 +14,6 @@ const successMessage = ref('');
 const categories = Object.values(CategorieObjet);
 const authToken: string = localStorage.getItem('authToken') || '';
 const handleSubmit = async () => {
-
-  const categorieObjet = ref<CategorieObjet | ''>('');
-
   const objet: Objet = {
     nom: nomObjet.value,
     description: descriptionObjet.value,
@@ -24,7 +21,7 @@ const handleSubmit = async () => {
   };
 
   try {
-    const response = await apiRequest.AddObjet(objet);
+    const response = await apiRequest.AddObjet(objet, authToken);
 
     if (!(response instanceof Response) || !response.ok) {
       throw new Error('Erreur lors de l\'ajout de l\'objet');
@@ -33,10 +30,12 @@ const handleSubmit = async () => {
     const data = response.json();
     console.log("data", data);
     successMessage.value = 'Objet ajouté avec succès !';
+
     // Reset form
     nomObjet.value = '';
     descriptionObjet.value = '';
     categorieObjet.value = '';
+
   } catch (error) {
     errorMessage.value = (error as Error).message;
   }

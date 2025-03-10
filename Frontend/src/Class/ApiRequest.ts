@@ -2,7 +2,15 @@ import Request from "../Function/Request";
 import RequestType from "../Types/RequestType";
 import Objet from "../Types/Objet";
 
+
+/**
+ * Class representing API requests.
+ */
 class ApiRequest {
+
+    /**
+     * The base URL of the API.
+     */
     private static readonly baseUrl = "http://localhost:3000/api";
 
     /**
@@ -84,7 +92,7 @@ class ApiRequest {
             RequestType.GET,
             {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
+                "Authorization": token
             }
         );
     }
@@ -124,14 +132,16 @@ class ApiRequest {
      * Adds a new object.
      *
      * @param {Objet} objet - The object to add.
+     * @param {string} token - The authentication token of the user.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    public static async AddObjet(objet: Objet): Promise<Response | Error> {
+    public static async AddObjet(objet: Objet, token: string): Promise<Response | Error> {
         return Request(
             `${this.baseUrl}/objets`,
             RequestType.POST,
             {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": token
             },
             JSON.stringify(objet)
         );

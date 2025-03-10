@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {ref, onMounted} from 'vue';
+import apiRequest from "../Class/ApiRequest";
 
 const objets = ref<{
   id: number;
@@ -17,13 +18,9 @@ const utilisateurId = ref(''); // ID réel de l'utilisateur connecté
 const authToken: string = localStorage.getItem('authToken') || '';
 const fetchUtilisateurId = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/utilisateurs/trans', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': authToken,
-      },
-    });
-    if (!response.ok) throw new Error('Erreur lors de la récupération de lutilisateur');
+    const response = await apiRequest.UserInformation(authToken);
+    if (response instanceof Error || !response.ok)
+      throw new Error('Erreur lors de la récupération de l\'utilisateur');
 
     const data = await response.json();
     utilisateurId.value = data.id;
@@ -51,8 +48,9 @@ const fetchUtilisateurId = async () => {
 // Récupérer les objets et vérifier s'ils sont en échange
 const fetchObjets = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/objets');
-    if (!response.ok) throw new Error('Erreur lors de la récupération des objets');
+    const response = await apiRequest.GetObjets();
+    if (response instanceof Error || !response.ok)
+      throw new Error('Erreur lors de la récupération des objets');
 
     const data = await response.json();
     objets.value = data.map((objet: any) => ({
@@ -74,8 +72,9 @@ const fetchObjets = async () => {
 // Récupérer la liste des échanges
 const fetchEchanges = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/echanges/all');
-    if (!response.ok) throw new Error('Erreur lors de la récupération des échanges');
+    const response = await apiRequest.GetEchanges();
+    if (response instanceof Error || !response.ok)
+      throw new Error('Erreur lors de la récupération des échanges');
 
     const echanges = await response.json();
     objets.value.forEach(objet => {
@@ -99,7 +98,7 @@ const handleProposerEchange = (objetId: number) => {
 // Fonction pour supprimer un objet
 const handleSupprimerObjet = async (objetId: number) => {
   try {
-    await fetch(`http://localhost:3000/api/objets/${objetId}`, {method: 'DELETE'});
+    await apiRequest.DeleteObjet(objetId);
     objets.value = objets.value.filter(o => o.id !== objetId);
   } catch (error) {
     errorMessage.value = 'Erreur lors de la suppression';
@@ -168,6 +167,7 @@ onMounted(async () => {
   gap: 20px;
   padding-bottom: 10px;
 }
+
 /**/
 
 /* Style des cartes */
