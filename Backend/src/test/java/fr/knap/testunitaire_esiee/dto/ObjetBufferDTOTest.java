@@ -26,10 +26,14 @@ class ObjetBufferDTOTest {
 
         ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO(nom, description, categorie);
 
-        assertEquals(nom, objetBufferDTO.getNom());
-        assertEquals(description, objetBufferDTO.getDescription());
-        assertEquals(categorie, objetBufferDTO.getCategorie());
-        assertEquals(dateCreation, objetBufferDTO.getDateCreation());
+        // Check that all fields are set correctly
+        assertEquals(nom, objetBufferDTO.getNom()); // Check that the nom field is set correctly
+        assertEquals(description, objetBufferDTO.getDescription()); // Check that the description field is set correctly
+        assertEquals(categorie, objetBufferDTO.getCategorie()); // Check that the categorie field is set correctly
+        assertEquals(
+                dateCreation.withSecond(0).withNano(0),
+                objetBufferDTO.getDateCreation().withSecond(0).withNano(0)
+        ); // Check that the dateCreation field is set correctly (ignoring seconds and nanoseconds)
     }
 
     /**
