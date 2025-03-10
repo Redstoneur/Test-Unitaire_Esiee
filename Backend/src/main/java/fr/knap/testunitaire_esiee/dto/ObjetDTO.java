@@ -59,6 +59,7 @@ public class ObjetDTO {
      * @param dateCreation  the creation date of the object
      */
     public ObjetDTO(Long id, String nom, String description, CategorieObjet categorie, String utilisateur, Long idUtilisateur, LocalDateTime dateCreation) {
+        this.id = id;
         this.nom = nom;
         this.description = description;
         this.categorie = categorie;

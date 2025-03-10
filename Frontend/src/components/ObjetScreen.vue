@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, defineProps} from 'vue';
+import Objet from "../Types/Objet";
 import apiRequest from "../Class/ApiRequest";
 
-const objets = ref<{
-  id: number;
-  nom: string;
-  description: string;
-  categorie: string;
-  showInput: boolean;
-  enEchange: boolean;
-  idUtilisateur: string
-}[]>([]);
+const props = defineProps<{
+  objets: Objet[],
+  handleSupprimerObjet: (objetId: number) => Promise<void>
+}>();
 const errorMessage = ref('');
 const utilisateurId = ref(''); // ID réel de l'utilisateur connecté
 
@@ -44,70 +40,16 @@ const fetchUtilisateurId = async () => {
  *  *
  *  */
 
-
-// Récupérer les objets et vérifier s'ils sont en échange
-const fetchObjets = async () => {
-  try {
-    const response = await apiRequest.GetObjets();
-    if (response instanceof Error || !response.ok)
-      throw new Error('Erreur lors de la récupération des objets');
-
-    const data = await response.json();
-    objets.value = data.map((objet: any) => ({
-      id: objet.id,
-      nom: objet.nom,
-      description: objet.description,
-      categorie: objet.categorie,
-      idUtilisateur: objet.idUtilisateur, // Mise à jour pour correspondre aux données API
-      showInput: false,
-      enEchange: false, // Sera mis à jour après récupération des échanges
-    }));
-
-    await fetchEchanges();
-  } catch (error) {
-    errorMessage.value = (error as Error).message;
-  }
-};
-
-// Récupérer la liste des échanges
-const fetchEchanges = async () => {
-  try {
-    const response = await apiRequest.GetEchanges();
-    if (response instanceof Error || !response.ok)
-      throw new Error('Erreur lors de la récupération des échanges');
-
-    const echanges = await response.json();
-    objets.value.forEach(objet => {
-      if (echanges.some((e: any) => e.objetId === objet.id)) {
-        objet.enEchange = true;
-      }
-    });
-  } catch (error) {
-    errorMessage.value = (error as Error).message;
-  }
-};
-
 // Fonction pour afficher/cacher l'input d'échange
 const handleProposerEchange = (objetId: number) => {
-  const objet = objets.value.find(o => o.id === objetId);
+  const objet = props.objets.find(o => o.id === objetId);
   if (objet) {
     objet.showInput = !objet.showInput;
   }
 };
 
-// Fonction pour supprimer un objet
-const handleSupprimerObjet = async (objetId: number) => {
-  try {
-    await apiRequest.DeleteObjet(objetId);
-    objets.value = objets.value.filter(o => o.id !== objetId);
-  } catch (error) {
-    errorMessage.value = 'Erreur lors de la suppression';
-  }
-};
-
 onMounted(async () => {
   await fetchUtilisateurId();
-  await fetchObjets();
 });
 </script>
 
@@ -128,7 +70,7 @@ onMounted(async () => {
 
         <template v-else>
           <button v-if="objet.idUtilisateur === utilisateurId" class="delete-btn"
-                  @click="handleSupprimerObjet(objet.id)">Supprimer l'objet
+                  @click="props.handleSupprimerObjet(objet.id)">Supprimer l'objet
           </button>
           <button v-else class="exchange-btn" @click="handleProposerEchange(objet.id)">Proposer à l'échange</button>
         </template>

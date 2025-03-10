@@ -123,12 +123,13 @@ class ApiRequest {
      * @param {number} id - The ID of the object to delete.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    public static async DeleteObjet(id: number): Promise<Response | Error> {
+    public static async DeleteObjet(id: number, token: string): Promise<Response | Error> {
         return Request(
             `${this.baseUrl}/objets/${id}`,
             RequestType.DELETE,
             {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": token
             }
         );
     }

@@ -4,6 +4,7 @@ import ObjetScreen from './ObjetScreen.vue';
 import {useRouter} from 'vue-router';
 import ApiRequest from "../Class/ApiRequest";
 import CategorieObjet from "../Types/CategorieObjet";
+import Objet from "../Types/Objet";
 
 // Déclaration des variables réactives
 const isLoginMode = ref(true);
@@ -17,6 +18,7 @@ const isAuthenticated = ref(false);
 const router = useRouter();
 const searchText = ref('');
 const searchCategorie = ref('');
+const objets = ref<Objet[]>([]);
 
 // Liste des catégories d'objets
 const categories = Object.values(CategorieObjet);
@@ -106,16 +108,79 @@ const logout = () => {
   router.push('/'); // Rediriger vers la page d'accueil
 };
 
+// Récupérer les objets et vérifier s'ils sont en échange
+const fetchObjets = async () => {
+  try {
+    const response = await ApiRequest.GetObjets();
+    if (response instanceof Error || !response.ok)
+      throw new Error('Erreur lors de la récupération des objets');
+
+    const data = await response.json();
+    objets.value = data.map((objet: any) => ({
+      id: objet.id,
+      nom: objet.nom,
+      description: objet.description,
+      categorie: objet.categorie,
+      idUtilisateur: objet.idUtilisateur,
+      showInput: false,
+      enEchange: false,
+    }));
+
+    await fetchEchanges();
+  } catch (error) {
+    errorMessage.value = (error as Error).message;
+  }
+};
+
+// Récupérer la liste des échanges
+const fetchEchanges = async () => {
+  try {
+    const response = await ApiRequest.GetEchanges();
+    if (response instanceof Error || !response.ok)
+      throw new Error('Erreur lors de la récupération des échanges');
+
+    const echanges = await response.json();
+    objets.value.forEach(objet => {
+      if (echanges.some((e: any) => e.objetId === objet.id)) {
+        objet.enEchange = true;
+      }
+    });
+  } catch (error) {
+    errorMessage.value = (error as Error).message;
+  }
+};
+
+// Fonction pour supprimer un objet
+const handleSupprimerObjet = async (objetId: number) => {
+  try {
+    const token = localStorage.getItem('authToken');
+    if (token && await ApiRequest.BooleanVerifyToken(token)){
+      isAuthenticated.value = true;
+      const response = await ApiRequest.DeleteObjet(objetId, token);
+
+      if (response instanceof Error || !response.ok)
+        throw new Error('Erreur lors de la suppression');
+
+      objets.value = objets.value.filter(o => o.id !== objetId);
+    } else
+      throw new Error('Vous n\'êtes pas Connecté');
+  } catch (error) {
+    errorMessage.value = (error as Error).message;
+  }
+};
+
 // Vérification si l'utilisateur est déjà authentifié
 onMounted(async () => {
   const token = localStorage.getItem('authToken');
-  if (token) {
-    const isValid = await ApiRequest.BooleanVerifyToken(token);
-    if (isValid) {
-      isAuthenticated.value = true;
-    }
-  }
+  isAuthenticated.value = !!(token && await ApiRequest.BooleanVerifyToken(token));
+  await fetchObjets();
 });
+
+// Fonction pour gérer la soumission du formulaire de recherche
+const handleSearch = async () => {
+  await fetchObjets();
+};
+
 </script>
 
 <template>
@@ -146,15 +211,15 @@ onMounted(async () => {
         <button class="disconected" @click="logout">Déconnexion</button>
       </header>
       <main>
-        <form class="search-bar">
+        <form class="search-bar" @submit.prevent="handleSearch">
           <input type="text" v-model="searchText" placeholder="Rechercher par texte"/>
           <select v-model="searchCategorie" placeholder="Rechercher par catégorie">
             <option value="" disabled selected>Sélectionner une catégorie</option>
             <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
           </select>
-          <button @click="">Rechercher</button>
+          <button type="submit">Rechercher</button>
         </form>
-        <ObjetScreen class="object-screen"/>
+        <ObjetScreen :objets="objets" :handleSupprimerObjet="handleSupprimerObjet" class="object-screen"/>
       </main>
     </div>
   </div>
