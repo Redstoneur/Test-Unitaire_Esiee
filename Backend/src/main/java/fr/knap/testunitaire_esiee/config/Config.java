@@ -60,6 +60,13 @@ public class Config {
         };
     }
 
+    /**
+     * Creates a list of users.
+     *
+     * @param faker         The Faker instance used to generate random data.
+     * @param numberOfUsers The number of users to create.
+     * @return A list of Utilisateur objects.
+     */
     private List<Utilisateur> createUtilisateurs(Faker faker, int numberOfUsers) {
         List<Utilisateur> utilisateurs = new ArrayList<>();
         utilisateurs.add(new Utilisateur(
@@ -81,6 +88,15 @@ public class Config {
         return utilisateurs;
     }
 
+    /**
+     * Creates a list of objects.
+     *
+     * @param faker              The Faker instance used to generate random data.
+     * @param utilisateurService The service used to manage users.
+     * @param numberOfObjects    The number of objects to create.
+     * @param numberOfUsers      The number of users available.
+     * @return A list of Objet objects.
+     */
     private List<Objet> createObjets(Faker faker, UtilisateurService utilisateurService, int numberOfObjects, int numberOfUsers) {
         List<Objet> objets = new ArrayList<>();
         for (int i = 0; i < numberOfObjects; i++) {
@@ -95,6 +111,14 @@ public class Config {
         return objets;
     }
 
+    /**
+     * Creates a list of exchanges.
+     *
+     * @param objetService      The service used to manage objects.
+     * @param numberOfObjects   The number of objects available.
+     * @param numberOfExchanges The number of exchanges to create.
+     * @return A list of Echange objects.
+     */
     private List<Echange> createEchanges(ObjetService objetService, int numberOfObjects, int numberOfExchanges) {
         List<Echange> echanges = new ArrayList<>();
         for (int i = 0; i < numberOfExchanges; i++) {
