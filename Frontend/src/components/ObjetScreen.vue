@@ -103,6 +103,7 @@ onMounted(async () => {
           <p><strong>Objet proposé :</strong> {{ exchangeDetails.objetPropose.nom }}</p>
           <!-- Ajoutez ici les détails supplémentaires de l'échange -->
         </div>
+        <button class="close-btn" @click="showModal = false">Fermer</button>
       </div>
     </div>
   </div>
@@ -233,6 +234,7 @@ h2 {
   text-align: center;
   width: 80%;
   max-width: 500px;
+  position: relative;
 }
 
 .close {
@@ -241,5 +243,22 @@ h2 {
   right: 10px;
   font-size: 24px;
   cursor: pointer;
+}
+
+.close-btn {
+  background: #e74c3c;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+  width: 100%;
+  transition: background 0.3s ease-in-out;
+}
+
+.close-btn:hover {
+  background: #c0392b;
 }
 </style>
