@@ -18,7 +18,7 @@ const Request = async (url: string, method: RequestType, headers?: any, body?: a
     }
 
     if (body === undefined) {
-        body = "{}";
+        body = {};
     }
 
     try {

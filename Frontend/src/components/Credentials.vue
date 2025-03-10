@@ -2,6 +2,7 @@
 import {ref, onMounted} from 'vue';
 import ObjetScreen from './ObjetScreen.vue';
 import {useRouter} from 'vue-router';
+import ApiRequest from "../Class/ApiRequest";
 
 // Déclaration des variables réactives
 const isLoginMode = ref(true);
@@ -54,8 +55,12 @@ const register = async () => {
     const data = await response.json();
 
     // Sauvegarde du token et connexion immédiate
-    localStorage.setItem('authToken', data.token);
-    isAuthenticated.value = true;
+    const token = data.token;
+    const isValid = await ApiRequest.BooleanVerifyToken(token);
+    if (isValid) {
+      localStorage.setItem('authToken', token);
+      isAuthenticated.value = true;
+    }
 
     // Réinitialiser le formulaire
     resetForm();
@@ -80,8 +85,12 @@ const login = async () => {
     const data = await response.json();
 
     // Sauvegarder le jeton et connexion immédiate
-    localStorage.setItem('authToken', data.token);
-    isAuthenticated.value = true;
+    const token = data.token;
+    const isValid = await ApiRequest.BooleanVerifyToken(token);
+    if (isValid) {
+      localStorage.setItem('authToken', token);
+      isAuthenticated.value = true;
+    }
 
     // Réinitialiser le formulaire
     resetForm();
@@ -101,10 +110,13 @@ const logout = () => {
 };
 
 // Vérification si l'utilisateur est déjà authentifié
-onMounted(() => {
+onMounted(async () => {
   const token = localStorage.getItem('authToken');
   if (token) {
-    isAuthenticated.value = true;
+    const isValid = await ApiRequest.BooleanVerifyToken(token);
+    if (isValid) {
+      isAuthenticated.value = true;
+    }
   }
 });
 </script>

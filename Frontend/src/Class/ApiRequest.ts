@@ -3,7 +3,7 @@ import RequestType from "../Types/RequestType";
 import Objet from "../Types/Objet";
 
 class ApiRequest {
-    private static readonly baseUrl = "http://localhost:5000/api";
+    private static readonly baseUrl = "http://localhost:3000/api";
 
     /**
      * Sends a login request with the provided username and password.
@@ -37,6 +37,39 @@ class ApiRequest {
                 "Content-Type": "application/json"
             },
             JSON.stringify({username, password}));
+    }
+
+    /**
+     * Verifies the provided token.
+     *
+     * @param {string} token - The token to verify.
+     * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
+     */
+    public static async VerifyToken(token: string): Promise<Response | Error> {
+        return Request(
+            `${this.baseUrl}/credentials/verifyToken`,
+            RequestType.POST,
+            {
+                "Content-Type": "application/json"
+            },
+            JSON.stringify({token})
+        );
+    }
+
+    /**
+     * Verifies the provided token.
+     *
+     * @param {string} token - The token to verify.
+     * @returns {Promise<boolean>} A promise that resolves to true if the token is valid, false otherwise.
+     */
+    public static async BooleanVerifyToken(token: string): Promise<boolean> {
+        const response = await this.VerifyToken(token);
+
+        if (response instanceof Error) {
+            return false;
+        }
+
+        return response.status === 200;
     }
 
     /**
@@ -100,7 +133,8 @@ class ApiRequest {
             {
                 "Content-Type": "application/json"
             },
-            JSON.stringify(objet));
+            JSON.stringify(objet)
+        );
     }
 
     /**
