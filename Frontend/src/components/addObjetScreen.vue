@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import {ref} from 'vue';
+import apiRequest from "../Class/ApiRequest";
+import Objet from "../Types/Objet";
+import CategorieObjet from "../Types/CategorieObjet";
 
 const nomObjet = ref('');
 const descriptionObjet = ref('');
@@ -8,41 +11,27 @@ const categorieObjet = ref('');
 const errorMessage = ref('');
 const successMessage = ref('');
 
-const categories = [
-  'MOBILIER',
-  'JARDINAGE',
-  'INFORMATIQUE',
-  'GAMING',
-  'OUTILS',
-  'COLLECTION',
-  'LITTERATURE',
-  'VETEMENTS',
-  'ELECTROMENAGER',
-  'AUTRE'
-]; // Liste des catégories mises à jour
+const categories = Object.values(CategorieObjet);
 const authToken: string = localStorage.getItem('authToken') || '';
 const handleSubmit = async () => {
-  const objet = {
+
+  const categorieObjet = ref<CategorieObjet | ''>('');
+
+  const objet: Objet = {
     nom: nomObjet.value,
     description: descriptionObjet.value,
-    categorie: categorieObjet.value,
+    categorie: categorieObjet.value as CategorieObjet,
   };
 
   try {
-    const response = await fetch('http://localhost:3000/api/objets', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': authToken,
-      },
-      body: JSON.stringify(objet),
-    });
+    const response = await apiRequest.AddObjet(objet);
 
-    if (!response.ok) {
+    if (!(response instanceof Response) || !response.ok) {
       throw new Error('Erreur lors de l\'ajout de l\'objet');
     }
-    const data = await response.json();
-    console.log("datt", data)
+
+    const data = response.json();
+    console.log("data", data);
     successMessage.value = 'Objet ajouté avec succès !';
     // Reset form
     nomObjet.value = '';
