@@ -2,7 +2,6 @@
 import {ref, onMounted} from 'vue';
 import ObjetScreen from './ObjetScreen.vue';
 import {useRouter} from 'vue-router';
-import HelloWorld from "./HelloWorld.vue";
 
 // Déclaration des variables réactives
 const isLoginMode = ref(true);
