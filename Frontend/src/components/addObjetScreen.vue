@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 import apiRequest from "../Class/ApiRequest";
-import Objet from "../Types/Objet";
+import ObjetDTO from "../Types/ObjetDTO";
 import CategorieObjet from "../Types/CategorieObjet";
 
 const nomObjet = ref('');
@@ -14,7 +14,7 @@ const successMessage = ref('');
 const categories = Object.values(CategorieObjet);
 const authToken: string = localStorage.getItem('authToken') || '';
 const handleSubmit = async () => {
-  const objet: Objet = {
+  const objet: ObjetDTO = {
     nom: nomObjet.value,
     description: descriptionObjet.value,
     categorie: categorieObjet.value as CategorieObjet,

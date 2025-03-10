@@ -1,6 +1,6 @@
 import Request from "../Function/Request";
 import RequestType from "../Types/RequestType";
-import Objet from "../Types/Objet";
+import ObjetDTO from "../Types/ObjetDTO";
 
 
 /**
@@ -136,11 +136,11 @@ class ApiRequest {
     /**
      * Adds a new object.
      *
-     * @param {Objet} objet - The object to add.
+     * @param {ObjetDTO} objet - The object to add.
      * @param {string} token - The authentication token of the user.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    public static async AddObjet(objet: Objet, token: string): Promise<Response | Error> {
+    public static async AddObjet(objet: ObjetDTO, token: string): Promise<Response | Error> {
         return Request(
             `${this.baseUrl}/objets`,
             RequestType.POST,

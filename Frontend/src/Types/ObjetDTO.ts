@@ -3,7 +3,7 @@ import CategorieObjet from "./CategorieObjet";
 /**
  * Interface representing an object.
  */
-interface Objet {
+interface ObjetDTO {
     /** The name of the object */
     nom: string,
     /** The description of the object */
@@ -12,4 +12,4 @@ interface Objet {
     categorie: CategorieObjet,
 }
 
-export default Objet;
+export default ObjetDTO;
