@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, onMounted, defineProps} from 'vue';
+import { ref, onMounted, defineProps } from 'vue';
 import Objet from "../Types/Objet";
 import apiRequest from "../Class/ApiRequest";
 
@@ -9,6 +9,8 @@ const props = defineProps<{
 }>();
 const errorMessage = ref('');
 const utilisateurId = ref(''); // ID réel de l'utilisateur connecté
+const showModal = ref(false);
+const selectedObjet = ref<Objet | null>(null);
 
 // Récupérer l'ID de l'utilisateur connecté
 const authToken: string = localStorage.getItem('authToken') || '';
@@ -23,22 +25,7 @@ const fetchUtilisateurId = async () => {
   } catch (error) {
     errorMessage.value = (error as Error).message;
   }
-}
-/**
- *  todo: delete commentaires
- *
- * /**
- *  *   Règles d'affichage pour un objet
- *  * Si l'objet fait partie d'un échange
- *  *
- *  * Si l'utilisateur est le propriétaire → Il peut consulter l'échange.
- *  * Si l'utilisateur n'est pas le propriétaire → Afficher "déjà demandé" (il ne peut pas proposer d'échange).
- *  * Si l'objet ne fait pas partie d'un échange
- *  *
- *  * Si l'utilisateur est le propriétaire → Il peut supprimer l'objet.
- *  * Si l'utilisateur n'est pas le propriétaire → Il peut proposer un échange.
- *  *
- *  */
+};
 
 // Fonction pour afficher/cacher l'input d'échange
 const handleProposerEchange = (objetId: number) => {
@@ -46,6 +33,12 @@ const handleProposerEchange = (objetId: number) => {
   if (objet) {
     objet.showInput = !objet.showInput;
   }
+};
+
+// Fonction pour afficher la modal de consultation d'échange
+const handleVoirEchange = (objet: Objet) => {
+  selectedObjet.value = objet;
+  showModal.value = true;
 };
 
 onMounted(async () => {
@@ -64,8 +57,7 @@ onMounted(async () => {
         <p class="categorie"><strong>Catégorie :</strong> {{ objet.categorie }}</p>
 
         <template v-if="objet.enEchange">
-          <button v-if="objet.idUtilisateur === utilisateurId" class="view-btn">Consulter l'échange</button>
-          <p v-else class="info">Déjà demandé</p>
+          <button v-if="objet.idUtilisateur === utilisateurId" class="view-btn" @click="handleVoirEchange(objet)">Voir l'échange</button>
         </template>
 
         <template v-else>
@@ -78,6 +70,17 @@ onMounted(async () => {
         <div class="input-container" v-if="objet.showInput">
           <input type="text" placeholder="Entrez votre proposition" class="exchange-input"/>
         </div>
+      </div>
+    </div>
+
+    <div v-if="showModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="showModal = false">&times;</span>
+        <h2>Détails de l'échange</h2>
+        <p><strong>Nom de l'objet :</strong> {{ selectedObjet?.nom }}</p>
+        <p><strong>Description :</strong> {{ selectedObjet?.description }}</p>
+        <p><strong>Catégorie :</strong> {{ selectedObjet?.categorie }}</p>
+        <!-- Ajoutez ici les détails supplémentaires de l'échange -->
       </div>
     </div>
   </div>
@@ -94,23 +97,12 @@ onMounted(async () => {
   padding: 20px;
 }
 
-/*
-.grid {
-  display: flex;
-  overflow-x: auto;
-  gap: 20px;
-  padding-bottom: 10px;
-}
-*/
-/**/
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   padding-bottom: 10px;
 }
-
-/**/
 
 /* Style des cartes */
 .card {
@@ -197,5 +189,35 @@ h2 {
   font-size: 16px;
   margin-bottom: 20px;
   text-align: center;
+}
+
+/* Style de la modal */
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 80%;
+  max-width: 500px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
 }
 </style>

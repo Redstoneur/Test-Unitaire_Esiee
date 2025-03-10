@@ -5,6 +5,7 @@ import {useRouter} from 'vue-router';
 import ApiRequest from "../Class/ApiRequest";
 import CategorieObjet from "../Types/CategorieObjet";
 import Objet from "../Types/Objet";
+import apiRequest from "../Class/ApiRequest";
 
 // Déclaration des variables réactives
 const isLoginMode = ref(true);
@@ -19,6 +20,7 @@ const router = useRouter();
 const searchText = ref('');
 const searchCategorie = ref('');
 const objets = ref<Objet[]>([]);
+const utilisateurId = ref('');
 
 // Liste des catégories d'objets
 const categories = Object.values(CategorieObjet);
@@ -108,6 +110,26 @@ const logout = () => {
   router.push('/'); // Rediriger vers la page d'accueil
 };
 
+// Récupérer l'ID de l'utilisateur connecté
+const fetchUtilisateurId = async () => {
+  try {
+    const token = localStorage.getItem('authToken');
+    if (token && await ApiRequest.BooleanVerifyToken(token)) {
+      isAuthenticated.value = true;
+      const response = await apiRequest.UserInformation(token);
+      if (response instanceof Error || !response.ok)
+        throw new Error('Erreur lors de la récupération de l\'utilisateur');
+
+      const data = await response.json();
+      utilisateurId.value = data.id;
+    } else
+      throw new Error('Vous n\'êtes pas Connecté');
+  } catch (error) {
+    errorMessage.value = (error as Error).message;
+  }
+};
+
+
 // Récupérer les objets et vérifier s'ils sont en échange
 const fetchObjets = async () => {
   try {
@@ -123,7 +145,7 @@ const fetchObjets = async () => {
       categorie: objet.categorie,
       idUtilisateur: objet.idUtilisateur,
       showInput: false,
-      enEchange: false,
+      enEchange: false
     }));
 
     await fetchEchanges();
@@ -140,10 +162,15 @@ const fetchEchanges = async () => {
       throw new Error('Erreur lors de la récupération des échanges');
 
     const echanges = await response.json();
+    console.log(echanges)
     objets.value.forEach(objet => {
-      if (echanges.some((e: any) => e.objetId === objet.id)) {
+
+      if (echanges.some((e: any) =>
+          e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
+      )) {
         objet.enEchange = true;
       }
+
     });
   } catch (error) {
     errorMessage.value = (error as Error).message;
@@ -154,7 +181,7 @@ const fetchEchanges = async () => {
 const handleSupprimerObjet = async (objetId: number) => {
   try {
     const token = localStorage.getItem('authToken');
-    if (token && await ApiRequest.BooleanVerifyToken(token)){
+    if (token && await ApiRequest.BooleanVerifyToken(token)) {
       isAuthenticated.value = true;
       const response = await ApiRequest.DeleteObjet(objetId, token);
 
