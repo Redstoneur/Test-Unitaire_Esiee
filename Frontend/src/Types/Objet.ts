@@ -36,6 +36,11 @@ interface Objet {
      * Identifier of the user associated with the object.
      */
     idUtilisateur: string;
+
+    /**
+     * Identifier of exchange associated with the object.
+     */
+    idEchange: number;
 }
 
 export default Objet;

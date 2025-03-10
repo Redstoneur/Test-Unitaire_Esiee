@@ -145,7 +145,8 @@ const fetchObjets = async () => {
       categorie: objet.categorie,
       idUtilisateur: objet.idUtilisateur,
       showInput: false,
-      enEchange: false
+      enEchange: false,
+      idEchange:null
     }));
 
     await fetchEchanges();
@@ -169,6 +170,9 @@ const fetchEchanges = async () => {
           e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
       )) {
         objet.enEchange = true;
+        objet.idEchange = echanges.find((e: any) =>
+            e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
+        ).id;
       }
 
     });
