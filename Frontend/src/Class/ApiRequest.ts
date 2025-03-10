@@ -16,35 +16,40 @@ class ApiRequest {
     /**
      * Sends a login request with the provided username and password.
      *
-     * @param {string} username - The username of the user.
-     * @param {string} password - The password of the user.
+     * @param {string} mail - The username of the user.
+     * @param {string} mdp - The password of the user.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    public static async Login(username: string, password: string): Promise<Response | Error> {
+    public static async Login(mail: string, mdp: string): Promise<Response | Error> {
         return Request(
             `${this.baseUrl}/credentials/login`,
             RequestType.POST,
             {
                 "Content-Type": "application/json"
             },
-            JSON.stringify({username, password}));
+            JSON.stringify({mail, mdp}));
     }
 
     /**
      * Sends a registration request with the provided username and password.
      *
-     * @param {string} username - The username of the user.
-     * @param {string} password - The password of the user.
+     * @param {string} pseudo - The username of the user.
+     * @param {string} mdp - The password of the user.
+     * @param {string} mail - The email of the user.
+     * @param {string} nom - The last name of the user.
+     * @param {string} prenom - The first name of the user.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    public static async Register(username: string, password: string): Promise<Response | Error> {
+    public static async Register(pseudo: string, mdp: string, mail: string,
+                                 nom: string, prenom: string): Promise<Response | Error> {
         return Request(
             `${this.baseUrl}/credentials/register`,
             RequestType.POST,
             {
                 "Content-Type": "application/json"
             },
-            JSON.stringify({username, password}));
+            JSON.stringify({pseudo, mdp, mail, nom, prenom})
+        );
     }
 
     /**

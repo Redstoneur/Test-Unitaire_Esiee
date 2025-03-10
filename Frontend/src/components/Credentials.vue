@@ -38,19 +38,16 @@ const resetForm = () => {
 // Inscription de l'utilisateur
 const register = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/credentials/register', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        pseudo: pseudo.value,
-        mdp: mdp.value,
-        mail: mail.value,
-        nom: nom.value,
-        prenom: prenom.value,
-      }),
-    });
+    const response = await ApiRequest.Register(
+        pseudo.value,
+        mdp.value,
+        mail.value,
+        nom.value,
+        prenom.value
+    );
 
-    if (!response.ok) throw new Error('Erreur lors de l\'inscription');
+    if (response instanceof Error || !response.ok)
+      throw new Error('Erreur lors de l\'inscription');
 
     const data = await response.json();
 
@@ -75,13 +72,11 @@ const register = async () => {
 // Connexion de l'utilisateur
 const login = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/credentials/login', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({mail: mail.value, mdp: mdp.value}),
-    });
+    const response = await ApiRequest.Login(mail.value, mdp.value);
 
-    if (!response.ok) throw new Error('Échec de la connexion');
+    if (response instanceof Error || !response.ok)
+      throw new Error('Échec de la connexion');
+
     const data = await response.json();
 
     // Sauvegarder le jeton et connexion immédiate
