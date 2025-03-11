@@ -1,4 +1,4 @@
-import Request from "../Function/Request";
+import Request from "./Request";
 import RequestType from "../Types/RequestType";
 import ObjetDTO from "../Types/ObjetDTO";
 

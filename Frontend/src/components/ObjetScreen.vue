@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref, onMounted, defineProps} from 'vue';
 import Objet from "../Types/Objet";
-import {UserInformation,GetEchange} from "../Class/ApiRequest";
+import {UserInformation,GetEchange} from "../Function/ApiRequest";
 
 const props = defineProps<{
   objets: Objet[],

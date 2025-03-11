@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref} from 'vue';
-import {AddObjet} from "../Class/ApiRequest";
+import {AddObjet} from "../Function/ApiRequest";
 import ObjetDTO from "../Types/ObjetDTO";
 import CategorieObjet from "../Types/CategorieObjet";
 

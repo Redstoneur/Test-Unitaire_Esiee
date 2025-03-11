@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import Credentions from './components/Credentials.vue';
 import AddObjectScreen from './components/addObjetScreen.vue';
-import {BooleanVerifyToken} from "./Class/ApiRequest";
+import {BooleanVerifyToken} from "./Function/ApiRequest";
 
 const requireAuth = async (to: any, from: any, next: any) => {
     const token = localStorage.getItem('authToken');

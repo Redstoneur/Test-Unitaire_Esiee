@@ -5,7 +5,7 @@ import {useRouter} from 'vue-router';
 import {
   Register, BooleanVerifyToken, Login,
   GetObjets, GetEchanges, DeleteObjet
-} from "../Class/ApiRequest";
+} from "../Function/ApiRequest";
 import CategorieObjet from "../Types/CategorieObjet";
 import Objet from "../Types/Objet";
 
