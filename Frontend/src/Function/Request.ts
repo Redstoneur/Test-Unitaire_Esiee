@@ -9,7 +9,7 @@ import RequestType from "../Types/RequestType";
  * @param {any} [body] - Optional body to include in the request. Defaults to `"{}"` if not provided.
  * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
  */
-const Request = async (url: string, method: RequestType, headers?: any, body?: any): Promise<Response | Error> => {
+const Request = async (url: string, method: RequestType, headers?: Record<string, string>, body?: Record<string, string>): Promise<Response | Error> => {
 
     if (headers === undefined) {
         headers = {"Content-Type": "application/json"};
@@ -27,7 +27,7 @@ const Request = async (url: string, method: RequestType, headers?: any, body?: a
             return await fetch(url, {
                 method: method,
                 headers: headers,
-                body: body
+                body: JSON.stringify(body)
             });
     } catch (error) {
         console.error(error);

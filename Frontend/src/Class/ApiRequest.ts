@@ -27,7 +27,8 @@ class ApiRequest {
             {
                 "Content-Type": "application/json"
             },
-            JSON.stringify({mail, mdp}));
+            {mail, mdp}
+        );
     }
 
     /**
@@ -48,7 +49,7 @@ class ApiRequest {
             {
                 "Content-Type": "application/json"
             },
-            JSON.stringify({pseudo, mdp, mail, nom, prenom})
+            {pseudo, mdp, mail, nom, prenom}
         );
     }
 
@@ -65,7 +66,7 @@ class ApiRequest {
             {
                 "Content-Type": "application/json"
             },
-            JSON.stringify({token})
+            {token}
         );
     }
 
@@ -121,6 +122,7 @@ class ApiRequest {
      * Deletes an object with the specified ID.
      *
      * @param {number} id - The ID of the object to delete.
+     * @param {string} token - The authentication token of the user.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
     public static async DeleteObjet(id: number, token: string): Promise<Response | Error> {
@@ -149,7 +151,11 @@ class ApiRequest {
                 "Content-Type": "application/json",
                 "Authorization": token
             },
-            JSON.stringify(objet)
+            {
+                nom: objet.nom,
+                description: objet.description,
+                categorie: objet.categorie
+            }
         );
     }
 
