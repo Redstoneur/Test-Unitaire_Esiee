@@ -3,8 +3,8 @@ describe('Ajout d\'objet avec authentification', () => {
         cy.login();  // Appel de la commande login personnalisée
         cy.visit('http://localhost:5173/add-object');
 
-        cy.get('input[type="email"]').type('test@example.com');
-        cy.get('input[type="password"]').type('password123');
+        cy.get('input[type="email"]').type('admin@mail.fr');
+        cy.get('input[type="password"]').type('admin');
         cy.get('button[type="submit"]').click();
         cy.wait(1000);
 

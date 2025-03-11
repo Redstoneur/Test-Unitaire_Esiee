@@ -41,8 +41,8 @@ describe('Objets Component', () => {
         // Charger la page
         cy.visit('/');
 
-        cy.get('input[type="email"]').type('test@example.com');
-        cy.get('input[type="password"]').type('password123');
+        cy.get('input[type="email"]').type('admin@mail.fr');
+        cy.get('input[type="password"]').type('admin');
         cy.get('button[type="submit"]').click();
 
         cy.wait(1000);
