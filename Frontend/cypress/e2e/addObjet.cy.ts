@@ -45,7 +45,7 @@ describe('Ajout d\'objet avec authentification', () => {
         // Simuler une erreur d'API (mauvaise réponse)
         cy.intercept('POST', 'http://localhost:3000/api/objets', {
             statusCode: 500,
-            body: { message: 'Erreur lors de l\'ajout de l\'objet' }
+            body: {message: 'Erreur lors de l\'ajout de l\'objet'}
         });
 
         // Remplir le formulaire avec des données valides
@@ -58,6 +58,59 @@ describe('Ajout d\'objet avec authentification', () => {
 
         // Vérifier que l'erreur est affichée
         cy.contains('Erreur lors de l\'ajout de l\'objet').should('be.visible');
+    });
+
+    it('Ajouter un objet de chaque catégorie', () => {
+        // Créer un objet pour chaque catégorie
+        cy.get('input#nomObjet').type('Table');
+        cy.get('textarea#descriptionObjet').type('Une table en bois');
+        cy.get('select#categorieObjet').select('MOBILIER');
+        cy.get('button[type="submit"]').click();
+
+        cy.get('input#nomObjet').type('Tondeuse');
+        cy.get('textarea#descriptionObjet').type('Une tondeuse électrique');
+        cy.get('select#categorieObjet').select('JARDINAGE');
+        cy.get('button[type="submit"]').click();
+
+        cy.get('input#nomObjet').type('Ordinateur');
+        cy.get('textarea#descriptionObjet').type('Un ordinateur portable');
+        cy.get('select#categorieObjet').select('INFORMATIQUE');
+        cy.get('button[type="submit"]').click();
+
+        cy.get('input#nomObjet').type('Manette');
+        cy.get('textarea#descriptionObjet').type('Une manette de jeu');
+        cy.get('select#categorieObjet').select('GAMING');
+        cy.get('button[type="submit"]').click();
+
+        cy.get('input#nomObjet').type('Perceuse');
+        cy.get('textarea#descriptionObjet').type('Une perceuse sans fil');
+        cy.get('select#categorieObjet').select('OUTILS');
+        cy.get('button[type="submit"]').click();
+
+        cy.get('input#nomObjet').type('Timbres');
+        cy.get('textarea#descriptionObjet').type('Une collection de timbres');
+        cy.get('select#categorieObjet').select('COLLECTION');
+        cy.get('button[type="submit"]').click();
+
+        cy.get('input#nomObjet').type('Livre');
+        cy.get('textarea#descriptionObjet').type('Un roman policier');
+        cy.get('select#categorieObjet').select('LITTERATURE');
+        cy.get('button[type="submit"]').click();
+
+        cy.get('input#nomObjet').type('Chemise');
+        cy.get('textarea#descriptionObjet').type('Une chemise en coton');
+        cy.get('select#categorieObjet').select('VETEMENTS');
+        cy.get('button[type="submit"]').click();
+
+        cy.get('input#nomObjet').type('Machine à laver');
+        cy.get('textarea#descriptionObjet').type('Une machine à laver 8kg');
+        cy.get('select#categorieObjet').select('ELECTROMENAGER');
+        cy.get('button[type="submit"]').click();
+
+        cy.get('input#nomObjet').type('Objet');
+        cy.get('textarea#descriptionObjet').type('Un objet non classé');
+        cy.get('select#categorieObjet').select('AUTRE');
+        cy.get('button[type="submit"]').click();
     });
 
     it('Doit rediriger vers la page de connexion si l\'utilisateur n\'est pas connecté', () => {
