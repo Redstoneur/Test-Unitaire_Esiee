@@ -57,6 +57,7 @@ class UtilisateurControllerTest {
     void obtenirUtilisateurInfoParIdReturnsUtilisateurDTOIfTokenValid() {
         String authToken = "validToken";
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO(
+                1L,
                 "pseudo",
                 "nom",
                 "prenom"
@@ -132,6 +133,7 @@ class UtilisateurControllerTest {
         String authToken = "validToken";
         Long id = 1L;
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO(
+                id,
                 "pseudo",
                 "nom",
                 "prenom"

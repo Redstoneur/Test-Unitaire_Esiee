@@ -14,6 +14,11 @@ import java.time.LocalDateTime;
 public class ObjetDTO {
 
     /**
+     * The unique identifier for the object.
+     */
+    private Long id;
+
+    /**
      * The name of the object.
      */
     private String nom;
@@ -53,7 +58,8 @@ public class ObjetDTO {
      * @param idUtilisateur the ID of the user associated with the object
      * @param dateCreation  the creation date of the object
      */
-    public ObjetDTO(String nom, String description, CategorieObjet categorie, String utilisateur, Long idUtilisateur, LocalDateTime dateCreation) {
+    public ObjetDTO(Long id, String nom, String description, CategorieObjet categorie, String utilisateur, Long idUtilisateur, LocalDateTime dateCreation) {
+        this.id = id;
         this.nom = nom;
         this.description = description;
         this.categorie = categorie;

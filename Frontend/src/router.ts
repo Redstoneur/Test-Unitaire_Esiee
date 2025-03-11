@@ -1,21 +1,46 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {
+    createRouter,
+    createWebHistory,
+    NavigationGuardNext,
+    RouteLocationNormalized,
+    Router,
+    RouteRecordRaw
+} from 'vue-router';
 import Credentions from './components/Credentials.vue';
 import AddObjectScreen from './components/addObjetScreen.vue';
+import {BooleanVerifyToken} from "./Function/ApiRequest";
+import {Component} from "vue";
 
-const routes = [
+const requireAuth = async (to: RouteLocationNormalized, from: RouteLocationNormalized,
+                           next: NavigationGuardNext) => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        next('/');
+    } else {
+        const isValid = await BooleanVerifyToken(token);
+        if (isValid) {
+            next();
+        } else {
+            next('/');
+        }
+    }
+};
+
+const routes: RouteRecordRaw[] = [
     {
-        path: '/', // Page d'accueil
+        path: '/',
         name: 'home',
-        component: Credentions, // Composant pour l'authentification
+        component: Credentions as unknown as Component,
     },
     {
-        path: '/add-object', // Page pour ajouter un objet
+        path: '/add-object',
         name: 'add-object',
-        component: AddObjectScreen, // Composant pour ajouter un objet
+        component: AddObjectScreen as unknown as Component,
+        beforeEnter: requireAuth,
     },
 ];
 
-const router = createRouter({
+const router: Router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
 });

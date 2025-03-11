@@ -1,9 +1,9 @@
 import { createApp } from 'vue';
-import './style.css';
+import type { Component } from 'vue';
 import App from './App.vue';
 import router from './router';  // Importer le routeur
 
-const app = createApp(App);
+const app: ReturnType<typeof createApp> = createApp(App as Component);
 app.use(router);  // Utiliser Vue Router
 
 app.mount('#app');

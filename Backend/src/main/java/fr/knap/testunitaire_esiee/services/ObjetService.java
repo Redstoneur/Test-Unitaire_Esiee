@@ -47,7 +47,7 @@ public class ObjetService {
 
         objets.forEach(o -> {
             Utilisateur utilisateur = o.getUtilisateur();
-            tousLesObjets.add(new ObjetDTO(o.getNom(), o.getDescription(), o.getCategorie(), utilisateur.getPseudo(), utilisateur.getId(), o.getDateCreation()));
+            tousLesObjets.add(new ObjetDTO(o.getId(),o.getNom(), o.getDescription(), o.getCategorie(), utilisateur.getPseudo(), utilisateur.getId(), o.getDateCreation()));
         });
 
         return tousLesObjets;
@@ -99,7 +99,7 @@ public class ObjetService {
             Utilisateur u = utilisateur.get();
             List<Objet> objets = objetRepository.findByUtilisateurId(idUtilisateur);
             return objets.stream()
-                    .map(o -> new ObjetDTO(o.getNom(), o.getDescription(), o.getCategorie(), u.getPseudo(), u.getId(), o.getDateCreation()))
+                    .map(o -> new ObjetDTO(o.getId(),o.getNom(), o.getDescription(), o.getCategorie(), u.getPseudo(), u.getId(), o.getDateCreation()))
                     .collect(Collectors.toList());
         }
         return null;

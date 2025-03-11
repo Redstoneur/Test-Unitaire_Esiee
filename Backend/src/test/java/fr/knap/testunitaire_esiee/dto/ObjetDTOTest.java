@@ -19,6 +19,8 @@ class ObjetDTOTest {
      */
     @Test
     void constructorWithParametersSetsAllFields() {
+
+        Long id = 1L;
         String nom = "Laptop";
         String description = "A high-end gaming laptop";
         CategorieObjet categorie = CategorieObjet.INFORMATIQUE;
@@ -26,7 +28,7 @@ class ObjetDTOTest {
         Long idUtilisateur = 1L;
         LocalDateTime dateCreation = LocalDateTime.now();
 
-        ObjetDTO objetDTO = new ObjetDTO(nom, description, categorie, utilisateur, idUtilisateur, dateCreation);
+        ObjetDTO objetDTO = new ObjetDTO(id, nom, description, categorie, utilisateur, idUtilisateur, dateCreation);
 
         assertEquals(nom, objetDTO.getNom());
         assertEquals(description, objetDTO.getDescription());
@@ -41,7 +43,7 @@ class ObjetDTOTest {
      */
     @Test
     void setNomUpdatesNom() {
-        ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
+        ObjetDTO objetDTO = new ObjetDTO(1L,"Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
         String newNom = "Smartphone";
         objetDTO.setNom(newNom);
 
@@ -53,7 +55,7 @@ class ObjetDTOTest {
      */
     @Test
     void setDescriptionUpdatesDescription() {
-        ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
+        ObjetDTO objetDTO = new ObjetDTO(1L,"Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
         String newDescription = "A brand new smartphone";
         objetDTO.setDescription(newDescription);
 
@@ -65,7 +67,7 @@ class ObjetDTOTest {
      */
     @Test
     void setCategorieUpdatesCategorie() {
-        ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
+        ObjetDTO objetDTO = new ObjetDTO(1L,"Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
         CategorieObjet newCategorie = CategorieObjet.ELECTROMENAGER;
         objetDTO.setCategorie(newCategorie);
 
@@ -77,7 +79,7 @@ class ObjetDTOTest {
      */
     @Test
     void setUtilisateurUpdatesUtilisateur() {
-        ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
+        ObjetDTO objetDTO = new ObjetDTO(1L,"Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
         String newUtilisateur = "user456";
         objetDTO.setUtilisateur(newUtilisateur);
 
@@ -89,7 +91,7 @@ class ObjetDTOTest {
      */
     @Test
     void setIdUtilisateurUpdatesIdUtilisateur() {
-        ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
+        ObjetDTO objetDTO = new ObjetDTO(1L,"Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
         Long newIdUtilisateur = 2L;
         objetDTO.setIdUtilisateur(newIdUtilisateur);
 
@@ -101,7 +103,7 @@ class ObjetDTOTest {
      */
     @Test
     void setDateCreationUpdatesDateCreation() {
-        ObjetDTO objetDTO = new ObjetDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
+        ObjetDTO objetDTO = new ObjetDTO(1L,"Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, "user123", 1L, LocalDateTime.now());
         LocalDateTime newDateCreation = LocalDateTime.now().plusDays(1);
         objetDTO.setDateCreation(newDateCreation);
 
