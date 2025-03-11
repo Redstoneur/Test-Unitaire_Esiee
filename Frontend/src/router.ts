@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router';
+import {createRouter, createWebHistory, Router, RouteRecordRaw} from 'vue-router';
 import Credentions from './components/Credentials.vue';
 import AddObjectScreen from './components/addObjetScreen.vue';
 import {BooleanVerifyToken} from "./Function/ApiRequest";
@@ -17,7 +17,7 @@ const requireAuth = async (to: any, from: any, next: any) => {
     }
 };
 
-const routes = [
+const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
         name: 'home',
@@ -31,7 +31,7 @@ const routes = [
     },
 ];
 
-const router = createRouter({
+const router: Router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
 });
