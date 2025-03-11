@@ -2,16 +2,14 @@ import Request from "../Function/Request";
 import RequestType from "../Types/RequestType";
 import ObjetDTO from "../Types/ObjetDTO";
 
-
 /**
  * Class that contains methods to send requests to the API.
  */
-namespace ApiRequest {
-
+class ApiRequest {
     /**
      * The base URL of the API.
      */
-    const baseUrl = "http://localhost:3000/api";
+    private static baseUrl = "http://localhost:3000/api";
 
     /**
      * Sends a login request with the provided username and password.
@@ -20,9 +18,9 @@ namespace ApiRequest {
      * @param {string} mdp - The password of the user.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    export async function Login(mail: string, mdp: string): Promise<Response | Error> {
+    static async Login(mail: string, mdp: string): Promise<Response | Error> {
         return Request(
-            `${baseUrl}/credentials/login`,
+            `${this.baseUrl}/credentials/login`,
             RequestType.POST,
             {
                 "Content-Type": "application/json"
@@ -41,10 +39,9 @@ namespace ApiRequest {
      * @param {string} prenom - The first name of the user.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    export async function Register(pseudo: string, mdp: string, mail: string,
-                                 nom: string, prenom: string): Promise<Response | Error> {
+    static async Register(pseudo: string, mdp: string, mail: string, nom: string, prenom: string): Promise<Response | Error> {
         return Request(
-            `${baseUrl}/credentials/register`,
+            `${this.baseUrl}/credentials/register`,
             RequestType.POST,
             {
                 "Content-Type": "application/json"
@@ -59,9 +56,9 @@ namespace ApiRequest {
      * @param {string} token - The token to verify.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    export async function VerifyToken(token: string): Promise<Response | Error> {
+    static async VerifyToken(token: string): Promise<Response | Error> {
         return Request(
-            `${baseUrl}/credentials/verifyToken`,
+            `${this.baseUrl}/credentials/verifyToken`,
             RequestType.POST,
             {
                 "Content-Type": "application/json"
@@ -76,8 +73,8 @@ namespace ApiRequest {
      * @param {string} token - The token to verify.
      * @returns {Promise<boolean>} A promise that resolves to true if the token is valid, false otherwise.
      */
-    export async function BooleanVerifyToken(token: string): Promise<boolean> {
-        const response = await VerifyToken(token);
+    static async BooleanVerifyToken(token: string): Promise<boolean> {
+        const response = await this.VerifyToken(token);
 
         if (response instanceof Error) {
             return false;
@@ -92,9 +89,9 @@ namespace ApiRequest {
      * @param {string} token - The authentication token of the user.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    export async function UserInformation(token: string): Promise<Response | Error> {
+    static async UserInformation(token: string): Promise<Response | Error> {
         return Request(
-            `${baseUrl}/utilisateurs/trans`,
+            `${this.baseUrl}/utilisateurs/trans`,
             RequestType.GET,
             {
                 "Content-Type": "application/json",
@@ -108,9 +105,9 @@ namespace ApiRequest {
      *
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    export async function GetObjets(): Promise<Response | Error> {
+    static async GetObjets(): Promise<Response | Error> {
         return Request(
-            `${baseUrl}/objets`,
+            `${this.baseUrl}/objets`,
             RequestType.GET,
             {
                 "Content-Type": "application/json"
@@ -125,9 +122,9 @@ namespace ApiRequest {
      * @param {string} token - The authentication token of the user.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    export async function DeleteObjet(id: number, token: string): Promise<Response | Error> {
+    static async DeleteObjet(id: number, token: string): Promise<Response | Error> {
         return Request(
-            `${baseUrl}/objets/${id}`,
+            `${this.baseUrl}/objets/${id}`,
             RequestType.DELETE,
             {
                 "Content-Type": "application/json",
@@ -143,9 +140,9 @@ namespace ApiRequest {
      * @param {string} token - The authentication token of the user.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    export async function AddObjet(objet: ObjetDTO, token: string): Promise<Response | Error> {
+    static async AddObjet(objet: ObjetDTO, token: string): Promise<Response | Error> {
         return Request(
-            `${baseUrl}/objets`,
+            `${this.baseUrl}/objets`,
             RequestType.POST,
             {
                 "Content-Type": "application/json",
@@ -164,9 +161,9 @@ namespace ApiRequest {
      *
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    export async function GetEchanges(): Promise<Response | Error> {
+    static async GetEchanges(): Promise<Response | Error> {
         return Request(
-            `${baseUrl}/echanges/all`,
+            `${this.baseUrl}/echanges/all`,
             RequestType.GET,
             {
                 "Content-Type": "application/json"
@@ -181,9 +178,9 @@ namespace ApiRequest {
      * @param {string} token - The authentication token of the user.
      * @returns {Promise<Response | Error>} A promise that resolves to the response or an error.
      */
-    export async function GetEchange(id: number, token: string): Promise<Response | Error> {
+    static async GetEchange(id: number, token: string): Promise<Response | Error> {
         return Request(
-            `${baseUrl}/echanges/${id}`,
+            `${this.baseUrl}/echanges/${id}`,
             RequestType.GET,
             {
                 "Content-Type": "application/json",

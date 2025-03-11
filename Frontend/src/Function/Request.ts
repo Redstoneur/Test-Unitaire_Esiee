@@ -11,9 +11,9 @@ import RequestType from "../Types/RequestType";
  */
 const Request = async (url: string, method: RequestType, headers?: Record<string, string>, body?: Record<string, string>): Promise<Response | Error> => {
 
-    if (headers === undefined) {
+    if (!headers) {
         headers = {"Content-Type": "application/json"};
-    } else if (headers["Content-Type"] === undefined) {
+    } else if (!headers["Content-Type"]) {
         headers["Content-Type"] = "application/json";
     }
 
