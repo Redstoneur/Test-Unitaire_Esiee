@@ -2,10 +2,12 @@
 import {ref, onMounted} from 'vue';
 import ObjetScreen from './ObjetScreen.vue';
 import {useRouter} from 'vue-router';
-import ApiRequest from "../Class/ApiRequest";
+import {
+  Register, BooleanVerifyToken, Login,
+  GetObjets, GetEchanges, DeleteObjet
+} from "../Class/ApiRequest";
 import CategorieObjet from "../Types/CategorieObjet";
 import Objet from "../Types/Objet";
-import apiRequest from "../Class/ApiRequest";
 
 // Déclaration des variables réactives
 const isLoginMode = ref(true);
@@ -43,7 +45,7 @@ const resetForm = () => {
 // Inscription de l'utilisateur
 const register = async () => {
   try {
-    const response = await ApiRequest.Register(
+    const response = await Register(
         pseudo.value,
         mdp.value,
         mail.value,
@@ -58,7 +60,7 @@ const register = async () => {
 
     // Sauvegarde du token et connexion immédiate
     const token = data.token;
-    const isValid = await ApiRequest.BooleanVerifyToken(token);
+    const isValid = await BooleanVerifyToken(token);
     if (isValid) {
       localStorage.setItem('authToken', token);
       isAuthenticated.value = true;
@@ -77,7 +79,7 @@ const register = async () => {
 // Connexion de l'utilisateur
 const login = async () => {
   try {
-    const response = await ApiRequest.Login(mail.value, mdp.value);
+    const response = await Login(mail.value, mdp.value);
 
     if (response instanceof Error || !response.ok)
       throw new Error('Échec de la connexion');
@@ -86,7 +88,7 @@ const login = async () => {
 
     // Sauvegarder le jeton et connexion immédiate
     const token = data.token;
-    const isValid = await ApiRequest.BooleanVerifyToken(token);
+    const isValid = await BooleanVerifyToken(token);
     if (isValid) {
       localStorage.setItem('authToken', token);
       isAuthenticated.value = true;
@@ -112,7 +114,7 @@ const logout = () => {
 // Récupérer les objets et vérifier s'ils sont en échange
 const fetchObjets = async () => {
   try {
-    const response = await ApiRequest.GetObjets();
+    const response = await GetObjets();
     if (response instanceof Error || !response.ok)
       throw new Error('Erreur lors de la récupération des objets');
 
@@ -152,7 +154,7 @@ const fetchObjets = async () => {
 // Récupérer la liste des échanges
 const fetchEchanges = async () => {
   try {
-    const response = await ApiRequest.GetEchanges();
+    const response = await GetEchanges();
     if (response instanceof Error || !response.ok)
       throw new Error('Erreur lors de la récupération des échanges');
 
@@ -178,9 +180,9 @@ const fetchEchanges = async () => {
 const handleSupprimerObjet = async (objetId: number) => {
   try {
     const token = localStorage.getItem('authToken');
-    if (token && await ApiRequest.BooleanVerifyToken(token)) {
+    if (token && await BooleanVerifyToken(token)) {
       isAuthenticated.value = true;
-      const response = await ApiRequest.DeleteObjet(objetId, token);
+      const response = await DeleteObjet(objetId, token);
 
       if (response instanceof Error || !response.ok)
         throw new Error('Erreur lors de la suppression');
@@ -196,7 +198,7 @@ const handleSupprimerObjet = async (objetId: number) => {
 // Vérification si l'utilisateur est déjà authentifié
 onMounted(async () => {
   const token = localStorage.getItem('authToken');
-  isAuthenticated.value = !!(token && await ApiRequest.BooleanVerifyToken(token));
+  isAuthenticated.value = !!(token && await BooleanVerifyToken(token));
   await fetchObjets();
 });
 

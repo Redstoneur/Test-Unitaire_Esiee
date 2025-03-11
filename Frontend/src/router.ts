@@ -1,14 +1,14 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import Credentions from './components/Credentials.vue';
 import AddObjectScreen from './components/addObjetScreen.vue';
-import ApiRequest from "./Class/ApiRequest";
+import {BooleanVerifyToken} from "./Class/ApiRequest";
 
 const requireAuth = async (to: any, from: any, next: any) => {
     const token = localStorage.getItem('authToken');
     if (!token) {
         next('/');
     } else {
-        const isValid = await ApiRequest.BooleanVerifyToken(token);
+        const isValid = await BooleanVerifyToken(token);
         if (isValid) {
             next();
         } else {

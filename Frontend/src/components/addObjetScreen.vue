@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref} from 'vue';
-import apiRequest from "../Class/ApiRequest";
+import {AddObjet} from "../Class/ApiRequest";
 import ObjetDTO from "../Types/ObjetDTO";
 import CategorieObjet from "../Types/CategorieObjet";
 
@@ -21,7 +21,7 @@ const handleSubmit = async () => {
   };
 
   try {
-    const response = await apiRequest.AddObjet(objet, authToken);
+    const response = await AddObjet(objet, authToken);
 
     if (!(response instanceof Response) || !response.ok) {
       throw new Error('Erreur lors de l\'ajout de l\'objet');

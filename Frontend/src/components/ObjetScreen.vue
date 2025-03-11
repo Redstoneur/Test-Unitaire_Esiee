@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref, onMounted, defineProps} from 'vue';
 import Objet from "../Types/Objet";
-import apiRequest from "../Class/ApiRequest";
+import {UserInformation,GetEchange} from "../Class/ApiRequest";
 
 const props = defineProps<{
   objets: Objet[],
@@ -17,7 +17,7 @@ const exchangeDetails = ref<any>(null);
 const authToken: string = localStorage.getItem('authToken') || '';
 const fetchUtilisateurId = async () => {
   try {
-    const response = await apiRequest.UserInformation(authToken);
+    const response = await UserInformation(authToken);
     if (response instanceof Error || !response.ok)
       throw new Error('Erreur lors de la récupération de l\'utilisateur');
 
@@ -46,7 +46,7 @@ const handleVoirEchange = async (objet: Objet) => {
 // Fonction pour récupérer les détails de l'échange
 const fetchExchangeDetails = async (exchangeId: number) => {
   try {
-    const response = await apiRequest.GetEchange(exchangeId, authToken);
+    const response = await GetEchange(exchangeId, authToken);
     if (response instanceof Error || !response.ok)
       throw new Error('Erreur lors de la récupération de l\'échange');
 
