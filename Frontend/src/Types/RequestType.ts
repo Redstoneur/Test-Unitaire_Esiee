@@ -8,8 +8,6 @@ enum RequestType {
     GET = "GET",
     /** Represents an HTTP POST request */
     POST = "POST",
-    /** Represents an HTTP PUT request */
-    PUT = "PUT",
     /** Represents an HTTP DELETE request */
     DELETE = "DELETE"
 }
