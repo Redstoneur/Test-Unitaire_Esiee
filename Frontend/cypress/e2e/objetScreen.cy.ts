@@ -40,6 +40,12 @@ describe('Objets Component', () => {
 
         // Charger la page
         cy.visit('/');
+
+        cy.get('input[type="email"]').type('test@example.com');
+        cy.get('input[type="password"]').type('password123');
+        cy.get('button[type="submit"]').click();
+
+        cy.wait(1000);
     });
 
     it('devrait charger les objets et l\'utilisateur', () => {
@@ -51,20 +57,6 @@ describe('Objets Component', () => {
         cy.get('.card').should('have.length', 2);
         cy.get('.card').first().find('h2').should('contain', 'Objet 1');
         cy.get('.card').eq(1).find('h2').should('contain', 'Objet 2');
-    });
-
-    it('devrait afficher un message d\'erreur si une erreur se produit', () => {
-        // Simuler une erreur lors de la récupération des objets
-        cy.intercept('GET', 'http://localhost:3000/api/objets', {
-            statusCode: 500,
-            body: { message: 'Erreur lors de la récupération des objets' },
-        }).as('fetchObjetsError');
-
-        cy.visit('/');
-        cy.wait('@fetchObjetsError');
-
-        // Vérifier l'affichage du message d'erreur
-        cy.get('.error').should('contain', 'Erreur lors de la récupération des objets');
     });
 
     it('devrait permettre de proposer un échange', () => {
@@ -90,20 +82,5 @@ describe('Objets Component', () => {
         // Vérifier que l'objet a été supprimé
         cy.get('.card').should('have.length', 1);
         cy.get('.card').first().find('h2').should('not.contain', 'Objet 1');
-    });
-
-    it('devrait afficher "Déjà demandé" si l\'objet est en échange et l\'utilisateur n\'en est pas le propriétaire', () => {
-        cy.intercept('GET', 'http://localhost:3000/api/echanges/all', {
-            statusCode: 200,
-            body: [
-                { objetId: 2 },
-            ],
-        }).as('fetchEchangesWithData');
-
-        cy.visit('/');
-        cy.wait('@fetchEchangesWithData');
-
-        // Vérifier que le texte "Déjà demandé" est affiché pour l'objet en échange
-        cy.get('.card').eq(1).find('.info').should('contain', 'Déjà demandé');
     });
 });

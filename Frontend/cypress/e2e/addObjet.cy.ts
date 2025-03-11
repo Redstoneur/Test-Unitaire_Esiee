@@ -2,6 +2,13 @@ describe('Ajout d\'objet avec authentification', () => {
     beforeEach(() => {
         cy.login();  // Appel de la commande login personnalisée
         cy.visit('http://localhost:5173/add-object');
+
+        cy.get('input[type="email"]').type('test@example.com');
+        cy.get('input[type="password"]').type('password123');
+        cy.get('button[type="submit"]').click();
+        cy.wait(1000);
+
+        cy.visit('/add-object');
     });
 
     it('Doit afficher le formulaire d\'ajout d\'objet pour un utilisateur authentifié', () => {
