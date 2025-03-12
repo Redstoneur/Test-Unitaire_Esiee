@@ -6,31 +6,47 @@ import {
     Router,
     RouteRecordRaw
 } from 'vue-router';
-import Credentions from './components/Credentials.vue';
-import AddObjectScreen from './components/addObjetScreen.vue';
-import {BooleanVerifyToken} from "./Function/ApiRequest";
 import {Component} from "vue";
 
-const requireAuth = async (to: RouteLocationNormalized, from: RouteLocationNormalized,
-                           next: NavigationGuardNext) => {
+// Components
+import Credentials from './components/Credentials.vue';
+import Home from './components/Home.vue';
+import AddObjectScreen from './components/addObjetScreen.vue';
+
+// Functions
+import {BooleanVerifyToken} from "./Function/ApiRequest";
+
+
+const requireAuth = async (
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized,
+    next: NavigationGuardNext
+) => {
     const token = localStorage.getItem('authToken');
     if (!token) {
-        next('/');
+        next('/login');
     } else {
         const isValid = await BooleanVerifyToken(token);
         if (isValid) {
             next();
         } else {
-            next('/');
+            next('/login');
         }
     }
 };
 
 const routes: RouteRecordRaw[] = [
     {
+        path: '/login',
+        name: 'login',
+        component: Credentials as unknown as Component,
+    },
+    {
         path: '/',
+        alias: '/home',
         name: 'home',
-        component: Credentions as unknown as Component,
+        component: Home as unknown as Component,
+        beforeEnter: requireAuth,
     },
     {
         path: '/add-object',

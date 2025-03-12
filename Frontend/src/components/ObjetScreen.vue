@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {ref, onMounted, defineProps} from 'vue';
+import {defineProps, onMounted, ref} from 'vue';
 
 // Importation des fonctions de l'API
-import {UserInformation,GetEchange} from "../Function/ApiRequest";
+import {GetEchange, UserInformation} from "../Function/ApiRequest";
 
 // Importation des types
 import Objet from "../Types/Objet";
