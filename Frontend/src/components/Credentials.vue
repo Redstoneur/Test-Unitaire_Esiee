@@ -8,6 +8,7 @@ import {
 } from "../Function/ApiRequest";
 import CategorieObjet from "../Types/CategorieObjet";
 import Objet from "../Types/Objet";
+import AppHeader from './AppHeader.vue';
 
 // Déclaration des variables réactives
 const isLoginMode = ref(true);
@@ -160,7 +161,6 @@ const fetchEchanges = async () => {
 
     const echanges = await response.json();
     objets.value.forEach(objet => {
-
       if (echanges.some((e: any) =>
           e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
       )) {
@@ -169,7 +169,6 @@ const fetchEchanges = async () => {
             e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
         ).id;
       }
-
     });
   } catch (error) {
     errorMessage.value = (error as Error).message;
@@ -188,19 +187,13 @@ const handleSupprimerObjet = async (objetId: number) => {
         throw new Error('Erreur lors de la suppression');
 
       objets.value = objets.value.filter(o => o.id !== objetId);
-    } else
+    } else {
       throw new Error('Vous n\'êtes pas Connecté');
+    }
   } catch (error) {
     errorMessage.value = (error as Error).message;
   }
 };
-
-// Vérification si l'utilisateur est déjà authentifié
-onMounted(async () => {
-  const token = localStorage.getItem('authToken');
-  isAuthenticated.value = !!(token && await BooleanVerifyToken(token));
-  await fetchObjets();
-});
 
 // Fonction pour gérer la soumission du formulaire de recherche
 const handleSearch = async () => {
@@ -213,6 +206,12 @@ const handleReset = async () => {
   await fetchObjets();
 };
 
+// Vérification si l'utilisateur est déjà authentifié
+onMounted(async () => {
+  const token = localStorage.getItem('authToken');
+  isAuthenticated.value = !!(token && await BooleanVerifyToken(token));
+  await fetchObjets();
+});
 </script>
 
 <template>
@@ -236,12 +235,15 @@ const handleReset = async () => {
       </div>
     </div>
     <div v-if="isAuthenticated" class="welcome">
-      <header>
-        <h2>Bienvenue ! Vous êtes connecté.</h2>
-        <h3 class="objet-title">Liste des objets</h3>
-        <router-link class="addObjet" to="/add-object">Ajouter un objet</router-link>
-        <button class="disconected" @click="logout">Déconnexion</button>
-      </header>
+      <!-- Header for Credentials -->
+      <AppHeader
+          title="Bienvenue ! Vous êtes connecté."
+          subtitle="Liste des objets"
+          routerLinkLabel="Ajouter un objet"
+          routerLinkTarget="/add-object"
+          :showLogout="true"
+          @logout="logout"
+      />
       <main>
         <form class="search-bar" @submit.prevent="handleSearch">
           <input type="text" v-model="searchText" placeholder="Rechercher par texte"/>
@@ -280,7 +282,6 @@ const handleReset = async () => {
   margin: 0 auto;
 }
 
-
 header {
   top: 0;
   width: 100%;
@@ -291,7 +292,6 @@ header {
 }
 
 main {
-  margin-top: 1em;
   padding: 0.5em;
   flex: 1;
   width: 100%;
@@ -316,24 +316,6 @@ main {
   justify-content: center;
 }
 
-.disconected {
-  margin-left: 20px;
-  transition: 0.5s ease-in-out;
-}
-
-.disconected:hover {
-  transition: background-color 0.3s ease-in-out;
-}
-
-.addObjet {
-  color: black;
-}
-
-.addObjet:hover {
-  color: blue;
-  transition: 0.5s ease-in-out;
-}
-
 .card {
   padding: 2rem;
   border-radius: 10px;
@@ -341,11 +323,6 @@ main {
   text-align: center;
   margin: 0 auto;
   background: white;
-}
-
-h2 {
-  margin-bottom: 1rem;
-  color: #333;
 }
 
 form {
@@ -386,9 +363,5 @@ button:hover {
 .error {
   color: red;
   margin-top: 10px;
-}
-
-.objet-title {
-  margin-top: 20px;
 }
 </style>

@@ -4,6 +4,7 @@ import {useRouter} from 'vue-router';
 import {AddObjet} from '../Function/ApiRequest';
 import ObjetDTO from '../Types/ObjetDTO';
 import CategorieObjet from '../Types/CategorieObjet';
+import AppHeader from './AppHeader.vue';
 
 const router = useRouter();
 
@@ -33,19 +34,12 @@ const handleSubmit = async () => {
       throw new Error("Erreur lors de l'ajout de l'objet");
     }
 
-    // const data = response.json();
-    // console.log("data", data);
-
-    // Show success modal
     addedObjet.value = {...objet};
     successMessage.value = 'Objet ajouté avec succès !';
     showSuccessModal.value = true;
-
-    // Reset form
     nomObjet.value = '';
     descriptionObjet.value = '';
     categorieObjet.value = '';
-
   } catch (error) {
     errorMessage.value = (error as Error).message;
   }
@@ -62,38 +56,35 @@ const returnHome = () => {
 
 <template>
   <div class="container">
-    <header>
-      <h2>Ajouter un Objet</h2>
-      <router-link to="/">Retour</router-link>
-    </header>
+    <!-- Header for AddObjetScreen -->
+    <AppHeader
+        title="Ajouter un Objet"
+        routerLinkLabel="Retour"
+        routerLinkTarget="/"
+    />
     <main>
-      <!-- Affichage des messages d'erreur ou de succès -->
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       <p v-if="successMessage" class="success">{{ successMessage }}</p>
-
-    <!-- Formulaire d'ajout d'objet -->
-    <form @submit.prevent="handleSubmit()">
-      <div class="form-group">
-        <label for="nomObjet">Nom de l'Objet</label>
-        <input v-model="nomObjet" type="text" id="nomObjet" required/>
-      </div>
-
-      <div class="form-group">
-        <label for="descriptionObjet">Description de l'Objet</label>
-        <textarea v-model="descriptionObjet" id="descriptionObjet" required></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="categorieObjet">Catégorie</label>
-        <select v-model="categorieObjet" id="categorieObjet" required>
-          <option value="" disabled selected>Sélectionner une catégorie</option>
-          <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
-        </select>
-      </div>
-
-      <button type="submit">Ajouter l'Objet</button>
-    </form>
-
+      <form @submit.prevent="handleSubmit()">
+        <div class="form-group">
+          <label for="nomObjet">Nom de l'Objet</label>
+          <input v-model="nomObjet" type="text" id="nomObjet" required/>
+        </div>
+        <div class="form-group">
+          <label for="descriptionObjet">Description de l'Objet</label>
+          <textarea v-model="descriptionObjet" id="descriptionObjet" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="categorieObjet">Catégorie</label>
+          <select v-model="categorieObjet" id="categorieObjet" required>
+            <option value="" disabled selected>Sélectionner une catégorie</option>
+            <option v-for="category in categories" :key="category" :value="category">
+              {{ category }}
+            </option>
+          </select>
+        </div>
+        <button type="submit">Ajouter l'Objet</button>
+      </form>
       <!-- Success Modal -->
       <div v-if="showSuccessModal" class="modal">
         <div class="modal-content">
@@ -104,8 +95,12 @@ const returnHome = () => {
             <p><strong>Catégorie :</strong> {{ addedObjet?.categorie }}</p>
           </div>
           <div class="modal-actions">
-            <button class="modal-btn continue-btn" @click="continueAdding">Continuer à ajouter</button>
-            <button class="modal-btn home-btn" @click="returnHome">Revenir à l'accueil</button>
+            <button class="modal-btn continue-btn" @click="continueAdding">
+              Continuer à ajouter
+            </button>
+            <button class="modal-btn home-btn" @click="returnHome">
+              Revenir à l'accueil
+            </button>
           </div>
         </div>
       </div>
@@ -120,17 +115,14 @@ const returnHome = () => {
   padding: 20px;
   text-align: center;
 }
-
 .form-group {
   margin-bottom: 15px;
 }
-
 label {
   display: block;
   text-align: left;
   margin-bottom: 5px;
 }
-
 input,
 select,
 textarea {
@@ -140,7 +132,6 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
-
 button {
   background-color: #4caf50;
   color: white;
@@ -150,20 +141,15 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
-
 button:hover {
   background-color: #45a049;
 }
-
 .error {
   color: red;
 }
-
 .success {
   color: green;
 }
-
-/* Modal Styles */
 .modal {
   display: flex;
   justify-content: center;
@@ -175,7 +161,6 @@ button:hover {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
 }
-
 .modal-content {
   background: white;
   padding: 20px;
@@ -184,17 +169,14 @@ button:hover {
   max-width: 500px;
   text-align: center;
 }
-
 .modal-details p {
   margin: 10px 0;
 }
-
 .modal-actions {
   margin-top: 20px;
   display: flex;
   justify-content: space-around;
 }
-
 .modal-btn {
   background-color: #4caf50;
   color: white;
@@ -203,7 +185,6 @@ button:hover {
   padding: 10px 20px;
   cursor: pointer;
 }
-
 .modal-btn:hover {
   background-color: #45a049;
 }
