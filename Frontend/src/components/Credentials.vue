@@ -1,18 +1,63 @@
+<!--
+  @file Frontend/src/components/Credentials.vue
+  @description A Vue component handling user authentication including login and registration.
+-->
+
 <script setup lang="ts">
-import {ref} from 'vue';
+import {Ref, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {BooleanVerifyToken, Login, Register} from "../Function/ApiRequest";
 
-const isLoginMode = ref(true);
-const pseudo = ref('');
-const mdp = ref('');
-const mail = ref('');
-const nom = ref('');
-const prenom = ref('');
-const errorMessage = ref('');
+/**
+ * Reactive variable to check if the component is in login mode.
+ * @type {Ref<boolean>}
+ */
+const isLoginMode: Ref<boolean> = ref(true);
+
+/**
+ * Reactive variable for holding the user's pseudo.
+ * @type {Ref<string>}
+ */
+const pseudo: Ref<string> = ref('');
+
+/**
+ * Reactive variable for holding the user's password.
+ * @type {Ref<string>}
+ */
+const mdp: Ref<string> = ref('');
+
+/**
+ * Reactive variable for holding the user's email.
+ * @type {Ref<string>}
+ */
+const mail: Ref<string> = ref('');
+
+/**
+ * Reactive variable for holding the user's last name.
+ * @type {Ref<string>}
+ */
+const nom: Ref<string> = ref('');
+
+/**
+ * Reactive variable for holding the user's first name.
+ * @type {Ref<string>}
+ */
+const prenom: Ref<string> = ref('');
+
+/**
+ * Reactive variable for storing error messages.
+ * @type {Ref<string>}
+ */
+const errorMessage: Ref<string> = ref('');
+
+/**
+ * Router instance for navigating between routes.
+ */
 const router = useRouter();
 
-// Réinitialiser le formulaire
+/**
+ * Resets the form by clearing all reactive fields.
+ */
 const resetForm = () => {
   pseudo.value = '';
   mdp.value = '';
@@ -22,7 +67,21 @@ const resetForm = () => {
   errorMessage.value = '';
 };
 
-// Inscription de l'utilisateur
+/**
+ * Toggles the mode between login and registration.
+ * Also resets the form fields when the mode changes.
+ */
+const toggleMode = () => {
+  isLoginMode.value = !isLoginMode.value;
+  resetForm();
+};
+
+/**
+ * Handles user registration by sending a request to the API.
+ * If successful, stores the authentication token and navigates to home.
+ *
+ * @async
+ */
 const register = async () => {
   const response = await Register(
       pseudo.value,
@@ -39,28 +98,24 @@ const register = async () => {
 
   const data = await response.json();
 
-  // Sauvegarde du token et connexion immédiate
+  // Save token and verify its validity
   const token = data.token;
   const isValid = await BooleanVerifyToken(token);
   if (isValid) {
     localStorage.setItem('authToken', token);
   }
 
-  // Réinitialiser le formulaire
   resetForm();
-
-  // Redirection vers la page d'accueil
   errorMessage.value = '';
   await router.push('/');
 };
 
-// Connexion de l'utilisateur
-// Changer le mode (connexion/inscription)
-const toggleMode = () => {
-  isLoginMode.value = !isLoginMode.value;
-  resetForm(); // Réinitialiser les champs quand on change de mode
-};
-
+/**
+ * Handles user login by sending a request to the API.
+ * If successful, stores the authentication token and navigates to home.
+ *
+ * @async
+ */
 const login = async () => {
   const response = await Login(mail.value, mdp.value);
 
@@ -85,19 +140,23 @@ const login = async () => {
 <template>
   <div class="container">
     <div class="card">
+      <!-- Display heading based on mode: Login or Registration -->
       <h2>{{ isLoginMode ? 'Connexion' : 'Inscription' }}</h2>
       <form @submit.prevent="isLoginMode ? login() : register()">
+        <!-- Registration specific inputs -->
         <div v-if="!isLoginMode">
           <input type="text" v-model="pseudo" placeholder="Pseudo" required/>
           <input type="text" v-model="nom" placeholder="Nom" required/>
           <input type="text" v-model="prenom" placeholder="Prénom" required/>
         </div>
-
+        <!-- Common inputs -->
         <input type="email" v-model="mail" placeholder="Email" required/>
         <input type="password" v-model="mdp" placeholder="Mot de passe" required/>
         <button type="submit">{{ isLoginMode ? 'Se connecter' : 'S\'inscrire' }}</button>
       </form>
+      <!-- Display error message if any -->
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      <!-- Button to toggle between login and registration mode -->
       <button class="toggle-btn" @click="toggleMode">{{ isLoginMode ? 'Créer un compte' : 'Se connecter' }}</button>
     </div>
   </div>
@@ -184,5 +243,4 @@ button:hover {
     width: 90%;
   }
 }
-
 </style>
