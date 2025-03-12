@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 import {useRouter} from 'vue-router';
+
+// Importation des composants
+import AppHeader from './AppHeader.vue';
+
+// Importation des fonctions de l'API
 import {AddObjet} from '../Function/ApiRequest';
+
+// Importation des types
 import ObjetDTO from '../Types/ObjetDTO';
 import CategorieObjet from '../Types/CategorieObjet';
-import AppHeader from './AppHeader.vue';
 
 const router = useRouter();
 

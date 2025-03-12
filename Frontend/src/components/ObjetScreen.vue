@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import {ref, onMounted, defineProps} from 'vue';
-import Objet from "../Types/Objet";
+
+// Importation des fonctions de l'API
 import {UserInformation,GetEchange} from "../Function/ApiRequest";
+
+// Importation des types
+import Objet from "../Types/Objet";
 
 const props = defineProps<{
   objets: Objet[],
@@ -62,7 +66,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="container">
+  <section class="objet-zone">
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 
     <div class="grid">
@@ -113,16 +117,15 @@ onMounted(async () => {
       </div>
     </div>
 
-  </div>
+  </section>
 </template>
 
 <style scoped>
 /* Style global */
-.container {
+.objet-zone {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
   background: #f4f4f4;
   padding: 20px;
 }
@@ -131,7 +134,7 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  padding-bottom: 10px;
+  padding: 1em;
 }
 
 /* Style des cartes */
@@ -141,7 +144,6 @@ onMounted(async () => {
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  min-width: 280px;
   flex-shrink: 0;
   transition: transform 0.3s ease-in-out;
 }
@@ -278,4 +280,17 @@ h2 {
 .exchange-item {
   width: 45%;
 }
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .card {
+    min-width: 90%;
+  }
+}
+
 </style>

@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import {ref, onMounted} from 'vue';
-import ObjetScreen from './ObjetScreen.vue';
+import {onMounted, ref} from 'vue';
 import {useRouter} from 'vue-router';
+
+// Importation des composants
+import ObjetScreen from './ObjetScreen.vue';
+import AppHeader from './AppHeader.vue';
+
+// Importation des fonctions de l'API
 import {
   Register, BooleanVerifyToken, Login,
   GetObjets, GetEchanges, DeleteObjet
 } from "../Function/ApiRequest";
+
+// Importation des types
 import CategorieObjet from "../Types/CategorieObjet";
 import Objet from "../Types/Objet";
-import AppHeader from './AppHeader.vue';
 
 // Déclaration des variables réactives
 const isLoginMode = ref(true);
@@ -364,4 +370,11 @@ button:hover {
   color: red;
   margin-top: 10px;
 }
+
+@media (max-width: 768px) {
+  main {
+    width: 90%;
+  }
+}
+
 </style>

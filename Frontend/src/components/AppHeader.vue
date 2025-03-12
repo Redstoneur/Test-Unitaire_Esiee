@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {defineEmits, defineProps} from 'vue';
-import {useRouter} from 'vue-router';
 
 const props = defineProps({
   title: {type: String, required: true},
@@ -11,11 +10,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['logout']);
-const router = useRouter();
-
-const handleRouterLink = () => {
-  if (props.routerLinkTarget) router.push(props.routerLinkTarget);
-};
 
 const onLogout = () => {
   emit('logout');
@@ -25,18 +19,18 @@ const onLogout = () => {
 <template>
   <header>
     <div class="header-titles">
-      <h2>{{ title }}</h2>
-      <h3 v-if="subtitle" class="objet-title">{{ subtitle }}</h3>
+      <h2>{{ props.title }}</h2>
+      <h3 v-if="props.subtitle" class="objet-title">{{ props.subtitle }}</h3>
     </div>
     <div class="header-actions">
       <router-link
-          v-if="routerLinkTarget"
-          :to="routerLinkTarget"
+          v-if="props.routerLinkTarget"
+          :to="props.routerLinkTarget"
           class="header-link"
       >
-        {{ routerLinkLabel }}
+        {{ props.routerLinkLabel }}
       </router-link>
-      <button v-if="showLogout" class="disconected" @click="onLogout">
+      <button v-if="props.showLogout" class="disconected" @click="onLogout">
         Déconnexion
       </button>
     </div>
