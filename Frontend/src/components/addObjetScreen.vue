@@ -33,22 +33,21 @@ const handleSubmit = async () => {
     categorie: categorieObjet.value as CategorieObjet,
   };
 
-  try {
-    const response = await AddObjet(objet, authToken);
+  const response = await AddObjet(objet, authToken);
 
-    if (!(response instanceof Response) || !response.ok) {
-      throw new Error("Erreur lors de l'ajout de l'objet");
-    }
-
-    addedObjet.value = {...objet};
-    successMessage.value = 'Objet ajouté avec succès !';
-    showSuccessModal.value = true;
-    nomObjet.value = '';
-    descriptionObjet.value = '';
-    categorieObjet.value = '';
-  } catch (error) {
-    errorMessage.value = (error as Error).message;
+  if (!(response instanceof Response) || !response.ok) {
+    errorMessage.value = "Erreur lors de l'ajout de l'objet";
+    return;
   }
+
+  addedObjet.value = {...objet};
+  successMessage.value = 'Objet ajouté avec succès !';
+  showSuccessModal.value = true;
+  nomObjet.value = '';
+  descriptionObjet.value = '';
+  categorieObjet.value = '';
+
+  errorMessage.value = '';
 };
 
 const continueAdding = () => {

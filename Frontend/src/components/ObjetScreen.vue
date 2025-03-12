@@ -19,17 +19,20 @@ const exchangeDetails = ref<any>(null);
 
 // Récupérer l'ID de l'utilisateur connecté
 const authToken: string = localStorage.getItem('authToken') || '';
-const fetchUtilisateurId = async () => {
-  try {
-    const response = await UserInformation(authToken);
-    if (response instanceof Error || !response.ok)
-      throw new Error('Erreur lors de la récupération de l\'utilisateur');
 
-    const data = await response.json();
-    utilisateurId.value = data.id;
-  } catch (error) {
-    errorMessage.value = (error as Error).message;
+// Fonction pour récupérer l'ID de l'utilisateur
+const fetchUtilisateurId = async () => {
+  const response = await UserInformation(authToken);
+
+  if (!(response instanceof Response) || !response.ok) {
+    errorMessage.value = 'Erreur lors de la récupération de l\'utilisateur';
+    return;
   }
+
+  const data = await response.json();
+  utilisateurId.value = data.id;
+
+  errorMessage.value = '';
 };
 
 // Fonction pour afficher/cacher l'input d'échange
@@ -49,15 +52,16 @@ const handleVoirEchange = async (objet: Objet) => {
 
 // Fonction pour récupérer les détails de l'échange
 const fetchExchangeDetails = async (exchangeId: number) => {
-  try {
-    const response = await GetEchange(exchangeId, authToken);
-    if (response instanceof Error || !response.ok)
-      throw new Error('Erreur lors de la récupération de l\'échange');
+  const response = await GetEchange(exchangeId, authToken);
 
-    exchangeDetails.value = await response.json();
-  } catch (error) {
-    errorMessage.value = (error as Error).message;
+  if (response instanceof Error || !response.ok) {
+    errorMessage.value = 'Erreur lors de la récupération de l\'échange';
+    return;
   }
+
+  exchangeDetails.value = await response.json();
+
+  errorMessage.value = '';
 };
 
 onMounted(async () => {

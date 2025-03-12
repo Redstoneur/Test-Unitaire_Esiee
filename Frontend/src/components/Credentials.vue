@@ -24,35 +24,34 @@ const resetForm = () => {
 
 // Inscription de l'utilisateur
 const register = async () => {
-  try {
-    const response = await Register(
-        pseudo.value,
-        mdp.value,
-        mail.value,
-        nom.value,
-        prenom.value
-    );
+  const response = await Register(
+      pseudo.value,
+      mdp.value,
+      mail.value,
+      nom.value,
+      prenom.value
+  );
 
-    if (response instanceof Error || !response.ok)
-      throw new Error('Erreur lors de l\'inscription');
-
-    const data = await response.json();
-
-    // Sauvegarde du token et connexion immédiate
-    const token = data.token;
-    const isValid = await BooleanVerifyToken(token);
-    if (isValid) {
-      localStorage.setItem('authToken', token);
-    }
-
-    // Réinitialiser le formulaire
-    resetForm();
-
-    // Redirection vers la page d'accueil
-    await router.push('/');
-  } catch (error: any) {
-    errorMessage.value = (error as Error).message;
+  if (!(response instanceof Response) || !response.ok) {
+    errorMessage.value = "Erreur lors de l'inscription";
+    return;
   }
+
+  const data = await response.json();
+
+  // Sauvegarde du token et connexion immédiate
+  const token = data.token;
+  const isValid = await BooleanVerifyToken(token);
+  if (isValid) {
+    localStorage.setItem('authToken', token);
+  }
+
+  // Réinitialiser le formulaire
+  resetForm();
+
+  // Redirection vers la page d'accueil
+  errorMessage.value = '';
+  await router.push('/');
 };
 
 // Connexion de l'utilisateur
@@ -63,21 +62,23 @@ const toggleMode = () => {
 };
 
 const login = async () => {
-  try {
-    const response = await Login(mail.value, mdp.value);
-    if (response instanceof Error || !response.ok)
-      throw new Error('Échec de la connexion');
+  const response = await Login(mail.value, mdp.value);
 
-    const data = await response.json();
-    const token = data.token;
-    const isValid = await BooleanVerifyToken(token);
-    if (isValid) {
-      localStorage.setItem('authToken', token);
-      await router.push('/');
-    }
-  } catch (error: any) {
-    errorMessage.value = (error as Error).message;
+  if (!(response instanceof Response) || !response.ok) {
+    errorMessage.value = 'Échec de la connexion';
+    return;
   }
+
+  const data = await response.json();
+  const token = data.token;
+  const isValid = await BooleanVerifyToken(token);
+  if (!isValid) {
+    errorMessage.value = 'Échec de la connexion';
+    return;
+  }
+  localStorage.setItem('authToken', token);
+  errorMessage.value = '';
+  await router.push('/');
 };
 </script>
 

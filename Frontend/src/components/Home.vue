@@ -7,8 +7,7 @@ import AppHeader from './AppHeader.vue';
 import ObjetScreen from './ObjetScreen.vue';
 
 // Importation des fonctions de l'API
-import {BooleanVerifyToken, DeleteObjet,
-  GetEchanges, GetObjets} from "../Function/ApiRequest";
+import {BooleanVerifyToken, DeleteObjet, GetEchanges, GetObjets} from "../Function/ApiRequest";
 
 // Importation des types
 import CategorieObjet from "../Types/CategorieObjet";
@@ -29,77 +28,84 @@ const logout = () => {
 };
 
 const fetchObjets = async () => {
-  try {
-    const response = await GetObjets();
-    if (response instanceof Error || !response.ok)
-      throw new Error('Erreur lors de la récupération des objets');
+  const response = await GetObjets();
 
-    const data = await response.json();
-    objets.value = data.map((objet: any) => ({
-      id: objet.id,
-      nom: objet.nom,
-      description: objet.description,
-      categorie: objet.categorie,
-      idUtilisateur: objet.idUtilisateur,
-      showInput: false,
-      enEchange: false,
-      idEchange: null
-    }));
-    if (searchCategorie.value) {
-      objets.value = objets.value.filter(o => o.categorie === searchCategorie.value);
-    }
-    if (searchText.value) {
-      objets.value = objets.value.filter(o =>
-          o.nom.toLowerCase().includes(searchText.value.toLowerCase()) ||
-          o.description.toLowerCase().includes(searchText.value.toLowerCase())
-      );
-    }
-    await fetchEchanges();
-  } catch (error) {
-    errorMessage.value = (error as Error).message;
+  if (!(response instanceof Response) || !response.ok) {
+    errorMessage.value = 'Erreur lors de la récupération des objets';
+    return;
   }
+
+  const data = await response.json();
+  objets.value = data.map((objet: any) => ({
+    id: objet.id,
+    nom: objet.nom,
+    description: objet.description,
+    categorie: objet.categorie,
+    idUtilisateur: objet.idUtilisateur,
+    showInput: false,
+    enEchange: false,
+    idEchange: null
+  }));
+
+  if (searchCategorie.value) {
+    objets.value = objets.value.filter(o => o.categorie === searchCategorie.value);
+  }
+
+  if (searchText.value) {
+    objets.value = objets.value.filter(o =>
+        o.nom.toLowerCase().includes(searchText.value.toLowerCase()) ||
+        o.description.toLowerCase().includes(searchText.value.toLowerCase())
+    );
+  }
+
+  errorMessage.value = '';
+  await fetchEchanges();
 };
 
 const fetchEchanges = async () => {
-  try {
-    const response = await GetEchanges();
-    if (response instanceof Error || !response.ok)
-      throw new Error('Erreur lors de la récupération des échanges');
+  const response = await GetEchanges();
 
-    const echanges = await response.json();
-    objets.value.forEach(objet => {
-      if (echanges.some((e: any) =>
-          e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
-      )) {
-        objet.enEchange = true;
-        objet.idEchange = echanges.find((e: any) =>
-            e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
-        ).id;
-      }
-    });
-  } catch (error) {
-    errorMessage.value = (error as Error).message;
+  if (!(response instanceof Response) || !response.ok) {
+    errorMessage.value = 'Erreur lors de la récupération des échanges';
+    return;
   }
+
+  const echanges = await response.json();
+
+  objets.value.forEach(objet => {
+    if (echanges.some((e: any) =>
+        e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
+    )) {
+      objet.enEchange = true;
+      objet.idEchange = echanges.find((e: any) =>
+          e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
+      ).id;
+    }
+  });
+
+  errorMessage.value = '';
 };
 
 // Fonction pour supprimer un objet
 const handleSupprimerObjet = async (objetId: number) => {
-  try {
-    const token = localStorage.getItem('authToken');
-    if (token && await BooleanVerifyToken(token)) {
-      isAuthenticated.value = true;
-      const response = await DeleteObjet(objetId, token);
+  const token = localStorage.getItem('authToken');
+  if (token && await BooleanVerifyToken(token)) {
+    isAuthenticated.value = true;
+    const response = await DeleteObjet(objetId, token);
 
-      if (response instanceof Error || !response.ok)
-        throw new Error('Erreur lors de la suppression');
-
-      objets.value = objets.value.filter(o => o.id !== objetId);
-    } else {
-      throw new Error('Vous n\'êtes pas Connecté');
+    if (!(response instanceof Response) || !response.ok) {
+      errorMessage.value = 'Erreur lors de la suppression';
+      return;
     }
-  } catch (error) {
-    errorMessage.value = (error as Error).message;
+
+    objets.value = objets.value.filter(o => o.id !== objetId);
+
+    errorMessage.value = '';
+    return;
   }
+  errorMessage.value = 'Vous n\'êtes pas Connecté';
+  isAuthenticated.value = false;
+
 };
 
 const handleSearch = async () => {
