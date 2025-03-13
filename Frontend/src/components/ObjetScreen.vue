@@ -4,10 +4,13 @@
   It supports showing object details, proposing exchanges, deleting objects and viewing exchange details via a modal.
 -->
 <script setup lang="ts">
-import {onMounted, Ref, ref} from 'vue';
+import {computed, onMounted, Ref, ref} from 'vue';
+
+// Import Component
+import ObjetForm from "./ObjetForm.vue";
 
 // Import function
-import {GetEchange, UserInformation} from "../Function/ApiRequest";
+import {CreateEchange, GetEchange, UserInformation} from "../Function/ApiRequest";
 
 // Import types
 import Objet from "../Types/Objet";
@@ -59,6 +62,55 @@ const exchangeDetails: Ref<any> = ref(null);
 const authToken: string = localStorage.getItem('authToken') || '';
 
 /**
+ * Controls the visibility of the proposal exchange modal.
+ * @type {Ref<boolean>}
+ */
+const showProposeModal: Ref<boolean> = ref(false);
+
+/**
+ * Controls whether to display the creation form inside the proposal exchange modal.
+ * @type {Ref<boolean>}
+ */
+const showCreateForm: Ref<boolean> = ref(false);
+
+/**
+ * Holds the selected user object (either chosen from the list or created via form).
+ * @type {Ref<Objet | null>}
+ */
+const selectedObjetProposal: Ref<Objet | null> = ref<Objet | null>(null);
+
+/**
+ * Holds the object on which the user clicked "proposer à l'échange".
+ * @type {Ref<Objet | null>}
+ */
+const objetRecherche: Ref<Objet | null> = ref<Objet | null>(null);
+
+/**
+ * Holds the name of the object to be created.
+ * @type {Ref<string>}
+ */
+const nomObjet: Ref<string> = ref('');
+
+/**
+ * Holds the description of the object to be created.
+ * @type {Ref<string>}
+ */
+const descriptionObjet: Ref<string> = ref('');
+
+/**
+ * Holds the category of the object to be created.
+ * @type {Ref<string>}
+ */
+const categorieObjet: Ref<string> = ref('');
+
+/**
+ * Computed list of user's objects that are not engaged in an exchange.
+ */
+const userObjects = computed(() => {
+  return props.objets.filter(o => o.idUtilisateur === utilisateurId.value && !o.enEchange);
+});
+
+/**
  * Fetches the logged in user's id by making an asynchronous request to the UserInformation API.
  *
  * @async
@@ -83,28 +135,8 @@ const fetchUtilisateurId = async () => {
 };
 
 /**
- * Handles proposing an exchange for an object.
- *
- * This function searches through the provided objects for the one that matches the given ID.
- * If the object is found, it toggles the visibility of the input field that allows users to enter their proposal.
- *
- * @param {number} objetId - The ID of the object for which to propose an exchange.
- */
-const handleProposerEchange = (objetId: number) => {
-  // Search for the object in the list by its ID.
-  const objet = props.objets.find(o => o.id === objetId);
-  if (objet) {
-    // Toggle the 'showInput' property to display or hide the exchange input field.
-    objet.showInput = !objet.showInput;
-  }
-};
-
-/**
- * Handles viewing the details of an exchange.
- *
- * Sets the selected object, displays the modal and fetches exchange details.
- *
- * @param {Objet} objet - The object to view the exchange details for.
+ * Handles the request to view exchange details.
+ * @param objet - The object for which exchange details are to be shown.
  */
 const handleVoirEchange = async (objet: Objet) => {
   // Assign the passed object to the reactive selected object
@@ -134,6 +166,57 @@ const fetchExchangeDetails = async (exchangeId: number) => {
   }
 
   exchangeDetails.value = await response.json();
+  errorMessage.value = '';
+};
+
+/**
+ * Handles opening the propose exchange modal.
+ * Stores the target object (to be acquired) and opens the modal.
+ * @param objet - The object for which the exchange is proposed.
+ */
+const handleProposerExchange = (objet: Objet) => {
+  objetRecherche.value = objet;
+  // Reset any previous selection and creation form state
+  selectedObjetProposal.value = null;
+  showCreateForm.value = false;
+  showProposeModal.value = true;
+};
+
+/**
+ * Sets the selected proposed object from the user's list.
+ * @param objet - The user object selected for exchange proposition.
+ */
+const selectUserObjet = (objet: Objet) => {
+  selectedObjetProposal.value = objet;
+};
+
+/**
+ * Called when a new object is created via the form.
+ * @param payload - Contains the created object.
+ */
+const handleObjetCreated = (payload: { objet: Objet }) => {
+  selectedObjetProposal.value = payload.objet;
+  // Optionally hide the creation form once an object is created.
+  showCreateForm.value = false;
+};
+
+/**
+ * Confirms and creates the exchange by calling the API.
+ * @async
+ */
+const confirmExchange = async () => {
+  if (!selectedObjetProposal.value || !objetRecherche.value) return;
+  const response = await CreateEchange(
+      selectedObjetProposal.value.id,
+      objetRecherche.value.id,
+      authToken
+  );
+  if (response instanceof Error || !response.ok) {
+    errorMessage.value = 'Erreur lors de la création de l\'échange';
+    return;
+  }
+  // Reset modal state on success
+  showProposeModal.value = false;
   errorMessage.value = '';
 };
 
@@ -173,9 +256,13 @@ onMounted(async () => {
         <!-- If the object is not in exchange, provide deletion or exchange proposition actions -->
         <template v-else>
           <button v-if="objet.idUtilisateur === utilisateurId" class="delete-btn"
-                  @click="props.handleSupprimerObjet(objet.id)">Supprimer l'objet
+                  @click="props.handleSupprimerObjet(objet.id)">
+            Supprimer l&apos;objet
           </button>
-          <button v-else class="exchange-btn" @click="handleProposerEchange(objet.id)">Proposer à l'échange</button>
+          <!-- Modified button logic: open propose exchange modal -->
+          <button v-else class="exchange-btn" @click="handleProposerExchange(objet)">
+            Proposer à l&apos;échange
+          </button>
         </template>
 
         <!-- Input field for exchange proposition when toggled -->
@@ -185,7 +272,7 @@ onMounted(async () => {
       </div>
     </div>
 
-    <!-- Modal section for displaying exchange details -->
+    <!-- Exchange details modal (existing) -->
     <div v-if="showModal" class="modal">
       <div class="modal-content">
         <!-- Close control for modal -->
@@ -215,10 +302,55 @@ onMounted(async () => {
         <button class="close-btn" @click="showModal = false">Fermer</button>
       </div>
     </div>
+
+    <!-- New modal for proposing an exchange -->
+    <div v-if="showProposeModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="showProposeModal = false">&times;</span>
+        <h2>Proposer un échange</h2>
+        <!-- Option to choose among user's objects -->
+        <div v-if="!showCreateForm">
+          <h3>Choisir un objet parmi les vôtres</h3>
+          <div v-if="userObjects.length">
+            <div v-for="objet in userObjects" :key="objet.id" class="card"
+                 :class="{ selected: selectedObjetProposal && selectedObjetProposal.id === objet.id }"
+                 @click="selectUserObjet(objet)">
+              <h2>{{ objet.nom }}</h2>
+              <p>{{ objet.description }}</p>
+              <p><strong>Catégorie :</strong> {{ objet.categorie }}</p>
+            </div>
+          </div>
+          <p v-else>Aucun objet trouvé.</p>
+          <button class="modal-btn" @click="showCreateForm = true">
+            Créer un nouvel objet
+          </button>
+        </div>
+        <!-- Option to create a new object -->
+        <div v-else>
+          <h3>Créer un nouvel objet</h3>
+          <!-- Using the existing ObjetForm component -->
+          <ObjetForm
+              v-model:nomObjet="nomObjet"
+              v-model:descriptionObjet="descriptionObjet"
+              v-model:categorieObjet="categorieObjet"
+              :authToken="authToken"
+              @object-added="handleObjetCreated"
+          />
+          <button class="modal-btn" @click="showCreateForm = false">
+            Choisir parmi mes objets
+          </button>
+        </div>
+        <!-- Confirm exchange button is enabled only if an object is selected -->
+        <button class="modal-btn" :disabled="!selectedObjetProposal" @click="confirmExchange">
+          Confirmer l'échange
+        </button>
+      </div>
+    </div>
   </section>
 </template>
 
 <style scoped>
+/* Existing styles remain unchanged */
 .objet-zone {
   display: flex;
   justify-content: center;
@@ -242,10 +374,15 @@ onMounted(async () => {
   text-align: center;
   flex-shrink: 0;
   transition: transform 0.3s ease-in-out;
+  cursor: pointer;
 }
 
 .card:hover {
   transform: translateY(-5px);
+}
+
+.selected {
+  border: 2px solid #4caf50;
 }
 
 h2 {
@@ -267,7 +404,7 @@ h2 {
   color: #444;
 }
 
-.exchange-btn, .delete-btn, .view-btn {
+.exchange-btn, .delete-btn, .view-btn, .modal-btn {
   background: #4a90e2;
   color: white;
   padding: 10px;
@@ -280,7 +417,7 @@ h2 {
   transition: background 0.3s ease-in-out;
 }
 
-.exchange-btn:hover, .delete-btn:hover, .view-btn:hover {
+.exchange-btn:hover, .delete-btn:hover, .view-btn:hover, .modal-btn:hover {
   background: #357ab8;
 }
 
