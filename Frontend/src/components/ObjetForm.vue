@@ -1,56 +1,45 @@
 <!--
   @file Frontend/src/components/ObjetForm.vue
   @description A Vue component for a form to add an object.
+  It now handles the form submission process.
 -->
 
 <script setup lang="ts">
-import {computed} from 'vue';
-
-// Import types
+import {computed, ref} from 'vue';
+import {AddObjet} from '../Function/ApiRequest';
+import ObjetDTO from '../Types/ObjetDTO';
 import CategorieObjet from '../Types/CategorieObjet';
 
 /**
- * Component properties definition.
+ * Component properties.
  *
- * @property {string} nomObjet - The object name.
+ * Defines the component's properties and their default values.
+ *
+ * @property {string} nomObjet - The name of the object.
  * @property {string} descriptionObjet - The object description.
- * @property {string} categorieObjet - The object category.
- * @property {string} errorMessage - The error message to display.
- * @property {string} successMessage - The success message to display.
+ * @property {string} categorieObjet - The category of the object.
+ * @property {string} authToken - The authentication token.
  */
 const props = defineProps({
-  nomObjet: String,
-  descriptionObjet: String,
-  categorieObjet: String,
-  errorMessage: String,
-  successMessage: String
+  nomObjet: { type: String, default: '' },
+  descriptionObjet: { type: String, default: '' },
+  categorieObjet: { type: String, default: '' },
+  authToken: { type: String, default: '' }
 });
 
-/**
- * List of object categories.
- * @type {string[]}
- */
-const categories: string[] = Object.values(CategorieObjet);
-
-/**
- * Define component emit events.
- * @event submit - Emitted when the form is submitted.
- * @event update:nomObjet - Emitted when the object name is updated.
- * @event update:descriptionObjet - Emitted when the object description is updated.
- * @event update:categorieObjet - Emitted when the object category is updated.
- */
+// Define component emit events.
 const emit = defineEmits([
-  'submit',
   'update:nomObjet',
   'update:descriptionObjet',
-  'update:categorieObjet'
+  'update:categorieObjet',
+  'object-added'
 ]);
 
 /**
  * Computed property for the object name.
  * Provides two-way binding by returning the current name and emitting an update event on change.
  */
-const nomObjet = computed({
+const nomObjetComputed = computed({
   get: () => props.nomObjet,
   set: (value: string) => emit('update:nomObjet', value)
 });
@@ -59,7 +48,7 @@ const nomObjet = computed({
  * Computed property for the object description.
  * Provides two-way binding by returning the current description and emitting an update event on change.
  */
-const descriptionObjet = computed({
+const descriptionObjetComputed = computed({
   get: () => props.descriptionObjet,
   set: (value: string) => emit('update:descriptionObjet', value)
 });
@@ -68,20 +57,58 @@ const descriptionObjet = computed({
  * Computed property for the object category.
  * Provides two-way binding by returning the current category and emitting an update event on change.
  */
-const categorieObjet = computed({
+const categorieObjetComputed = computed({
   get: () => props.categorieObjet,
   set: (value: string) => emit('update:categorieObjet', value)
 });
 
 /**
- * Handles the form submission.
- * Prevents the default form submission behavior and emits the 'submit' event.
- *
- * @param {Event} event - The event object from the form submission.
+ * List of object categories.
+ * @type {string[]}
  */
-const onSubmit = (event: Event) => {
+const categories: string[] = Object.values(CategorieObjet);
+
+// Local reactive state for messages.
+const errorMessage = ref('');
+const successMessage = ref('');
+
+/**
+ * Handles the form submission process.
+ * Constructs an object, sends an API request to add it, updates success or error messages,
+ * resets form fields and emits an event on success.
+ *
+ * @async
+ */
+const handleSubmit = async (event: Event) => {
   event.preventDefault();
-  emit('submit');
+
+  // Creating the object with current form values
+  const objet: ObjetDTO = {
+    nom: nomObjetComputed.value,
+    description: descriptionObjetComputed.value,
+    categorie: categorieObjetComputed.value as CategorieObjet,
+  };
+
+  // Send the API request to add the object
+  const response = await AddObjet(objet, props.authToken || '');
+
+  // Error handling when request fails or response is invalid
+  if (!(response instanceof Response) || !response.ok) {
+    errorMessage.value = "Erreur lors de l'ajout de l'objet";
+    return;
+  }
+
+  // Update state on successful addition
+  successMessage.value = 'Objet ajouté avec succès !';
+
+  // Emit event to parent with the added object and success message
+  emit('object-added', {objet, successMessage: successMessage.value});
+
+  // Reset form fields and clear any previous error message
+  nomObjetComputed.value = '';
+  descriptionObjetComputed.value = '';
+  categorieObjetComputed.value = '';
+  errorMessage.value = '';
 };
 </script>
 
@@ -92,21 +119,21 @@ const onSubmit = (event: Event) => {
     <!-- Display success message if exists -->
     <p v-if="successMessage" class="success">{{ successMessage }}</p>
     <!-- Form for inputting object details -->
-    <form @submit="onSubmit">
+    <form @submit="handleSubmit">
       <div class="form-group">
         <!-- Input for object name -->
         <label for="nomObjet">Nom de l&apos;Objet</label>
-        <input v-model="nomObjet" type="text" id="nomObjet" required/>
+        <input v-model="nomObjetComputed" type="text" id="nomObjet" required/>
       </div>
       <div class="form-group">
         <!-- Textarea for object description -->
         <label for="descriptionObjet">Description de l&apos;Objet</label>
-        <textarea v-model="descriptionObjet" id="descriptionObjet" required></textarea>
+        <textarea v-model="descriptionObjetComputed" id="descriptionObjet" required></textarea>
       </div>
       <div class="form-group">
         <!-- Dropdown selector for object category -->
         <label for="categorieObjet">Catégorie</label>
-        <select v-model="categorieObjet" id="categorieObjet" required>
+        <select v-model="categorieObjetComputed" id="categorieObjet" required>
           <option value="" disabled>Sélectionner une catégorie</option>
           <option v-for="category in categories" :key="category" :value="category">
             {{ category }}
@@ -120,6 +147,7 @@ const onSubmit = (event: Event) => {
 </template>
 
 <style scoped>
+/* (Keep existing CSS unchanged) */
 .form-group {
   margin-bottom: 15px;
 }

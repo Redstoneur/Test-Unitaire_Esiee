@@ -1,8 +1,8 @@
 <!--
-  @file Frontend/src/components/addObjetScreen.vue
-  @description A Vue component for adding an object using a form.
-  It handles form submission and displays a modal on success.
--->
+   @file Frontend/src/components/addObjetScreen.vue
+   @description A Vue component for adding an object using a form.
+   It handles the modal display on successful object addition.
+ -->
 
 <script setup lang="ts">
 import {Ref, ref} from 'vue';
@@ -11,9 +11,6 @@ import {useRouter} from 'vue-router';
 // Import component
 import AppHeader from './AppHeader.vue';
 import ObjetForm from './ObjetForm.vue';
-
-// Import function
-import {AddObjet} from '../Function/ApiRequest';
 
 // Import types
 import ObjetDTO from '../Types/ObjetDTO';
@@ -42,18 +39,6 @@ const descriptionObjet: Ref<string> = ref('');
 const categorieObjet: Ref<CategorieObjet | ""> = ref<CategorieObjet | ''>('');
 
 /**
- * Reactive variable for storing error messages.
- * @type {Ref<string>}
- */
-const errorMessage: Ref<string> = ref('');
-
-/**
- * Reactive variable for storing success messages.
- * @type {Ref<string>}
- */
-const successMessage: Ref<string> = ref('');
-
-/**
  * Flag indicating whether the success modal is visible.
  * @type {Ref<boolean>}
  */
@@ -72,41 +57,14 @@ const addedObjet: Ref<ObjetDTO | null> = ref<ObjetDTO | null>(null);
 const authToken: string = localStorage.getItem('authToken') || '';
 
 /**
- * Handles the form submission process.
- * Constructs an object, sends an API request to add it, updates success or error messages,
- * resets form fields and shows the success modal in case of success.
+ * Handles the event when ObjetForm has successfully added an object.
+ * Sets the added object and shows the success modal.
  *
- * @async
+ * @param {Object} payload - The event payload containing the added object and success message.
  */
-const handleSubmit = async () => {
-  // Creating the object with current form values
-  const objet: ObjetDTO = {
-    nom: nomObjet.value,
-    description: descriptionObjet.value,
-    categorie: categorieObjet.value as CategorieObjet,
-  };
-
-  // Send the API request to add the object
-  const response = await AddObjet(objet, authToken);
-
-  // Error handling when request fails or response is invalid
-  if (!(response instanceof Response) || !response.ok) {
-    errorMessage.value = "Erreur lors de l'ajout de l'objet";
-    return;
-  }
-
-  // Update state on successful addition
-  addedObjet.value = {...objet};
-  successMessage.value = 'Objet ajouté avec succès !';
+const handleObjectAdded = (payload: { objet: ObjetDTO; successMessage: string; }) => {
+  addedObjet.value = {...payload.objet};
   showSuccessModal.value = true;
-
-  // Reset form fields
-  nomObjet.value = '';
-  descriptionObjet.value = '';
-  categorieObjet.value = '';
-
-  // Clear any previous error message
-  errorMessage.value = '';
 };
 
 /**
@@ -137,12 +95,11 @@ const returnHome = () => {
 
       <!-- Reusable Objet Form Component -->
       <ObjetForm
-          :errorMessage="errorMessage"
-          :successMessage="successMessage"
           v-model:nomObjet="nomObjet"
           v-model:descriptionObjet="descriptionObjet"
           v-model:categorieObjet="categorieObjet"
-          @submit="handleSubmit"
+          :authToken="authToken"
+          @object-added="handleObjectAdded"
       />
 
       <!-- Success Modal displayed when an object is successfully added -->
@@ -171,7 +128,7 @@ const returnHome = () => {
 </template>
 
 <style scoped>
-/* Container styles for the main wrapper */
+/* (Keep existing CSS unchanged) */
 .container {
   max-width: 600px;
   margin: 0 auto;
