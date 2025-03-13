@@ -8,13 +8,13 @@
 import {Ref, ref} from 'vue';
 import {useRouter} from 'vue-router';
 
-// Import child component for the header
+// Import component
 import AppHeader from './AppHeader.vue';
 
-// Import API request function to add an object
+// Import function
 import {AddObjet} from '../Function/ApiRequest';
 
-// Import types for object data
+// Import types
 import ObjetDTO from '../Types/ObjetDTO';
 import CategorieObjet from '../Types/CategorieObjet';
 

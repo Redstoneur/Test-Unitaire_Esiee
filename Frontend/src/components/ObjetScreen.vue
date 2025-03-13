@@ -1,56 +1,130 @@
+<!--
+  @file Frontend/src/components/ObjetScreen.vue
+  @description ObjetScreen component handles the display of objects.
+  It supports showing object details, proposing exchanges, deleting objects and viewing exchange details via a modal.
+-->
 <script setup lang="ts">
-import {defineProps, onMounted, ref} from 'vue';
+import {defineProps, onMounted, Ref, ref} from 'vue';
 
-// Importation des fonctions de l'API
+// Import function
 import {GetEchange, UserInformation} from "../Function/ApiRequest";
 
-// Importation des types
+// Import types
 import Objet from "../Types/Objet";
 
+/**
+ * Defines the properties accepted by the ObjetScreen component.
+ * @property {Objet[]} objets - List of objects to display.
+ * @property {function} handleSupprimerObjet - Function to handle object deletion.
+ */
 const props = defineProps<{
   objets: Objet[],
   handleSupprimerObjet: (objetId: number) => Promise<void>
 }>();
-const errorMessage = ref('');
-const utilisateurId = ref(''); // ID réel de l'utilisateur connecté
-const showModal = ref(false);
-const selectedObjet = ref<Objet | null>(null);
-const exchangeDetails = ref<any>(null);
 
-// Récupérer l'ID de l'utilisateur connecté
+/**
+ * Error message displayed when an error occurs.
+ * @type {Ref<string>}
+ */
+const errorMessage: Ref<string> = ref('');
+
+/**
+ * Logged in user id.
+ * @type {Ref<string>}
+ */
+const utilisateurId: Ref<string> = ref('');
+
+/**
+ * Reactive variable to show/hide the modal.
+ * @type {Ref<boolean>}
+ */
+const showModal: Ref<boolean> = ref(false);
+
+/**
+ * Selected object to view exchange details.
+ * @type {Ref<Objet | null>}
+ */
+const selectedObjet: Ref<Objet | null> = ref(null);
+
+/**
+ * Details of the selected exchange.
+ * @type {Ref<any>}
+ */
+const exchangeDetails: Ref<any> = ref(null);
+
+/**
+ * Authentication token stored in local storage.
+ * @type {string}
+ */
 const authToken: string = localStorage.getItem('authToken') || '';
 
-// Fonction pour récupérer l'ID de l'utilisateur
+/**
+ * Fetches the logged in user's id by making an asynchronous request to the UserInformation API.
+ *
+ * @async
+ * @function fetchUtilisateurId
+ */
 const fetchUtilisateurId = async () => {
+  // Make an API call to retrieve user information using the authToken.
   const response = await UserInformation(authToken);
 
+  // Check if the response is valid and OK, otherwise set an error message.
   if (!(response instanceof Response) || !response.ok) {
     errorMessage.value = 'Erreur lors de la récupération de l\'utilisateur';
     return;
   }
 
+  // Parse the response as JSON and update the utilisateurId ref with the retrieved id.
   const data = await response.json();
   utilisateurId.value = data.id;
 
+  // Clear any previous error messages.
   errorMessage.value = '';
 };
 
-// Fonction pour afficher/cacher l'input d'échange
+/**
+ * Handles proposing an exchange for an object.
+ *
+ * This function searches through the provided objects for the one that matches the given ID.
+ * If the object is found, it toggles the visibility of the input field that allows users to enter their proposal.
+ *
+ * @param {number} objetId - The ID of the object for which to propose an exchange.
+ */
 const handleProposerEchange = (objetId: number) => {
+  // Search for the object in the list by its ID.
   const objet = props.objets.find(o => o.id === objetId);
   if (objet) {
+    // Toggle the 'showInput' property to display or hide the exchange input field.
     objet.showInput = !objet.showInput;
   }
 };
 
-// Fonction pour afficher la modal de consultation d'échange
+/**
+ * Handles viewing the details of an exchange.
+ *
+ * Sets the selected object, displays the modal and fetches exchange details.
+ *
+ * @param {Objet} objet - The object to view the exchange details for.
+ */
 const handleVoirEchange = async (objet: Objet) => {
+  // Assign the passed object to the reactive selected object
   selectedObjet.value = objet;
+  // Set the modal visibility to true
   showModal.value = true;
+  // Fetch and update exchange details using the object's exchange ID
   await fetchExchangeDetails(objet.idEchange);
 };
 
-// Fonction pour récupérer les détails de l'échange
+/**
+ * Fetches the details of an exchange.
+ *
+ * This function performs an asynchronous request to retrieve exchange details using the
+ * provided exchange ID. It calls the GetEchange function with the exchange ID and authToken.
+ * If an error occurs or the response is not OK, the errorMessage is set with a descriptive error.
+ * Otherwise, it updates the exchangeDetails ref with the JSON data from the response and clears any previous error.
+ *
+ * @param {number} exchangeId - The ID of the exchange to fetch details for.
+ */
 const fetchExchangeDetails = async (exchangeId: number) => {
   const response = await GetEchange(exchangeId, authToken);
 
@@ -60,31 +134,43 @@ const fetchExchangeDetails = async (exchangeId: number) => {
   }
 
   exchangeDetails.value = await response.json();
-
   errorMessage.value = '';
 };
 
+/**
+ * Component mounted lifecycle hook.
+ * Fetches the logged in user's ID when the component is mounted.
+ */
 onMounted(async () => {
   await fetchUtilisateurId();
 });
 </script>
 
 <template>
+  <!-- Template for ObjetScreen component -->
   <section class="objet-zone">
+    <!-- Error message display section -->
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 
+    <!-- Grid display for object cards -->
     <div class="grid">
+      <!-- Loop through each object and display its corresponding card -->
       <div v-for="objet in objets" :key="objet.id" class="card">
+        <!-- Display object title -->
         <h2>{{ objet.nom }}</h2>
+        <!-- Display object description -->
         <p class="description">{{ objet.description }}</p>
+        <!-- Display object category -->
         <p class="categorie"><strong>Catégorie :</strong> {{ objet.categorie }}</p>
 
+        <!-- If the object is in exchange and the user is the owner, show exchange details button -->
         <template v-if="objet.enEchange">
           <button v-if="objet.idUtilisateur === utilisateurId" class="view-btn" @click="handleVoirEchange(objet)">
-            Voir l'échange
+            Voir l&apos;échange
           </button>
         </template>
 
+        <!-- If the object is not in exchange, provide deletion or exchange proposition actions -->
         <template v-else>
           <button v-if="objet.idUtilisateur === utilisateurId" class="delete-btn"
                   @click="props.handleSupprimerObjet(objet.id)">Supprimer l'objet
@@ -92,24 +178,32 @@ onMounted(async () => {
           <button v-else class="exchange-btn" @click="handleProposerEchange(objet.id)">Proposer à l'échange</button>
         </template>
 
+        <!-- Input field for exchange proposition when toggled -->
         <div class="input-container" v-if="objet.showInput">
           <input type="text" placeholder="Entrez votre proposition" class="exchange-input"/>
         </div>
       </div>
     </div>
 
+    <!-- Modal section for displaying exchange details -->
     <div v-if="showModal" class="modal">
       <div class="modal-content">
+        <!-- Close control for modal -->
         <span class="close" @click="showModal = false">&times;</span>
+        <!-- Modal title -->
         <h2>Détails de l'échange</h2>
+        <!-- Display exchange state -->
         <p><strong>État de l'échange :</strong> {{ exchangeDetails?.etatEchange }}</p>
+        <!-- Exchange details grid -->
         <div class="exchange-details">
+          <!-- Requested object details -->
           <div class="exchange-item">
             <h3>Objet demandé</h3>
             <p><strong>Nom :</strong> {{ exchangeDetails?.objetDemande.nom }}</p>
             <p><strong>Description :</strong> {{ exchangeDetails?.objetDemande.description }}</p>
             <p><strong>Catégorie :</strong> {{ exchangeDetails?.objetDemande.categorie }}</p>
           </div>
+          <!-- Proposed object details -->
           <div class="exchange-item">
             <h3>Objet proposé</h3>
             <p><strong>Nom :</strong> {{ exchangeDetails?.objetPropose.nom }}</p>
@@ -117,15 +211,14 @@ onMounted(async () => {
             <p><strong>Catégorie :</strong> {{ exchangeDetails?.objetPropose.categorie }}</p>
           </div>
         </div>
+        <!-- Button to close modal -->
         <button class="close-btn" @click="showModal = false">Fermer</button>
       </div>
     </div>
-
   </section>
 </template>
 
 <style scoped>
-/* Style global */
 .objet-zone {
   display: flex;
   justify-content: center;
@@ -141,7 +234,6 @@ onMounted(async () => {
   padding: 1em;
 }
 
-/* Style des cartes */
 .card {
   background: white;
   padding: 20px;
@@ -175,7 +267,6 @@ h2 {
   color: #444;
 }
 
-/* Bouton d'échange */
 .exchange-btn, .delete-btn, .view-btn {
   background: #4a90e2;
   color: white;
@@ -193,7 +284,6 @@ h2 {
   background: #357ab8;
 }
 
-/* Input animé */
 .input-container {
   margin-top: 10px;
   animation: fadeIn 0.3s ease-in-out;
@@ -207,7 +297,6 @@ h2 {
   font-size: 14px;
 }
 
-/* Animation d'apparition */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -219,7 +308,6 @@ h2 {
   }
 }
 
-/* Message d'erreur */
 .error {
   color: red;
   font-size: 16px;
@@ -227,7 +315,6 @@ h2 {
   text-align: center;
 }
 
-/* Style de la modal */
 .modal {
   display: flex;
   justify-content: center;
@@ -296,5 +383,4 @@ h2 {
     min-width: 90%;
   }
 }
-
 </style>

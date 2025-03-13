@@ -1,41 +1,97 @@
+<!--
+  @file Frontend/src/components/Home.vue
+  @description Home component that displays the welcome screen, search bar and list of objects.
+  It uses the AppHeader and ObjetScreen components to render the header and object list.
+-->
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
-import {useRouter} from 'vue-router';
+import {onMounted, Ref, ref} from 'vue';
+import {Router, useRouter} from 'vue-router';
 
-// Importation des composants
+// Import components
 import AppHeader from './AppHeader.vue';
 import ObjetScreen from './ObjetScreen.vue';
 
-// Importation des fonctions de l'API
+// Import API functions
 import {BooleanVerifyToken, DeleteObjet, GetEchanges, GetObjets} from "../Function/ApiRequest";
 
-// Importation des types
+// Import types
 import CategorieObjet from "../Types/CategorieObjet";
 import Objet from "../Types/Objet";
 
-const router = useRouter();
-const isAuthenticated = ref(true);
-const errorMessage = ref('');
-const searchText = ref('');
-const searchCategorie = ref('');
-const objets = ref<Objet[]>([]);
-const categories = Object.values(CategorieObjet);
+/**
+ * Router instance for navigating between routes.
+ * @type {Router}
+ */
+const router: Router = useRouter();
 
+/**
+ * Reactive boolean indicating whether the user is authenticated.
+ * @type {Ref<boolean>}
+ */
+const isAuthenticated: Ref<boolean> = ref(true);
+
+/**
+ * Reactive string used to display error messages.
+ * @type {Ref<string>}
+ */
+const errorMessage: Ref<string> = ref('');
+
+/**
+ * Reactive string for the search query text.
+ * @type {Ref<string>}
+ */
+const searchText: Ref<string> = ref('');
+
+/**
+ * Reactive string for filtering objects by category.
+ * @type {Ref<string>}
+ */
+const searchCategorie: Ref<string> = ref('');
+
+/**
+ * Reactive array to store objects fetched from the API.
+ * @type {Ref<Objet[]>}
+ */
+const objets: Ref<Objet[]> = ref([]);
+
+/**
+ * Array of categories extracted from the CategorieObjet enum.
+ * @type {string[]}
+ */
+const categories: string[] = Object.values(CategorieObjet);
+
+/**
+ * Logs out the user.
+ *
+ * This function removes the authentication token from local storage,
+ * updates the authentication state, and navigates the user to the login page.
+ */
 const logout = () => {
   localStorage.removeItem('authToken');
   isAuthenticated.value = false;
   router.push('/login');
 };
 
+/**
+ * Retrieves objects from the API and updates the objets array.
+ *
+ * @async
+ * @function fetchObjets
+ */
 const fetchObjets = async () => {
+  // Call the API to retrieve objects.
   const response = await GetObjets();
 
+  // Verify that the response is an instance of Response and that it is OK.
   if (!(response instanceof Response) || !response.ok) {
     errorMessage.value = 'Erreur lors de la récupération des objets';
     return;
   }
 
+  // Parse the JSON data from the response.
   const data = await response.json();
+
+  // Map the data to the expected object structure.
   objets.value = data.map((objet: any) => ({
     id: objet.id,
     nom: objet.nom,
@@ -47,10 +103,12 @@ const fetchObjets = async () => {
     idEchange: null
   }));
 
+  // Filter objects if a category is selected.
   if (searchCategorie.value) {
     objets.value = objets.value.filter(o => o.categorie === searchCategorie.value);
   }
 
+  // Filter objects if a search text is provided.
   if (searchText.value) {
     objets.value = objets.value.filter(o =>
         o.nom.toLowerCase().includes(searchText.value.toLowerCase()) ||
@@ -58,7 +116,10 @@ const fetchObjets = async () => {
     );
   }
 
+  // Clear any previous error messages.
   errorMessage.value = '';
+
+  // Fetch the exchange information related to the objects.
   await fetchEchanges();
 };
 
@@ -86,7 +147,6 @@ const fetchEchanges = async () => {
   errorMessage.value = '';
 };
 
-// Fonction pour supprimer un objet
 const handleSupprimerObjet = async (objetId: number) => {
   const token = localStorage.getItem('authToken');
   if (token && await BooleanVerifyToken(token)) {
@@ -99,13 +159,11 @@ const handleSupprimerObjet = async (objetId: number) => {
     }
 
     objets.value = objets.value.filter(o => o.id !== objetId);
-
     errorMessage.value = '';
     return;
   }
   errorMessage.value = 'Vous n\'êtes pas Connecté';
   isAuthenticated.value = false;
-
 };
 
 const handleSearch = async () => {
@@ -121,7 +179,7 @@ const handleReset = async () => {
 onMounted(async () => {
   const token = localStorage.getItem('authToken');
   if (!(token && await BooleanVerifyToken(token))) {
-    router.push('/login');
+    await router.push('/login');
   }
   await fetchObjets();
 });
@@ -158,7 +216,6 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-
 .welcome {
   text-align: center;
   padding: 20px;
@@ -241,5 +298,4 @@ button:hover {
     width: 90%;
   }
 }
-
 </style>
