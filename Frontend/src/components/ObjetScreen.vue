@@ -4,7 +4,7 @@
   It supports showing object details, proposing exchanges, deleting objects and viewing exchange details via a modal.
 -->
 <script setup lang="ts">
-import {computed, onMounted, Ref, ref} from 'vue';
+import {computed, onBeforeUnmount, onMounted, Ref, ref} from 'vue';
 
 // Import Component
 import ObjetForm from "./ObjetForm.vue";
@@ -75,15 +75,15 @@ const showCreateForm: Ref<boolean> = ref(false);
 
 /**
  * Holds the selected user object (either chosen from the list or created via form).
- * @type {Ref<Objet | null>}
+ * @type {Ref<number | null>}
  */
-const selectedObjetProposal: Ref<Objet | null> = ref<Objet | null>(null);
+const selectedObjetProposal: Ref<number | null> = ref<number | null>(null);
 
 /**
  * Holds the object on which the user clicked "proposer à l'échange".
- * @type {Ref<Objet | null>}
+ * @type {Ref<number | null>}
  */
-const objetRecherche: Ref<Objet | null> = ref<Objet | null>(null);
+const objetRecherche: Ref<number | null> = ref<number | null>(null);
 
 /**
  * Holds the name of the object to be created.
@@ -104,23 +104,31 @@ const descriptionObjet: Ref<string> = ref('');
 const categorieObjet: Ref<string> = ref('');
 
 /**
- * Computed list of user's objects that are not engaged in an exchange.
+ * Filter user's objects not in exchange.
  */
 const userObjects = computed(() => {
   return props.objets.filter(o => o.idUtilisateur === utilisateurId.value && !o.enEchange);
 });
 
 /**
- * Current page number for pagination.
+ * Items per page based on screen width.
+ * @type {Ref<number>}
+ */
+const itemsPerPage: Ref<number> = ref(window.innerWidth < 480 ? 1 : 4);
+
+/**
+ * Updates itemsPerPage on window resize.
+ */
+const updateItemsPerPage = () => {
+  itemsPerPage.value = window.innerWidth < 480 ? 1 : 4;
+};
+
+/**
+ * Current page for pagination.
  * @type {Ref<number>}
  */
 const currentPage: Ref<number> = ref(1);
 
-/**
- * Number of items per page to display.
- * @type {Ref<number>}
- */
-const itemsPerPage: Ref<number> = ref(3);
 
 /**
  * Computes a paginated subset of user's objects.
@@ -214,7 +222,7 @@ const fetchExchangeDetails = async (exchangeId: number) => {
  * @param objet - The object for which the exchange is proposed.
  */
 const handleProposerExchange = (objet: Objet) => {
-  objetRecherche.value = objet;
+  objetRecherche.value = objet.id;
   // Reset any previous selection and creation form state
   selectedObjetProposal.value = null;
   showCreateForm.value = false;
@@ -226,17 +234,21 @@ const handleProposerExchange = (objet: Objet) => {
  * @param objet - The user object selected for exchange proposition.
  */
 const selectUserObjet = (objet: Objet) => {
-  selectedObjetProposal.value = objet;
+  selectedObjetProposal.value = objet.id;
+  // Immediately confirm the exchange upon selection
+  confirmExchange();
 };
 
 /**
  * Called when a new object is created via the form.
  * @param payload - Contains the created object.
  */
-const handleObjetCreated = (payload: { objet: Objet }) => {
-  selectedObjetProposal.value = payload.objet;
+const handleObjetCreated = (payload: { id: number }) => {
+  selectedObjetProposal.value = payload.id
   // Optionally hide the creation form once an object is created.
   showCreateForm.value = false;
+  // Immediately confirm the exchange after object creation
+  confirmExchange();
 };
 
 /**
@@ -245,9 +257,10 @@ const handleObjetCreated = (payload: { objet: Objet }) => {
  */
 const confirmExchange = async () => {
   if (!selectedObjetProposal.value || !objetRecherche.value) return;
+
   const response = await CreateEchange(
-      selectedObjetProposal.value.id,
-      objetRecherche.value.id,
+      selectedObjetProposal.value,
+      objetRecherche.value,
       authToken
   );
   if (response instanceof Error || !response.ok) {
@@ -257,6 +270,9 @@ const confirmExchange = async () => {
   // Reset modal state on success
   showProposeModal.value = false;
   errorMessage.value = '';
+
+  // recharge la page pour afficher les changements
+  location.reload();
 };
 
 /**
@@ -265,6 +281,14 @@ const confirmExchange = async () => {
  */
 onMounted(async () => {
   await fetchUtilisateurId();
+  window.addEventListener('resize', updateItemsPerPage);
+});
+
+/**
+ * Removes the resize event listener when the component is about to unmount.
+ */
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateItemsPerPage);
 });
 </script>
 
@@ -317,9 +341,9 @@ onMounted(async () => {
         <!-- Close control for modal -->
         <span class="close" @click="showModal = false">&times;</span>
         <!-- Modal title -->
-        <h2>Détails de l'échange</h2>
+        <h2>Détails de l&apos;échange</h2>
         <!-- Display exchange state -->
-        <p><strong>État de l'échange :</strong> {{ exchangeDetails?.etatEchange }}</p>
+        <p><strong>État de l&apos;échange :</strong> {{ exchangeDetails?.etatEchange }}</p>
         <!-- Exchange details grid -->
         <div class="exchange-details">
           <!-- Requested object details -->
@@ -350,9 +374,9 @@ onMounted(async () => {
         <!-- Option to choose among user's objects -->
         <div v-if="!showCreateForm">
           <h3>Choisir un objet parmi les vôtres</h3>
-          <div v-if="paginatedUserObjects.length">
+          <div v-if="paginatedUserObjects.length" class="card-grid">
             <div v-for="objet in paginatedUserObjects" :key="objet.id" class="card"
-                 :class="{ selected: selectedObjetProposal && selectedObjetProposal.id === objet.id }"
+                 :class="{ selected: selectedObjetProposal && selectedObjetProposal === objet.id }"
                  @click="selectUserObjet(objet)">
               <h2>{{ objet.nom }}</h2>
               <p>{{ objet.description }}</p>
@@ -382,15 +406,15 @@ onMounted(async () => {
               v-model:descriptionObjet="descriptionObjet"
               v-model:categorieObjet="categorieObjet"
               :authToken="authToken"
-              @object-added="handleObjetCreated"
+              @object-added-id="handleObjetCreated"
           />
           <button class="modal-btn" @click="showCreateForm = false">
             Choisir parmi mes objets
           </button>
         </div>
-        <!-- Confirm exchange button is enabled only if an object is selected -->
-        <button class="modal-btn" :disabled="!selectedObjetProposal" @click="confirmExchange">
-          Confirmer l'échange
+        <!-- Cancel button to close modal without validating -->
+        <button class="modal-btn" @click="showProposeModal = false">
+          Annuler
         </button>
       </div>
     </div>
@@ -557,6 +581,18 @@ h2 {
   width: 45%;
 }
 
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
@@ -567,5 +603,11 @@ h2 {
   .card {
     min-width: 90%;
   }
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
 }
 </style>

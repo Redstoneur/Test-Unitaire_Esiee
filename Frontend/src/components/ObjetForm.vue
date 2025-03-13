@@ -32,7 +32,8 @@ const emit = defineEmits([
   'update:nomObjet',
   'update:descriptionObjet',
   'update:categorieObjet',
-  'object-added'
+  'object-added',
+  'object-added-id'
 ]);
 
 /**
@@ -101,8 +102,11 @@ const handleSubmit = async (event: Event) => {
   // Update state on successful addition
   successMessage.value = 'Objet ajouté avec succès !';
 
+  const data = await response.json();
+
   // Emit event to parent with the added object and success message
-  emit('object-added', {objet, successMessage: successMessage.value});
+  emit('object-added', {data, successMessage: successMessage.value});
+  emit('object-added-id', {id: data.id, successMessage: successMessage.value});
 
   // Reset form fields and clear any previous error message
   nomObjetComputed.value = '';
