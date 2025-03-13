@@ -352,6 +352,7 @@ onBeforeUnmount(() => {
             <p><strong>Nom :</strong> {{ exchangeDetails?.objetDemande.nom }}</p>
             <p><strong>Description :</strong> {{ exchangeDetails?.objetDemande.description }}</p>
             <p><strong>Catégorie :</strong> {{ exchangeDetails?.objetDemande.categorie }}</p>
+            <p><strong>Propriétaire :</strong> {{ exchangeDetails?.objetDemande.utilisateur.pseudo}}</p>
           </div>
           <!-- Proposed object details -->
           <div class="exchange-item">
@@ -359,6 +360,7 @@ onBeforeUnmount(() => {
             <p><strong>Nom :</strong> {{ exchangeDetails?.objetPropose.nom }}</p>
             <p><strong>Description :</strong> {{ exchangeDetails?.objetPropose.description }}</p>
             <p><strong>Catégorie :</strong> {{ exchangeDetails?.objetPropose.categorie }}</p>
+            <p><strong>Propriétaire :</strong> {{ exchangeDetails?.objetPropose.utilisateur.pseudo}}</p>
           </div>
         </div>
         <!-- Button to close modal -->
@@ -413,7 +415,7 @@ onBeforeUnmount(() => {
           </button>
         </div>
         <!-- Cancel button to close modal without validating -->
-        <button class="modal-btn" @click="showProposeModal = false">
+        <button class="close-btn" @click="showProposeModal = false">
           Annuler
         </button>
       </div>
@@ -610,4 +612,10 @@ h2 {
   justify-content: space-between;
   margin-top: 10px;
 }
+
+.pagination button {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
 </style>
