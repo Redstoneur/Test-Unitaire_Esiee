@@ -158,7 +158,7 @@ const prevPage = () => {
 };
 
 /**
- * Fetches the logged in user's id by making an asynchronous request to the UserInformation API.
+ * Fetches the logged-in user's id by making an asynchronous request to the UserInformation API.
  *
  * @async
  * @function fetchUtilisateurId
@@ -217,7 +217,7 @@ const fetchExchangeDetails = async (exchangeId: number) => {
 };
 
 /**
- * Handles opening the propose exchange modal.
+ * Handles opening the proposal exchange modal.
  * Stores the target object (to be acquired) and opens the modal.
  * @param objet - The object for which the exchange is proposed.
  */
@@ -277,7 +277,7 @@ const confirmExchange = async () => {
 
 /**
  * Component mounted lifecycle hook.
- * Fetches the logged in user's ID when the component is mounted.
+ * Fetches the logged-in user's ID when the component is mounted.
  */
 onMounted(async () => {
   await fetchUtilisateurId();
