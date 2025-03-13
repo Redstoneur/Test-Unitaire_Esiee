@@ -4,7 +4,7 @@
   It supports showing object details, proposing exchanges, deleting objects and viewing exchange details via a modal.
 -->
 <script setup lang="ts">
-import {defineProps, onMounted, Ref, ref} from 'vue';
+import {onMounted, Ref, ref} from 'vue';
 
 // Import function
 import {GetEchange, UserInformation} from "../Function/ApiRequest";

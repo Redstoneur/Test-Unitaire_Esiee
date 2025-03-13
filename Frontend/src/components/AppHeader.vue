@@ -5,7 +5,6 @@
 -->
 
 <script setup lang="ts">
-import {defineEmits, defineProps} from 'vue';
 
 /**
  * Defines the properties accepted by the AppHeader component.
