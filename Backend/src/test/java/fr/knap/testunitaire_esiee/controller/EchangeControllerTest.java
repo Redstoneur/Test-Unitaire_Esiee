@@ -2,6 +2,7 @@ package fr.knap.testunitaire_esiee.controller;
 
 import fr.knap.testunitaire_esiee.dto.EchangeBufferDTO;
 import fr.knap.testunitaire_esiee.model.Echange;
+import fr.knap.testunitaire_esiee.model.Objet;
 import fr.knap.testunitaire_esiee.services.EchangeService;
 import fr.knap.testunitaire_esiee.services.ObjetService;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
@@ -54,16 +55,29 @@ class EchangeControllerTest {
         long idObjetPropose = 1L;
         long idObjetRecherche = 2L;
 
+        Objet objetPropose = new Objet();
+        objetPropose.setId(idObjetPropose);
+        Objet objetRecherche = new Objet();
+        objetRecherche.setId(idObjetRecherche);
+
         EchangeBufferDTO echangeBufferDTO = new EchangeBufferDTO(idObjetPropose, idObjetRecherche);
-        Echange createdEchange = new Echange();
+        Echange createdEchange = new Echange(
+                objetPropose,
+                objetRecherche
+        );
 
         when(utilisateurService.verifyToken(authToken)).thenReturn(true);
         when(echangeService.creerEchange(any(Echange.class))).thenReturn(createdEchange);
+        when(objetService.obtenirObjetParId(idObjetPropose)).thenReturn(objetPropose);
+        when(objetService.obtenirObjetParId(idObjetRecherche)).thenReturn(objetRecherche);
 
         Echange result = echangeController.creerEchange(authToken, echangeBufferDTO);
 
         assertEquals(createdEchange, result);
         verify(echangeService, times(1)).creerEchange(any(Echange.class));
+        verify(utilisateurService, times(1)).verifyToken(authToken);
+        verify(objetService, times(1)).obtenirObjetParId(idObjetPropose);
+        verify(objetService, times(1)).obtenirObjetParId(idObjetRecherche);
     }
 
     /**
