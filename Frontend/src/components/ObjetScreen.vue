@@ -10,10 +10,11 @@ import {computed, onBeforeUnmount, onMounted, Ref, ref} from 'vue';
 import ObjetForm from "./ObjetForm.vue";
 
 // Import function
-import {CreateEchange, GetEchange, UserInformation} from "../Function/ApiRequest";
+import {CreateEchange, GetEchange, UpdateEchange, UserInformation} from "../Function/ApiRequest";
 
 // Import types
 import Objet from "../Types/Objet";
+import EtatEchange from "../Types/EtatEchange";
 
 /**
  * Defines the properties accepted by the ObjetScreen component.
@@ -275,6 +276,28 @@ const confirmExchange = async () => {
   location.reload();
 };
 
+const handleUpdateExchange = async (nouvelEtat: EtatEchange) => {
+  if (!exchangeDetails.value || !exchangeDetails.value.id) return;
+
+  console.log(exchangeDetails.value.id);
+  console.log(nouvelEtat);
+  console.log(nouvelEtat.toString())
+  console.log(authToken)
+
+  const response = await UpdateEchange(
+      exchangeDetails.value.id,
+      nouvelEtat,
+      authToken
+  );
+  if (response instanceof Error || !response.ok) {
+    errorMessage.value = 'Erreur lors de la mise à jour de l\'échange';
+    return;
+  }
+  showModal.value = false;
+  errorMessage.value = '';
+  location.reload();
+};
+
 /**
  * Component mounted lifecycle hook.
  * Fetches the logged-in user's ID when the component is mounted.
@@ -363,6 +386,22 @@ onBeforeUnmount(() => {
             <p><strong>Propriétaire :</strong> {{ exchangeDetails?.objetPropose.utilisateur.pseudo}}</p>
           </div>
         </div>
+        <!-- In the modal in Frontend/src/components/ObjetScreen.vue -->
+        <div v-if="exchangeDetails?.etatEchange === EtatEchange.ATTENTE">
+          <template v-if="exchangeDetails?.objetDemande.utilisateur.id === utilisateurId">
+            <button class="modal-btn" @click="handleUpdateExchange(EtatEchange.ACCEPTE)">
+              Accepter
+            </button>
+            <button class="modal-btn" @click="handleUpdateExchange(EtatEchange.REFUSE)">
+              Refuser
+            </button>
+          </template>
+          <template v-else-if="exchangeDetails?.objetPropose.utilisateur.id === utilisateurId">
+            <button class="modal-btn" @click="handleUpdateExchange(EtatEchange.ANNULER)">
+              Annuler
+            </button>
+          </template>
+        </div>
         <!-- Button to close modal -->
         <button class="close-btn" @click="showModal = false">Fermer</button>
       </div>
@@ -427,6 +466,7 @@ onBeforeUnmount(() => {
 /* Existing styles remain unchanged */
 .objet-zone {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: #f4f4f4;

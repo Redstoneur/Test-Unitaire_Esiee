@@ -1,6 +1,7 @@
 package fr.knap.testunitaire_esiee.controller;
 
 import fr.knap.testunitaire_esiee.dto.EchangeBufferDTO;
+import fr.knap.testunitaire_esiee.dto.EchangeEtatDTO;
 import fr.knap.testunitaire_esiee.model.Echange;
 import fr.knap.testunitaire_esiee.model.Etat;
 import fr.knap.testunitaire_esiee.model.Objet;
@@ -138,9 +139,16 @@ class EchangeControllerTest {
     @Test
     void mettreAJourEchangeReturnsUpdatedEchangeIfValid() {
         String authToken = "validToken";
+
         Echange echange = new Echange();
         echange.setId(1L);
         echange.setEtatEchange(Etat.ATTENTE);
+
+        EchangeEtatDTO echangeEtatDTO = new EchangeEtatDTO(
+                echange.getId(),
+                echange.getEtatEchange()
+        );
+
         when(utilisateurService.verifyToken(authToken)).thenReturn(true);
         when(echangeService.echangeExist(echange.getId())).thenReturn(true);
         when(echangeService.mettreAJourEchange(echange)).thenReturn(echange);
@@ -149,7 +157,7 @@ class EchangeControllerTest {
         System.out.println(echange.getId());
         System.out.println(echange.getEtatEchange());
 
-        Echange result = echangeController.mettreAJourEchange(authToken, echange.getId(), echange.getEtatEchange());
+        Echange result = echangeController.mettreAJourEchange(authToken, echangeEtatDTO);
 
         assertEquals(echange, result);
         verify(utilisateurService, times(1)).verifyToken(authToken);
@@ -163,14 +171,21 @@ class EchangeControllerTest {
     @Test
     void obtenirUnEchangeThrowsForbiddenIfIdNegative() {
         String authToken = "validToken";
+
         Echange echange = new Echange();
         echange.setId(-1L);
         echange.setEtatEchange(Etat.ATTENTE);
+
+        EchangeEtatDTO echangeEtatDTO = new EchangeEtatDTO(
+                echange.getId(),
+                echange.getEtatEchange()
+        );
+
         when(utilisateurService.verifyToken(authToken)).thenReturn(true);
 
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
-                () -> echangeController.mettreAJourEchange(authToken, echange.getId(), echange.getEtatEchange())
+                () -> echangeController.mettreAJourEchange(authToken, echangeEtatDTO)
         );
 
         assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatusCode());
@@ -185,14 +200,21 @@ class EchangeControllerTest {
     @Test
     void mettreAJourEchangeThrowsExceptionIfIdNull() {
         String authToken = "validToken";
+
         Echange echange = new Echange();
         echange.setId(675L);
+
+        EchangeEtatDTO echangeEtatDTO = new EchangeEtatDTO(
+                echange.getId(),
+                echange.getEtatEchange()
+        );
+
         when(utilisateurService.verifyToken(authToken)).thenReturn(true);
         when(echangeService.obtenirEchangeParId(echange.getId())).thenReturn(null);
 
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
-                () -> echangeController.mettreAJourEchange(authToken, echange.getId(), echange.getEtatEchange())
+                () -> echangeController.mettreAJourEchange(authToken, echangeEtatDTO)
         );
 
         assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatusCode());
@@ -208,9 +230,16 @@ class EchangeControllerTest {
     @Test
     void mettreAJourEchangeThrowsUnauthorizedIfEchangeNotExist() {
         String authToken = "validToken";
+
         Echange echange = new Echange();
         echange.setId(1L);
         echange.setEtatEchange(Etat.ATTENTE);
+
+        EchangeEtatDTO echangeEtatDTO = new EchangeEtatDTO(
+                echange.getId(),
+                echange.getEtatEchange()
+        );
+
         when(utilisateurService.verifyToken(authToken)).thenReturn(true);
         when(echangeService.echangeExist(echange.getId())).thenReturn(false);
         when(echangeService.mettreAJourEchange(echange)).thenReturn(echange);
@@ -218,7 +247,7 @@ class EchangeControllerTest {
 
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
-                () -> echangeController.mettreAJourEchange(authToken, echange.getId(), echange.getEtatEchange())
+                () -> echangeController.mettreAJourEchange(authToken, echangeEtatDTO)
         );
 
         assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatusCode());
@@ -234,13 +263,19 @@ class EchangeControllerTest {
     @Test
     void mettreAJourEchangeThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
+
         Echange echange = new Echange();
         echange.setId(1L);
         when(utilisateurService.verifyToken(authToken)).thenReturn(false);
 
+        EchangeEtatDTO echangeEtatDTO = new EchangeEtatDTO(
+                echange.getId(),
+                echange.getEtatEchange()
+        );
+
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
-                () -> echangeController.mettreAJourEchange(authToken, echange.getId(), echange.getEtatEchange())
+                () -> echangeController.mettreAJourEchange(authToken, echangeEtatDTO)
         );
 
         assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());

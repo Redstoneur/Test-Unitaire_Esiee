@@ -1,8 +1,8 @@
 package fr.knap.testunitaire_esiee.controller;
 
 import fr.knap.testunitaire_esiee.dto.EchangeBufferDTO;
+import fr.knap.testunitaire_esiee.dto.EchangeEtatDTO;
 import fr.knap.testunitaire_esiee.model.Echange;
-import fr.knap.testunitaire_esiee.model.Etat;
 import fr.knap.testunitaire_esiee.services.EchangeService;
 import fr.knap.testunitaire_esiee.services.ObjetService;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
@@ -72,25 +72,24 @@ public class EchangeController {
     /**
      * Updates an existing exchange.
      *
-     * @param id   The ID of the exchange to update.
-     * @param etat The new state of the exchange.
+     * @param echangeEtatDTO The exchange to be updated.
      * @return The updated exchange.
      * @throws IllegalArgumentException if the exchange ID is null.
      * @throws ResponseStatusException  if the exchange does not exist.
      */
     @PutMapping("/update")
     public Echange mettreAJourEchange(@RequestHeader("Authorization") String authToken,
-                                      @RequestBody long id, @RequestBody Etat etat) {
+                                      @RequestBody EchangeEtatDTO echangeEtatDTO) {
         if (utilisateurService.verifyToken(authToken)) {
-            if (id <= 0)
+            if (echangeEtatDTO.getId() <= 0)
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange ID is invalid");
 
-            Echange echange = echangeService.obtenirEchangeParId(id);
+            Echange echange = echangeService.obtenirEchangeParId(echangeEtatDTO.getId());
 
             if (echange == null)
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange does not exist");
 
-            echange.setEtatEchange(etat);
+            echange.setEtatEchange(echangeEtatDTO.getEtat());
 
             if (echangeService.echangeExist(echange.getId()))
                 return echangeService.mettreAJourEchange(echange);

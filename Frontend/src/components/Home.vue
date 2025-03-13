@@ -17,6 +17,7 @@ import {BooleanVerifyToken, DeleteObjet, GetEchanges, GetObjets} from "../Functi
 // Import types
 import CategorieObjet from "../Types/CategorieObjet";
 import Objet from "../Types/Objet";
+import EtatEchange from "../Types/EtatEchange";
 
 /**
  * Router instance for navigating between routes.
@@ -135,11 +136,11 @@ const fetchEchanges = async () => {
 
   objets.value.forEach(objet => {
     if (echanges.some((e: any) =>
-        e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
+        (e.objetDemande.id === objet.id || e.objetPropose.id === objet.id) && (e.etatEchange === EtatEchange.ATTENTE)
     )) {
       objet.enEchange = true;
       objet.idEchange = echanges.find((e: any) =>
-          e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
+          (e.objetDemande.id === objet.id || e.objetPropose.id === objet.id) && (e.etatEchange === EtatEchange.ATTENTE)
       ).id;
     }
   });
