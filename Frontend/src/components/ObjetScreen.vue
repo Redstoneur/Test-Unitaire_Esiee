@@ -111,6 +111,45 @@ const userObjects = computed(() => {
 });
 
 /**
+ * Current page number for pagination.
+ * @type {Ref<number>}
+ */
+const currentPage: Ref<number> = ref(1);
+
+/**
+ * Number of items per page to display.
+ * @type {Ref<number>}
+ */
+const itemsPerPage: Ref<number> = ref(3);
+
+/**
+ * Computes a paginated subset of user's objects.
+ * Calculates the starting index and returns a slice of the user objects corresponding to the current page.
+ */
+const paginatedUserObjects = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  return userObjects.value.slice(start, start + itemsPerPage.value);
+});
+
+/**
+ * Advances to the next page if there are more objects.
+ */
+const nextPage = () => {
+  if (currentPage.value * itemsPerPage.value < userObjects.value.length) {
+    currentPage.value++;
+  }
+};
+
+/**
+ * Goes back to the previous page if not on the first page.
+ */
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+/**
  * Fetches the logged in user's id by making an asynchronous request to the UserInformation API.
  *
  * @async
@@ -303,7 +342,7 @@ onMounted(async () => {
       </div>
     </div>
 
-    <!-- New modal for proposing an exchange -->
+    <!-- Modal for proposing an exchange -->
     <div v-if="showProposeModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="showProposeModal = false">&times;</span>
@@ -311,8 +350,8 @@ onMounted(async () => {
         <!-- Option to choose among user's objects -->
         <div v-if="!showCreateForm">
           <h3>Choisir un objet parmi les vôtres</h3>
-          <div v-if="userObjects.length">
-            <div v-for="objet in userObjects" :key="objet.id" class="card"
+          <div v-if="paginatedUserObjects.length">
+            <div v-for="objet in paginatedUserObjects" :key="objet.id" class="card"
                  :class="{ selected: selectedObjetProposal && selectedObjetProposal.id === objet.id }"
                  @click="selectUserObjet(objet)">
               <h2>{{ objet.nom }}</h2>
@@ -321,6 +360,15 @@ onMounted(async () => {
             </div>
           </div>
           <p v-else>Aucun objet trouvé.</p>
+          <!-- Pagination controls -->
+          <div class="pagination">
+            <button class="modal-btn" @click="prevPage" :disabled="currentPage === 1">
+              Previous
+            </button>
+            <button class="modal-btn" @click="nextPage" :disabled="currentPage * itemsPerPage >= userObjects.length">
+              Next
+            </button>
+          </div>
           <button class="modal-btn" @click="showCreateForm = true">
             Créer un nouvel objet
           </button>
