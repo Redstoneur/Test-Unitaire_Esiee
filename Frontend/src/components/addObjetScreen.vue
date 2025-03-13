@@ -10,6 +10,7 @@ import {useRouter} from 'vue-router';
 
 // Import component
 import AppHeader from './AppHeader.vue';
+import ObjetForm from './ObjetForm.vue';
 
 // Import function
 import {AddObjet} from '../Function/ApiRequest';
@@ -63,11 +64,6 @@ const showSuccessModal: Ref<boolean> = ref(false);
  * @type {Ref<ObjetDTO | null>}
  */
 const addedObjet: Ref<ObjetDTO | null> = ref<ObjetDTO | null>(null);
-
-/**
- * An array of available categories for selection.
- */
-const categories = Object.values(CategorieObjet);
 
 /**
  * Authentication token retrieved from local storage.
@@ -136,36 +132,19 @@ const returnHome = () => {
         routerLinkLabel="Retour"
         routerLinkTarget="/"
     />
+
     <main>
-      <!-- Display error message if exists -->
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-      <!-- Display success message if exists -->
-      <p v-if="successMessage" class="success">{{ successMessage }}</p>
-      <!-- Form for inputting object details -->
-      <form @submit.prevent="handleSubmit()">
-        <div class="form-group">
-          <!-- Input for object name -->
-          <label for="nomObjet">Nom de l&apos;Objet</label>
-          <input v-model="nomObjet" type="text" id="nomObjet" required/>
-        </div>
-        <div class="form-group">
-          <!-- Textarea for object description -->
-          <label for="descriptionObjet">Description de l&apos;Objet</label>
-          <textarea v-model="descriptionObjet" id="descriptionObjet" required></textarea>
-        </div>
-        <div class="form-group">
-          <!-- Dropdown selector for object category -->
-          <label for="categorieObjet">Catégorie</label>
-          <select v-model="categorieObjet" id="categorieObjet" required>
-            <option value="" disabled selected>Sélectionner une catégorie</option>
-            <option v-for="category in categories" :key="category" :value="category">
-              {{ category }}
-            </option>
-          </select>
-        </div>
-        <!-- Submit button to add the object -->
-        <button type="submit">Ajouter l&apos;Objet</button>
-      </form>
+
+      <!-- Reusable Objet Form Component -->
+      <ObjetForm
+          :errorMessage="errorMessage"
+          :successMessage="successMessage"
+          v-model:nomObjet="nomObjet"
+          v-model:descriptionObjet="descriptionObjet"
+          v-model:categorieObjet="categorieObjet"
+          @submit="handleSubmit"
+      />
+
       <!-- Success Modal displayed when an object is successfully added -->
       <div v-if="showSuccessModal" class="modal">
         <div class="modal-content">
@@ -198,55 +177,6 @@ const returnHome = () => {
   margin: 0 auto;
   padding: 20px;
   text-align: center;
-}
-
-/* Margin for form groups */
-.form-group {
-  margin-bottom: 15px;
-}
-
-/* Label style for form elements */
-label {
-  display: block;
-  text-align: left;
-  margin-bottom: 5px;
-}
-
-/* Style for input, select, and textarea elements */
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* General style for buttons */
-button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-/* Hover effect for buttons */
-button:hover {
-  background-color: #45a049;
-}
-
-/* Error message styling */
-.error {
-  color: red;
-}
-
-/* Success message styling */
-.success {
-  color: green;
 }
 
 /* Modal container styles */
