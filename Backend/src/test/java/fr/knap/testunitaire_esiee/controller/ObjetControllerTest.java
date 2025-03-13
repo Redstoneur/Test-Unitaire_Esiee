@@ -58,9 +58,11 @@ class ObjetControllerTest {
         when(utilisateurService.obtenirUtilisateurParToken(authToken)).thenReturn(utilisateur);
         when(objetService.creerObjet(any(Objet.class))).thenReturn(objet);
 
-        Objet result = objetController.creerObjet(authToken, objetBufferDTO);
+        ObjetDTO result = objetController.creerObjet(authToken, objetBufferDTO);
 
-        assertEquals(objet, result);
+        assertEquals(objet.getNom(), result.getNom());
+        assertEquals(objet.getDescription(), result.getDescription());
+        assertEquals(objet.getCategorie(), result.getCategorie());
         verify(utilisateurService, times(1)).verifyToken(authToken);
         verify(utilisateurService, times(1)).obtenirUtilisateurParToken(authToken);
         verify(objetService, times(1)).creerObjet(any(Objet.class));

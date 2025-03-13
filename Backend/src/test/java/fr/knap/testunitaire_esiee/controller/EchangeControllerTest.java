@@ -1,7 +1,9 @@
 package fr.knap.testunitaire_esiee.controller;
 
+import fr.knap.testunitaire_esiee.dto.EchangeBufferDTO;
 import fr.knap.testunitaire_esiee.model.Echange;
 import fr.knap.testunitaire_esiee.services.EchangeService;
+import fr.knap.testunitaire_esiee.services.ObjetService;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,7 +16,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -28,6 +31,9 @@ class EchangeControllerTest {
 
     @Mock
     private UtilisateurService utilisateurService;
+
+    @Mock
+    private ObjetService objetService;
 
     @InjectMocks
     private EchangeController echangeController;
@@ -44,13 +50,20 @@ class EchangeControllerTest {
      */
     @Test
     void creerEchangeReturnsCreatedEchange() {
-        Echange echange = new Echange();
-        when(echangeService.creerEchange(echange)).thenReturn(echange);
+        String authToken = "validToken";
+        long idObjetPropose = 1L;
+        long idObjetRecherche = 2L;
 
-        Echange result = echangeController.creerEchange(echange);
+        EchangeBufferDTO echangeBufferDTO = new EchangeBufferDTO(idObjetPropose, idObjetRecherche);
+        Echange createdEchange = new Echange();
 
-        assertEquals(echange, result);
-        verify(echangeService, times(1)).creerEchange(echange);
+        when(utilisateurService.verifyToken(authToken)).thenReturn(true);
+        when(echangeService.creerEchange(any(Echange.class))).thenReturn(createdEchange);
+
+        Echange result = echangeController.creerEchange(authToken, echangeBufferDTO);
+
+        assertEquals(createdEchange, result);
+        verify(echangeService, times(1)).creerEchange(any(Echange.class));
     }
 
     /**
