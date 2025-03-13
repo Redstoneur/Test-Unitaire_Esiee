@@ -34,6 +34,23 @@ class EchangeTest {
     }
 
     /**
+     * Tests the constructor with only objetPropose and objetDemande to ensure it sets all fields correctly.
+     */
+    @Test
+    void constructorWithObjetProposeAndObjetDemandeSetsAllFields() {
+        Objet objetPropose = new Objet();
+        Objet objetDemande = new Objet();
+
+        Echange echange = new Echange(objetPropose, objetDemande);
+
+        assertEquals(objetPropose, echange.getObjetPropose());
+        assertEquals(objetDemande, echange.getObjetDemande());
+        assertNotNull(echange.getDateProposition());
+        assertEquals(Etat.ATTENTE, echange.getEtatEchange());
+        assertNull(echange.getDateCloture());
+    }
+
+    /**
      * Tests the default constructor to ensure it sets all fields to null.
      */
     @Test

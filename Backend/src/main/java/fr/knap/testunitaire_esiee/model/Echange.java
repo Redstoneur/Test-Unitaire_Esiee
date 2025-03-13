@@ -77,4 +77,17 @@ public class Echange {
         this.dateCloture = dateCloture;
     }
 
+    /**
+     * Constructs a new Echange object with the specified details.
+     *
+     * @param objetPropose The object proposed in the exchange.
+     * @param objetDemande The object requested in the exchange.
+     */
+    public Echange(Objet objetPropose, Objet objetDemande) {
+        ObjetPropose = objetPropose;
+        ObjetDemande = objetDemande;
+        this.dateProposition = LocalDateTime.now();
+        EtatEchange = Etat.ATTENTE;
+    }
+
 }

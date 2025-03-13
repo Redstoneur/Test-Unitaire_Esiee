@@ -34,7 +34,7 @@ public class ObjetController {
      * @return The created object.
      */
     @PostMapping
-    public Objet creerObjet(@RequestHeader("Authorization") String authToken, @RequestBody ObjetBufferDTO objetBufferDTO) {
+    public ObjetDTO creerObjet(@RequestHeader("Authorization") String authToken, @RequestBody ObjetBufferDTO objetBufferDTO) {
         if(!utilisateurService.verifyToken(authToken))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
         Utilisateur utilisateur = utilisateurService.obtenirUtilisateurParToken(authToken);
@@ -46,7 +46,18 @@ public class ObjetController {
                 objetBufferDTO.getCategorie(),
                 objetBufferDTO.getDateCreation()
         );
-        return objetService.creerObjet(objet);
+
+        Objet objetCreated = objetService.creerObjet(objet);
+
+        return new ObjetDTO(
+                objetCreated.getId(),
+                objetCreated.getNom(),
+                objetCreated.getDescription(),
+                objetCreated.getCategorie(),
+                objetCreated.getUtilisateur().getPseudo(),
+                objetCreated.getUtilisateur().getId(),
+                objetCreated.getDateCreation()
+        );
     }
 
     /**

@@ -9,7 +9,9 @@ enum RequestType {
     /** Represents an HTTP POST request */
     POST = "POST",
     /** Represents an HTTP DELETE request */
-    DELETE = "DELETE"
+    DELETE = "DELETE",
+    /** Represents an HTTP PUT request */
+    PUT = "PUT"
 }
 
 export default RequestType;

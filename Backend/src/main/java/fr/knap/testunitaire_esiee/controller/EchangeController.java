@@ -1,7 +1,10 @@
 package fr.knap.testunitaire_esiee.controller;
 
+import fr.knap.testunitaire_esiee.dto.EchangeBufferDTO;
 import fr.knap.testunitaire_esiee.model.Echange;
+import fr.knap.testunitaire_esiee.model.Etat;
 import fr.knap.testunitaire_esiee.services.EchangeService;
+import fr.knap.testunitaire_esiee.services.ObjetService;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,16 +24,26 @@ public class EchangeController {
     private EchangeService echangeService;
     @Autowired
     private UtilisateurService utilisateurService;
+    @Autowired
+    private ObjetService objetService;
 
     /**
      * Creates a new exchange.
      *
-     * @param echange The exchange to be created.
+     * @param echangeBufferDTO The exchange to be created.
      * @return The created exchange.
      */
     @PostMapping("/create")
-    public Echange creerEchange(@RequestBody Echange echange) {
-        return echangeService.creerEchange(echange);
+    public Echange creerEchange(@RequestHeader("Authorization") String authToken, @RequestBody EchangeBufferDTO echangeBufferDTO) {
+        if (utilisateurService.verifyToken(authToken)) {
+            Echange echange = new Echange(
+                    objetService.obtenirObjetParId(echangeBufferDTO.getIdObjetPropose()),
+                    objetService.obtenirObjetParId(echangeBufferDTO.getIdObjetRecherche())
+            );
+
+            return echangeService.creerEchange(echange);
+        }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -59,18 +72,29 @@ public class EchangeController {
     /**
      * Updates an existing exchange.
      *
-     * @param echange The exchange to update.
+     * @param id   The ID of the exchange to update.
+     * @param etat The new state of the exchange.
      * @return The updated exchange.
      * @throws IllegalArgumentException if the exchange ID is null.
      * @throws ResponseStatusException  if the exchange does not exist.
      */
     @PutMapping("/update")
-    public Echange mettreAJourEchange(@RequestHeader("Authorization") String authToken, @RequestBody Echange echange) {
+    public Echange mettreAJourEchange(@RequestHeader("Authorization") String authToken,
+                                      @RequestBody long id, @RequestBody Etat etat) {
         if (utilisateurService.verifyToken(authToken)) {
-            if (echange.getId() == null)
-                throw new IllegalArgumentException("L'id de l'échange ne peut pas être null");
+            if (id <= 0)
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange ID is invalid");
+
+            Echange echange = echangeService.obtenirEchangeParId(id);
+
+            if (echange == null)
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange does not exist");
+
+            echange.setEtatEchange(etat);
+
             if (echangeService.echangeExist(echange.getId()))
                 return echangeService.mettreAJourEchange(echange);
+
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange is not valid");
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");

@@ -17,23 +17,6 @@ describe('Ajout d\'objet avec authentification', () => {
         cy.get('button[type="submit"]').click();
     });
 
-    it('Doit ajouter un objet avec succès', () => {
-        // Remplir les champs avec des données valides
-        cy.get('input#nomObjet').type('Table');
-        cy.get('textarea#descriptionObjet').type('Une table en bois');
-        cy.get('select#categorieObjet').select('MOBILIER');
-
-        // Simuler l'envoi du formulaire
-        cy.get('button[type="submit"]').click();
-
-        // Vérifier que le message de succès est affiché
-        cy.contains('Objet ajouté avec succès !').should('be.visible');
-
-        // Vérifier que le formulaire est réinitialisé après l'ajout
-        cy.get('input#nomObjet').should('have.value', '');
-        cy.get('textarea#descriptionObjet').should('have.value', '');
-    });
-
     it('Doit gérer l\'erreur en cas d\'échec de l\'ajout de l\'objet', () => {
         // Simuler une erreur d'API (mauvaise réponse)
         cy.intercept('POST', 'http://localhost:3000/api/objets', {
@@ -53,58 +36,26 @@ describe('Ajout d\'objet avec authentification', () => {
         cy.contains('Erreur lors de l\'ajout de l\'objet').should('be.visible');
     });
 
-    it('Ajouter un objet de chaque catégorie', () => {
-        // Créer un objet pour chaque catégorie
-        cy.get('input#nomObjet').type('Table');
-        cy.get('textarea#descriptionObjet').type('Une table en bois');
-        cy.get('select#categorieObjet').select('MOBILIER');
-        cy.get('button[type="submit"]').click();
 
-        cy.get('input#nomObjet').type('Tondeuse');
-        cy.get('textarea#descriptionObjet').type('Une tondeuse électrique');
-        cy.get('select#categorieObjet').select('JARDINAGE');
-        cy.get('button[type="submit"]').click();
+    it('should add an object for each category using addObject command', () => {
+        const objects = [
+            {nom: 'Table', description: 'Une table en bois', categorie: 'MOBILIER'},
+            {nom: 'Tondeuse', description: 'Une tondeuse électrique', categorie: 'JARDINAGE'},
+            {nom: 'Ordinateur', description: 'Un ordinateur portable', categorie: 'INFORMATIQUE'},
+            {nom: 'Manette', description: 'Une manette de jeu', categorie: 'GAMING'},
+            {nom: 'Perceuse', description: 'Une perceuse sans fil', categorie: 'OUTILS'},
+            {nom: 'Timbres', description: 'Une collection de timbres', categorie: 'COLLECTION'},
+            {nom: 'Livre', description: 'Un roman policier', categorie: 'LITTERATURE'},
+            {nom: 'Chemise', description: 'Une chemise en coton', categorie: 'VETEMENTS'},
+            {nom: 'Machine à laver', description: 'Une machine à laver 8kg', categorie: 'ELECTROMENAGER'},
+            {nom: 'Objet', description: 'Un objet non classé', categorie: 'AUTRE'}
+        ];
 
-        cy.get('input#nomObjet').type('Ordinateur');
-        cy.get('textarea#descriptionObjet').type('Un ordinateur portable');
-        cy.get('select#categorieObjet').select('INFORMATIQUE');
-        cy.get('button[type="submit"]').click();
-
-        cy.get('input#nomObjet').type('Manette');
-        cy.get('textarea#descriptionObjet').type('Une manette de jeu');
-        cy.get('select#categorieObjet').select('GAMING');
-        cy.get('button[type="submit"]').click();
-
-        cy.get('input#nomObjet').type('Perceuse');
-        cy.get('textarea#descriptionObjet').type('Une perceuse sans fil');
-        cy.get('select#categorieObjet').select('OUTILS');
-        cy.get('button[type="submit"]').click();
-
-        cy.get('input#nomObjet').type('Timbres');
-        cy.get('textarea#descriptionObjet').type('Une collection de timbres');
-        cy.get('select#categorieObjet').select('COLLECTION');
-        cy.get('button[type="submit"]').click();
-
-        cy.get('input#nomObjet').type('Livre');
-        cy.get('textarea#descriptionObjet').type('Un roman policier');
-        cy.get('select#categorieObjet').select('LITTERATURE');
-        cy.get('button[type="submit"]').click();
-
-        cy.get('input#nomObjet').type('Chemise');
-        cy.get('textarea#descriptionObjet').type('Une chemise en coton');
-        cy.get('select#categorieObjet').select('VETEMENTS');
-        cy.get('button[type="submit"]').click();
-
-        cy.get('input#nomObjet').type('Machine à laver');
-        cy.get('textarea#descriptionObjet').type('Une machine à laver 8kg');
-        cy.get('select#categorieObjet').select('ELECTROMENAGER');
-        cy.get('button[type="submit"]').click();
-
-        cy.get('input#nomObjet').type('Objet');
-        cy.get('textarea#descriptionObjet').type('Un objet non classé');
-        cy.get('select#categorieObjet').select('AUTRE');
-        cy.get('button[type="submit"]').click();
+        objects.forEach((objet) => {
+            cy.testAddObject(objet.nom, objet.description, objet.categorie);
+        });
     });
+
 
     it('Doit rediriger vers la page de connexion si l\'utilisateur n\'est pas connecté', () => {
         // Supprimer le token d'authentification pour simuler un utilisateur non connecté
