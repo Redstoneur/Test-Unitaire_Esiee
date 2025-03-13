@@ -1,5 +1,6 @@
 import Request from "./Request";
 import RequestType from "../Types/RequestType";
+import EtatEchange from "../Types/EtatEchange";
 import ObjetDTO from "../Types/ObjetDTO";
 
 /**
@@ -184,3 +185,50 @@ export const GetEchange = async (id: number, token: string): Promise<Response | 
         }
     );
 };
+
+/**
+ * Updates the state of an exchange.
+ *
+ * @param idObjetPropose - Identifier of the object proposed in the exchange.
+ * @param idObjetRecherche - Identifier of the object searched in the exchange.
+ * @param token - Authentication token.
+ * @returns A promise that resolves with a Response or an Error.
+ */
+export const CreateEchange = async (idObjetPropose: number, idObjetRecherche: number,
+                                    token: string): Promise<Response | Error> => {
+    return Request(
+        `${baseUrl}/echanges/create`,
+        RequestType.POST,
+        {
+            "Content-Type": "application/json",
+            "Authorization": token
+        },
+        {
+            "idObjetPropose": idObjetPropose,
+            "idObjetRecherche": idObjetRecherche
+        }
+    );
+}
+
+/**
+ * Updates the state of an exchange.
+ *
+ * @param id - Identifier of the exchange.
+ * @param etat - New state of the exchange.
+ * @param token - Authentication token.
+ * @returns A promise that resolves with a Response or an Error.
+ */
+export const UpdateEchange = async (id: number, etat: EtatEchange, token: string): Promise<Response | Error> => {
+    return Request(
+        `${baseUrl}/echanges/update`,
+        RequestType.PUT,
+        {
+            "Content-Type": "application/json",
+            "Authorization": token
+        },
+        {
+            "id": id,
+            "etat": etat
+        }
+    );
+}
