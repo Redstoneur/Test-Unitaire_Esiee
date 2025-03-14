@@ -3,6 +3,8 @@ package fr.knap.testunitaire_esiee.controller;
 import fr.knap.testunitaire_esiee.dto.EchangeBufferDTO;
 import fr.knap.testunitaire_esiee.dto.EchangeEtatDTO;
 import fr.knap.testunitaire_esiee.model.Echange;
+import fr.knap.testunitaire_esiee.model.Etat;
+import fr.knap.testunitaire_esiee.model.Objet;
 import fr.knap.testunitaire_esiee.services.EchangeService;
 import fr.knap.testunitaire_esiee.services.ObjetService;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -89,11 +92,36 @@ public class EchangeController {
             if (echange == null)
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange does not exist");
 
-            echange.setEtatEchange(echangeEtatDTO.getEtat());
+            if (echange.getEtatEchange().equals(echangeEtatDTO.getEtat()))
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "The new state is identical to the current state");
 
-            if (echangeService.echangeExist(echange.getId()))
+            if ((echange.getEtatEchange().equals(Etat.ACCEPTE) ||
+                    echange.getEtatEchange().equals(Etat.REFUSE) ||
+                    echange.getEtatEchange().equals(Etat.ANNULER)))
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "The exchange is already closed");
+
+            if (echangeService.echangeExist(echange.getId())) {
+                echange.setEtatEchange(echangeEtatDTO.getEtat());
+                if (echangeEtatDTO.getEtat().equals(Etat.ACCEPTE) ||
+                        echangeEtatDTO.getEtat().equals(Etat.REFUSE) ||
+                        echangeEtatDTO.getEtat().equals(Etat.ANNULER))
+                    echange.setDateCloture(LocalDateTime.now());
+
+                if (echangeEtatDTO.getEtat().equals(Etat.ACCEPTE)) {
+                    Objet objetPropose = echange.getObjetPropose();
+                    Objet objetDemande = echange.getObjetDemande();
+
+                    objetPropose.setUtilisateur(echange.getProprietaireObjetDemande());
+                    objetDemande.setUtilisateur(echange.getProprietaireObjetPropose());
+
+                    objetService.mettreAJourObjet(objetPropose.getId(), objetPropose);
+                    objetService.mettreAJourObjet(objetDemande.getId(), objetDemande);
+                }
+
                 return echangeService.mettreAJourEchange(echange);
-
+            }
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange is not valid");
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
