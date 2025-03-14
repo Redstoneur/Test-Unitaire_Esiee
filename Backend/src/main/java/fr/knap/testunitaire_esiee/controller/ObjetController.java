@@ -1,8 +1,8 @@
 package fr.knap.testunitaire_esiee.controller;
 
+import fr.knap.testunitaire_esiee.dto.ObjetBufferDTO;
 import fr.knap.testunitaire_esiee.dto.ObjetDTO;
 import fr.knap.testunitaire_esiee.model.Objet;
-import fr.knap.testunitaire_esiee.dto.ObjetBufferDTO;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.services.ObjetService;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
@@ -105,8 +105,13 @@ public class ObjetController {
      */
     @PutMapping("/{id}")
     public Objet mettreAJourObjet(@RequestHeader("Authorization") String authToken, @PathVariable Long id, @RequestBody Objet objet) {
-        if(utilisateurService.verifyToken(authToken))
+        if (utilisateurService.verifyToken(authToken)) {
+            Objet objetV = objetService.obtenirObjetParId(id);
+            if (objetV != null && objetV.getDateSuppression() != null)
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Object is deleted");
+
             return objetService.mettreAJourObjet(id, objet);
+        }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
     }
 

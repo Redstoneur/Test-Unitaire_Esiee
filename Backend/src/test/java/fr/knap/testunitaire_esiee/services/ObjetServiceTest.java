@@ -144,10 +144,18 @@ class ObjetServiceTest {
     @Test
     void supprimerObjetDeletesObjet() {
         Long id = 1L;
+        // Given an existing objet with no deletion date
+        Objet objet = new Objet();
+        objet.setDateSuppression(null);
+        when(objetRepository.findById(id)).thenReturn(Optional.of(objet));
+        when(objetRepository.save(objet)).thenReturn(objet);
 
+        // When
         objetService.supprimerObjet(id);
 
-        verify(objetRepository, times(1)).deleteById(id);
+        // Then, the objet's deletion date should be set and saved
+        assertNotNull(objet.getDateSuppression());
+        verify(objetRepository, times(1)).save(objet);
     }
 
     /**
