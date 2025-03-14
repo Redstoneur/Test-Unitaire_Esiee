@@ -331,6 +331,8 @@ onBeforeUnmount(() => {
         <p class="description">{{ objet.description }}</p>
         <!-- Display object category -->
         <p class="categorie"><strong>Catégorie :</strong> {{ objet.categorie }}</p>
+        <!-- Display object owner -->
+        <p class="owner"><strong>Propriétaire :</strong> {{ objet.utilisateur }}</p>
 
         <!-- If the object is in exchange and the user is the owner, show exchange details button -->
         <template v-if="objet.enEchange">
@@ -514,6 +516,12 @@ h2 {
 .categorie {
   font-size: 14px;
   font-weight: bold;
+  margin-top: 5px;
+  color: #444;
+}
+
+.owner {
+  font-size: 14px;
   margin-top: 5px;
   color: #444;
 }

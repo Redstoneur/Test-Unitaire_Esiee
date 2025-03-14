@@ -44,6 +44,12 @@ const errorMessage: Ref<string> = ref('');
 const searchText: Ref<string> = ref('');
 
 /**
+ * Reactive string for filtering objects by user.
+ * @type {Ref<string>}
+ */
+const searchUser: Ref<string> = ref('');
+
+/**
  * Reactive string for filtering objects by category.
  * @type {Ref<string>}
  */
@@ -99,6 +105,7 @@ const fetchObjets = async () => {
     description: objet.description,
     categorie: objet.categorie,
     idUtilisateur: objet.idUtilisateur,
+    utilisateur: objet.utilisateur,
     showInput: false,
     enEchange: false,
     idEchange: null
@@ -114,6 +121,13 @@ const fetchObjets = async () => {
     objets.value = objets.value.filter(o =>
         o.nom.toLowerCase().includes(searchText.value.toLowerCase()) ||
         o.description.toLowerCase().includes(searchText.value.toLowerCase())
+    );
+  }
+
+  // Filter objects if a search user is provided.
+  if (searchUser.value) {
+    objets.value = objets.value.filter(o =>
+        o.utilisateur.toLowerCase().includes(searchUser.value.toLowerCase())
     );
   }
 
@@ -199,6 +213,7 @@ onMounted(async () => {
     <main>
       <form class="search-bar" @submit.prevent="handleSearch">
         <input type="text" v-model="searchText" placeholder="Rechercher par texte"/>
+        <input type="text" v-model="searchUser" placeholder="Rechercher par utilisateur"/>
         <select v-model="searchCategorie">
           <option value="" disabled selected>Sélectionner une catégorie</option>
           <option v-for="category in categories" :key="category" :value="category">

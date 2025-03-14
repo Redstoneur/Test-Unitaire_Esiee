@@ -38,6 +38,11 @@ interface Objet {
     idUtilisateur: string;
 
     /**
+     * Owner of the object.
+     */
+    utilisateur: string;
+
+    /**
      * Identifier of exchange associated with the object.
      */
     idEchange: number;
