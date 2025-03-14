@@ -10,10 +10,11 @@ import {computed, onBeforeUnmount, onMounted, Ref, ref} from 'vue';
 import ObjetForm from "./ObjetForm.vue";
 
 // Import function
-import {CreateEchange, GetEchange, UserInformation} from "../Function/ApiRequest";
+import {CreateEchange, GetEchange, UpdateEchange, UserInformation} from "../Function/ApiRequest";
 
 // Import types
 import Objet from "../Types/Objet";
+import EtatEchange from "../Types/EtatEchange";
 
 /**
  * Defines the properties accepted by the ObjetScreen component.
@@ -275,6 +276,28 @@ const confirmExchange = async () => {
   location.reload();
 };
 
+const handleUpdateExchange = async (nouvelEtat: EtatEchange) => {
+  if (!exchangeDetails.value || !exchangeDetails.value.id) return;
+
+  console.log(exchangeDetails.value.id);
+  console.log(nouvelEtat);
+  console.log(nouvelEtat.toString())
+  console.log(authToken)
+
+  const response = await UpdateEchange(
+      exchangeDetails.value.id,
+      nouvelEtat,
+      authToken
+  );
+  if (response instanceof Error || !response.ok) {
+    errorMessage.value = 'Erreur lors de la mise à jour de l\'échange';
+    return;
+  }
+  showModal.value = false;
+  errorMessage.value = '';
+  location.reload();
+};
+
 /**
  * Component mounted lifecycle hook.
  * Fetches the logged-in user's ID when the component is mounted.
@@ -308,6 +331,8 @@ onBeforeUnmount(() => {
         <p class="description">{{ objet.description }}</p>
         <!-- Display object category -->
         <p class="categorie"><strong>Catégorie :</strong> {{ objet.categorie }}</p>
+        <!-- Display object owner -->
+        <p class="owner"><strong>Propriétaire :</strong> {{ objet.utilisateur }}</p>
 
         <!-- If the object is in exchange and the user is the owner, show exchange details button -->
         <template v-if="objet.enEchange">
@@ -352,6 +377,7 @@ onBeforeUnmount(() => {
             <p><strong>Nom :</strong> {{ exchangeDetails?.objetDemande.nom }}</p>
             <p><strong>Description :</strong> {{ exchangeDetails?.objetDemande.description }}</p>
             <p><strong>Catégorie :</strong> {{ exchangeDetails?.objetDemande.categorie }}</p>
+            <p><strong>Propriétaire :</strong> {{ exchangeDetails?.objetDemande.utilisateur.pseudo}}</p>
           </div>
           <!-- Proposed object details -->
           <div class="exchange-item">
@@ -359,7 +385,24 @@ onBeforeUnmount(() => {
             <p><strong>Nom :</strong> {{ exchangeDetails?.objetPropose.nom }}</p>
             <p><strong>Description :</strong> {{ exchangeDetails?.objetPropose.description }}</p>
             <p><strong>Catégorie :</strong> {{ exchangeDetails?.objetPropose.categorie }}</p>
+            <p><strong>Propriétaire :</strong> {{ exchangeDetails?.objetPropose.utilisateur.pseudo}}</p>
           </div>
+        </div>
+        <!-- In the modal in Frontend/src/components/ObjetScreen.vue -->
+        <div v-if="exchangeDetails?.etatEchange === EtatEchange.ATTENTE">
+          <template v-if="exchangeDetails?.objetDemande.utilisateur.id === utilisateurId">
+            <button class="modal-btn" @click="handleUpdateExchange(EtatEchange.ACCEPTE)">
+              Accepter
+            </button>
+            <button class="modal-btn" @click="handleUpdateExchange(EtatEchange.REFUSE)">
+              Refuser
+            </button>
+          </template>
+          <template v-else-if="exchangeDetails?.objetPropose.utilisateur.id === utilisateurId">
+            <button class="modal-btn" @click="handleUpdateExchange(EtatEchange.ANNULER)">
+              Annuler
+            </button>
+          </template>
         </div>
         <!-- Button to close modal -->
         <button class="close-btn" @click="showModal = false">Fermer</button>
@@ -413,7 +456,7 @@ onBeforeUnmount(() => {
           </button>
         </div>
         <!-- Cancel button to close modal without validating -->
-        <button class="modal-btn" @click="showProposeModal = false">
+        <button class="close-btn" @click="showProposeModal = false">
           Annuler
         </button>
       </div>
@@ -425,6 +468,7 @@ onBeforeUnmount(() => {
 /* Existing styles remain unchanged */
 .objet-zone {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: #f4f4f4;
@@ -472,6 +516,12 @@ h2 {
 .categorie {
   font-size: 14px;
   font-weight: bold;
+  margin-top: 5px;
+  color: #444;
+}
+
+.owner {
+  font-size: 14px;
   margin-top: 5px;
   color: #444;
 }
@@ -610,4 +660,10 @@ h2 {
   justify-content: space-between;
   margin-top: 10px;
 }
+
+.pagination button {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
 </style>

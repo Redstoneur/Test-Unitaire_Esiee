@@ -31,6 +31,7 @@ class ObjetTest {
         assertEquals(description, objet.getDescription());
         assertEquals(categorie, objet.getCategorie());
         assertEquals(dateCreation, objet.getDateCreation());
+        assertNull(objet.getDateSuppression());
     }
 
     /**
@@ -45,6 +46,7 @@ class ObjetTest {
         assertNull(objet.getDescription());
         assertNull(objet.getCategorie());
         assertNull(objet.getDateCreation());
+        assertNull(objet.getDateSuppression());
     }
 
     /**
@@ -105,5 +107,17 @@ class ObjetTest {
         objet.setDateCreation(dateCreation);
 
         assertEquals(dateCreation, objet.getDateCreation());
+    }
+
+    /**
+     * Tests the setDateSuppression method to ensure it updates the dateSuppression field.
+     */
+    @Test
+    void setDateSuppressionUpdatesDateSuppression() {
+        Objet objet = new Objet();
+        LocalDateTime dateSuppression = LocalDateTime.now();
+        objet.setDateSuppression(dateSuppression);
+
+        assertEquals(dateSuppression, objet.getDateSuppression());
     }
 }

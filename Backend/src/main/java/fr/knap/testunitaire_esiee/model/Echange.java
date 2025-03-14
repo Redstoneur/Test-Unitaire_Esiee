@@ -51,6 +51,18 @@ public class Echange {
     private LocalDateTime dateCloture;
 
     /**
+     * The owner of the proposed object in the exchange.
+     */
+    @ManyToOne
+    private Utilisateur proprietaireObjetPropose;
+
+    /**
+     * The owner of the requested object in the exchange.
+     */
+    @ManyToOne
+    private Utilisateur proprietaireObjetDemande;
+
+    /**
      * Default constructor.
      */
     public Echange() {
@@ -65,16 +77,16 @@ public class Echange {
      * @param etatEchange The current state of the exchange.
      * @param dateCloture The date and time when the exchange was closed.
      */
-    public Echange(
-            Objet objetPropose, Objet objetDemande,
-            LocalDateTime dateProposition, Etat etatEchange,
-            LocalDateTime dateCloture
-    ) {
-        ObjetPropose = objetPropose;
-        ObjetDemande = objetDemande;
+    public Echange(Objet objetPropose, Objet objetDemande,
+                   LocalDateTime dateProposition, Etat etatEchange,
+                   LocalDateTime dateCloture) {
+        this.ObjetPropose = objetPropose;
+        this.ObjetDemande = objetDemande;
         this.dateProposition = dateProposition;
-        EtatEchange = etatEchange;
+        this.EtatEchange = etatEchange;
         this.dateCloture = dateCloture;
+        this.proprietaireObjetPropose = objetPropose.getUtilisateur();
+        this.proprietaireObjetDemande = objetDemande.getUtilisateur();
     }
 
     /**
@@ -84,10 +96,12 @@ public class Echange {
      * @param objetDemande The object requested in the exchange.
      */
     public Echange(Objet objetPropose, Objet objetDemande) {
-        ObjetPropose = objetPropose;
-        ObjetDemande = objetDemande;
+        this.ObjetPropose = objetPropose;
+        this.ObjetDemande = objetDemande;
         this.dateProposition = LocalDateTime.now();
-        EtatEchange = Etat.ATTENTE;
+        this.EtatEchange = Etat.ATTENTE;
+        this.proprietaireObjetPropose = objetPropose.getUtilisateur();
+        this.proprietaireObjetDemande = objetDemande.getUtilisateur();
     }
 
 }

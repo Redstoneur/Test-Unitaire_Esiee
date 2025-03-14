@@ -8,6 +8,7 @@ import fr.knap.testunitaire_esiee.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +47,9 @@ public class ObjetService {
         List<ObjetDTO> tousLesObjets = new ArrayList<>();
 
         objets.forEach(o -> {
+            if (o.getDateSuppression() != null) {
+                return;
+            }
             Utilisateur utilisateur = o.getUtilisateur();
             tousLesObjets.add(new ObjetDTO(o.getId(),o.getNom(), o.getDescription(), o.getCategorie(), utilisateur.getPseudo(), utilisateur.getId(), o.getDateCreation()));
         });
@@ -60,7 +64,13 @@ public class ObjetService {
      * @return The Objet entity with the specified ID, or null if not found.
      */
     public Objet obtenirObjetParId(Long id) {
-        return objetRepository.findById(id).orElse(null);
+        Objet objet = objetRepository.findById(id).orElse(null);
+
+        if (objet != null && objet.getDateSuppression() != null) {
+            return null;
+        }
+
+        return objet;
     }
 
     /**
@@ -83,7 +93,13 @@ public class ObjetService {
      * @param id The ID of the Objet entity to be deleted.
      */
     public void supprimerObjet(Long id) {
-        objetRepository.deleteById(id);
+        Optional<Objet> objetOptional = objetRepository.findById(id);
+        if (objetOptional.isPresent()) {
+            Objet objet = objetOptional.get();
+            // Set the deletion date instead of deleting the record from the database.
+            objet.setDateSuppression(LocalDateTime.now());
+            objetRepository.save(objet);
+        }
     }
 
     /**
@@ -98,6 +114,12 @@ public class ObjetService {
         if (utilisateur.isPresent()) {
             Utilisateur u = utilisateur.get();
             List<Objet> objets = objetRepository.findByUtilisateurId(idUtilisateur);
+
+            // retiré les objet supprimés
+            objets = objets.stream().filter(
+                    o -> o.getDateSuppression() == null
+            ).toList();
+
             return objets.stream()
                     .map(o -> new ObjetDTO(o.getId(),o.getNom(), o.getDescription(), o.getCategorie(), u.getPseudo(), u.getId(), o.getDateCreation()))
                     .collect(Collectors.toList());

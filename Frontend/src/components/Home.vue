@@ -17,6 +17,7 @@ import {BooleanVerifyToken, DeleteObjet, GetEchanges, GetObjets} from "../Functi
 // Import types
 import CategorieObjet from "../Types/CategorieObjet";
 import Objet from "../Types/Objet";
+import EtatEchange from "../Types/EtatEchange";
 
 /**
  * Router instance for navigating between routes.
@@ -41,6 +42,12 @@ const errorMessage: Ref<string> = ref('');
  * @type {Ref<string>}
  */
 const searchText: Ref<string> = ref('');
+
+/**
+ * Reactive string for filtering objects by user.
+ * @type {Ref<string>}
+ */
+const searchUser: Ref<string> = ref('');
 
 /**
  * Reactive string for filtering objects by category.
@@ -98,6 +105,7 @@ const fetchObjets = async () => {
     description: objet.description,
     categorie: objet.categorie,
     idUtilisateur: objet.idUtilisateur,
+    utilisateur: objet.utilisateur,
     showInput: false,
     enEchange: false,
     idEchange: null
@@ -113,6 +121,13 @@ const fetchObjets = async () => {
     objets.value = objets.value.filter(o =>
         o.nom.toLowerCase().includes(searchText.value.toLowerCase()) ||
         o.description.toLowerCase().includes(searchText.value.toLowerCase())
+    );
+  }
+
+  // Filter objects if a search user is provided.
+  if (searchUser.value) {
+    objets.value = objets.value.filter(o =>
+        o.utilisateur.toLowerCase().includes(searchUser.value.toLowerCase())
     );
   }
 
@@ -135,11 +150,11 @@ const fetchEchanges = async () => {
 
   objets.value.forEach(objet => {
     if (echanges.some((e: any) =>
-        e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
+        (e.objetDemande.id === objet.id || e.objetPropose.id === objet.id) && (e.etatEchange === EtatEchange.ATTENTE)
     )) {
       objet.enEchange = true;
       objet.idEchange = echanges.find((e: any) =>
-          e.objetDemande.id === objet.id || e.objetPropose.id === objet.id
+          (e.objetDemande.id === objet.id || e.objetPropose.id === objet.id) && (e.etatEchange === EtatEchange.ATTENTE)
       ).id;
     }
   });
@@ -198,6 +213,7 @@ onMounted(async () => {
     <main>
       <form class="search-bar" @submit.prevent="handleSearch">
         <input type="text" v-model="searchText" placeholder="Rechercher par texte"/>
+        <input type="text" v-model="searchUser" placeholder="Rechercher par utilisateur"/>
         <select v-model="searchCategorie">
           <option value="" disabled selected>Sélectionner une catégorie</option>
           <option v-for="category in categories" :key="category" :value="category">
