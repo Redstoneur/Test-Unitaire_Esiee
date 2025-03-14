@@ -1,6 +1,7 @@
 package fr.knap.testunitaire_esiee.services;
 
 import fr.knap.testunitaire_esiee.dto.ObjetDTO;
+import fr.knap.testunitaire_esiee.model.Echange;
 import fr.knap.testunitaire_esiee.model.Objet;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.repository.ObjetRepository;
@@ -125,5 +126,19 @@ public class ObjetService {
                     .collect(Collectors.toList());
         }
         return null;
+    }
+
+    /**
+     * Updates the objects of an exchange.
+     *
+     * @param echange The exchange to be updated.
+     */
+    public void updateExchangeObjects(Echange echange) {
+        Objet objetPropose = echange.getObjetPropose();
+        Objet objetDemande = echange.getObjetDemande();
+        objetPropose.setUtilisateur(echange.getProprietaireObjetDemande());
+        objetDemande.setUtilisateur(echange.getProprietaireObjetPropose());
+        this.mettreAJourObjet(objetPropose.getId(), objetPropose);
+        this.mettreAJourObjet(objetDemande.getId(), objetDemande);
     }
 }
