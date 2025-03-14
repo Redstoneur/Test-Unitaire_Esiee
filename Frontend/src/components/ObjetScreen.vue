@@ -279,11 +279,6 @@ const confirmExchange = async () => {
 const handleUpdateExchange = async (nouvelEtat: EtatEchange) => {
   if (!exchangeDetails.value || !exchangeDetails.value.id) return;
 
-  console.log(exchangeDetails.value.id);
-  console.log(nouvelEtat);
-  console.log(nouvelEtat.toString())
-  console.log(authToken)
-
   const response = await UpdateEchange(
       exchangeDetails.value.id,
       nouvelEtat,

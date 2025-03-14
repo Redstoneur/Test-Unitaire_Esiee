@@ -49,7 +49,7 @@ public class Objet {
      * The deletion date of the object.
      */
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime DateSuppression;
+    private LocalDateTime dateSuppression;
 
     /**
      * The user associated with the object.
@@ -83,6 +83,6 @@ public class Objet {
         this.description = description;
         this.categorie = categorie;
         this.dateCreation = dateCreation;
-        this.DateSuppression = null;
+        this.dateSuppression = null;
     }
 }
