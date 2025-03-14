@@ -4,7 +4,6 @@ import fr.knap.testunitaire_esiee.dto.EchangeBufferDTO;
 import fr.knap.testunitaire_esiee.dto.EchangeEtatDTO;
 import fr.knap.testunitaire_esiee.model.Echange;
 import fr.knap.testunitaire_esiee.model.Etat;
-import fr.knap.testunitaire_esiee.model.Objet;
 import fr.knap.testunitaire_esiee.services.EchangeService;
 import fr.knap.testunitaire_esiee.services.ObjetService;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
@@ -83,47 +82,34 @@ public class EchangeController {
     @PutMapping("/update")
     public Echange mettreAJourEchange(@RequestHeader("Authorization") String authToken,
                                       @RequestBody EchangeEtatDTO echangeEtatDTO) {
-        if (utilisateurService.verifyToken(authToken)) {
-            if (echangeEtatDTO.getId() <= 0)
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange ID is invalid");
+        if (!utilisateurService.verifyToken(authToken))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
 
-            Echange echange = echangeService.obtenirEchangeParId(echangeEtatDTO.getId());
+        if (echangeEtatDTO.getId() <= 0)
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange ID is invalid");
 
-            if (echange == null)
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange does not exist");
+        Echange echange = echangeService.obtenirEchangeParId(echangeEtatDTO.getId());
+        if (echange == null)
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange does not exist");
 
-            if (echange.getEtatEchange().equals(echangeEtatDTO.getEtat()))
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, "The new state is identical to the current state");
+        if (echange.getEtatEchange().equals(echangeEtatDTO.getEtat()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The new state is identical to the current state");
 
-            if ((echange.getEtatEchange().equals(Etat.ACCEPTE) ||
-                    echange.getEtatEchange().equals(Etat.REFUSE) ||
-                    echange.getEtatEchange().equals(Etat.ANNULER)))
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, "The exchange is already closed");
+        if (java.util.EnumSet.of(Etat.ACCEPTE, Etat.REFUSE, Etat.ANNULER).contains(echange.getEtatEchange()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The exchange is already closed");
 
-            if (echangeService.echangeExist(echange.getId())) {
-                echange.setEtatEchange(echangeEtatDTO.getEtat());
-                if (echangeEtatDTO.getEtat().equals(Etat.ACCEPTE) ||
-                        echangeEtatDTO.getEtat().equals(Etat.REFUSE) ||
-                        echangeEtatDTO.getEtat().equals(Etat.ANNULER))
-                    echange.setDateCloture(LocalDateTime.now());
-
-                if (echangeEtatDTO.getEtat().equals(Etat.ACCEPTE)) {
-                    Objet objetPropose = echange.getObjetPropose();
-                    Objet objetDemande = echange.getObjetDemande();
-
-                    objetPropose.setUtilisateur(echange.getProprietaireObjetDemande());
-                    objetDemande.setUtilisateur(echange.getProprietaireObjetPropose());
-
-                    objetService.mettreAJourObjet(objetPropose.getId(), objetPropose);
-                    objetService.mettreAJourObjet(objetDemande.getId(), objetDemande);
-                }
-
-                return echangeService.mettreAJourEchange(echange);
-            }
+        if (!echangeService.echangeExist(echange.getId()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Echange is not valid");
-        }
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
+
+        echange.setEtatEchange(echangeEtatDTO.getEtat());
+        if (java.util.EnumSet.of(Etat.ACCEPTE, Etat.REFUSE, Etat.ANNULER).contains(echangeEtatDTO.getEtat()))
+            echange.setDateCloture(LocalDateTime.now());
+
+        if (echangeEtatDTO.getEtat().equals(Etat.ACCEPTE))
+            objetService.updateExchangeObjects(echange);
+
+        return echangeService.mettreAJourEchange(echange);
     }
 }
