@@ -73,9 +73,9 @@ avec ces API et inclut des tests end-to-end automatisés avec Cypress.
 
 ## Prérequis
 
-- Java 17 et Maven
-- Node.js 22 et npm
-- Docker (pour la version Dockerisée)
+* Java 17 et Maven
+* Node.js 22 et npm
+* Docker (pour la version Dockerisée)
 
 ## Lancement du projet
 
@@ -143,11 +143,11 @@ Cela va construire et démarrer automatiquement le backend et le frontend dans l
 
 ## Tests
 
-- Pour le backend, les tests unitaires se trouvent sous le répertoire `Backend/src/test` et peuvent être exécutés avec :
+* Pour le backend, les tests unitaires se trouvent sous le répertoire `Backend/src/test` et peuvent être exécutés avec :
   ```bash
   mvn test
   ```
-- Le frontend inclut des tests end-to-end avec Cypress. Pour les exécuter, ouvrez un terminal dans le répertoire
+* Le frontend inclut des tests end-to-end avec Cypress. Pour les exécuter, ouvrez un terminal dans le répertoire
   `Frontend` et lancez :
   ```bash
   npm run cy:open
@@ -155,5 +155,5 @@ Cela va construire et démarrer automatiquement le backend et le frontend dans l
 
 ## Remarques
 
-- Assurez-vous que les ports utilisés ne sont pas bloqués par d’autres services.
-- Les configurations Docker (Dockerfile, docker-compose.yml) doivent être ajustées selon l’environnement de déploiement.
+* Assurez-vous que les ports utilisés ne sont pas bloqués par d’autres services.
+* Les configurations Docker (Dockerfile, docker-compose.yml) doivent être ajustées selon l’environnement de déploiement.
