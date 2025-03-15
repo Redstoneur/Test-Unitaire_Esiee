@@ -58,7 +58,6 @@
   * [Remarques](#remarques)
 <!-- TOC -->
 
-
 ## Description du projet
 
 Ce projet est une application web composée d’un backend en Java (Spring Boot) et d’un frontend en Vue.js, conçue pour
