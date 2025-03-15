@@ -24,12 +24,16 @@ class ObjetBufferDTOTest {
         CategorieObjet categorie = CategorieObjet.INFORMATIQUE;
         LocalDateTime dateCreation = LocalDateTime.now();
 
-        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO(nom, description, categorie, dateCreation);
+        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO(nom, description, categorie);
 
-        assertEquals(nom, objetBufferDTO.getNom());
-        assertEquals(description, objetBufferDTO.getDescription());
-        assertEquals(categorie, objetBufferDTO.getCategorie());
-        assertEquals(dateCreation, objetBufferDTO.getDateCreation());
+        // Check that all fields are set correctly
+        assertEquals(nom, objetBufferDTO.getNom()); // Check that the nom field is set correctly
+        assertEquals(description, objetBufferDTO.getDescription()); // Check that the description field is set correctly
+        assertEquals(categorie, objetBufferDTO.getCategorie()); // Check that the categorie field is set correctly
+        assertEquals(
+                dateCreation.withSecond(0).withNano(0),
+                objetBufferDTO.getDateCreation().withSecond(0).withNano(0)
+        ); // Check that the dateCreation field is set correctly (ignoring seconds and nanoseconds)
     }
 
     /**
@@ -37,7 +41,7 @@ class ObjetBufferDTOTest {
      */
     @Test
     void setNomUpdatesNom() {
-        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
+        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE);
         String newNom = "Smartphone";
         objetBufferDTO.setNom(newNom);
 
@@ -49,7 +53,7 @@ class ObjetBufferDTOTest {
      */
     @Test
     void setDescriptionUpdatesDescription() {
-        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
+        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE);
         String newDescription = "A brand new smartphone";
         objetBufferDTO.setDescription(newDescription);
 
@@ -61,7 +65,7 @@ class ObjetBufferDTOTest {
      */
     @Test
     void setCategorieUpdatesCategorie() {
-        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
+        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE);
         CategorieObjet newCategorie = CategorieObjet.ELECTROMENAGER;
         objetBufferDTO.setCategorie(newCategorie);
 
@@ -73,7 +77,7 @@ class ObjetBufferDTOTest {
      */
     @Test
     void setDateCreationUpdatesDateCreation() {
-        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
+        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE);
         LocalDateTime newDateCreation = LocalDateTime.now().plusDays(1);
         objetBufferDTO.setDateCreation(newDateCreation);
 

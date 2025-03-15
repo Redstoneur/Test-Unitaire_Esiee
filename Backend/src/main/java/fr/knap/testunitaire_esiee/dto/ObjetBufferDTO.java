@@ -44,12 +44,11 @@ public class ObjetBufferDTO {
      * @param nom          the name of the object
      * @param description  the description of the object
      * @param categorie    the category of the object
-     * @param dateCreation the creation date of the object
      */
-    public ObjetBufferDTO(String nom, String description, CategorieObjet categorie, LocalDateTime dateCreation) {
+    public ObjetBufferDTO(String nom, String description, CategorieObjet categorie) {
         this.nom = nom;
         this.description = description;
         this.categorie = categorie;
-        this.dateCreation = dateCreation;
+        this.dateCreation = LocalDateTime.now();
     }
 }

@@ -1,6 +1,7 @@
 package fr.knap.testunitaire_esiee.services;
 
 import fr.knap.testunitaire_esiee.dto.ObjetDTO;
+import fr.knap.testunitaire_esiee.model.Echange;
 import fr.knap.testunitaire_esiee.model.Objet;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.repository.ObjetRepository;
@@ -8,6 +9,7 @@ import fr.knap.testunitaire_esiee.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,8 +48,11 @@ public class ObjetService {
         List<ObjetDTO> tousLesObjets = new ArrayList<>();
 
         objets.forEach(o -> {
+            if (o.getDateSuppression() != null) {
+                return;
+            }
             Utilisateur utilisateur = o.getUtilisateur();
-            tousLesObjets.add(new ObjetDTO(o.getNom(), o.getDescription(), o.getCategorie(), utilisateur.getPseudo(), utilisateur.getId(), o.getDateCreation()));
+            tousLesObjets.add(new ObjetDTO(o.getId(),o.getNom(), o.getDescription(), o.getCategorie(), utilisateur.getPseudo(), utilisateur.getId(), o.getDateCreation()));
         });
 
         return tousLesObjets;
@@ -60,7 +65,13 @@ public class ObjetService {
      * @return The Objet entity with the specified ID, or null if not found.
      */
     public Objet obtenirObjetParId(Long id) {
-        return objetRepository.findById(id).orElse(null);
+        Objet objet = objetRepository.findById(id).orElse(null);
+
+        if (objet != null && objet.getDateSuppression() != null) {
+            return null;
+        }
+
+        return objet;
     }
 
     /**
@@ -83,7 +94,13 @@ public class ObjetService {
      * @param id The ID of the Objet entity to be deleted.
      */
     public void supprimerObjet(Long id) {
-        objetRepository.deleteById(id);
+        Optional<Objet> objetOptional = objetRepository.findById(id);
+        if (objetOptional.isPresent()) {
+            Objet objet = objetOptional.get();
+            // Set the deletion date instead of deleting the record from the database.
+            objet.setDateSuppression(LocalDateTime.now());
+            objetRepository.save(objet);
+        }
     }
 
     /**
@@ -98,10 +115,30 @@ public class ObjetService {
         if (utilisateur.isPresent()) {
             Utilisateur u = utilisateur.get();
             List<Objet> objets = objetRepository.findByUtilisateurId(idUtilisateur);
+
+            // retiré les objet supprimés
+            objets = objets.stream().filter(
+                    o -> o.getDateSuppression() == null
+            ).toList();
+
             return objets.stream()
-                    .map(o -> new ObjetDTO(o.getNom(), o.getDescription(), o.getCategorie(), u.getPseudo(), u.getId(), o.getDateCreation()))
+                    .map(o -> new ObjetDTO(o.getId(),o.getNom(), o.getDescription(), o.getCategorie(), u.getPseudo(), u.getId(), o.getDateCreation()))
                     .collect(Collectors.toList());
         }
         return null;
+    }
+
+    /**
+     * Updates the objects of an exchange.
+     *
+     * @param echange The exchange to be updated.
+     */
+    public void updateExchangeObjects(Echange echange) {
+        Objet objetPropose = echange.getObjetPropose();
+        Objet objetDemande = echange.getObjetDemande();
+        objetPropose.setUtilisateur(echange.getProprietaireObjetDemande());
+        objetDemande.setUtilisateur(echange.getProprietaireObjetPropose());
+        this.mettreAJourObjet(objetPropose.getId(), objetPropose);
+        this.mettreAJourObjet(objetDemande.getId(), objetDemande);
     }
 }

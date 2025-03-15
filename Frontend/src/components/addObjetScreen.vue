@@ -1,137 +1,134 @@
+<!--
+   @file Frontend/src/components/addObjetScreen.vue
+   @description A Vue component for adding an object using a form.
+   It handles the modal display on successful object addition.
+ -->
+
 <script setup lang="ts">
-import { ref } from 'vue';
+import {Ref, ref} from 'vue';
+import {useRouter} from 'vue-router';
 
-const pseudo = ref('');
-const mdp = ref('');
-const mail = ref('');
-const nomUtilisateur = ref('');
-const prenomUtilisateur = ref('');
-const nomObjet = ref('');
-const descriptionObjet = ref('');
-const categorieObjet = ref('');
+// Import component
+import AppHeader from './AppHeader.vue';
+import ObjetForm from './ObjetForm.vue';
 
-const errorMessage = ref('');
-const successMessage = ref('');
+// Import types
+import ObjetDTO from '../Types/ObjetDTO';
+import CategorieObjet from '../Types/CategorieObjet';
 
-const categories = [
-  'MOBILIER',
-  'JARDINAGE',
-  'INFORMATIQUE',
-  'GAMING',
-  'OUTILS',
-  'COLLECTION',
-  'LITTERATURE',
-  'VETEMENTS',
-  'ELECTROMENAGER',
-  'AUTRE'
-]; // Liste des catégories mises à jour
+// Create a router instance for navigation
+const router = useRouter();
 
-const handleSubmit = async () => {
-  const utilisateur = {
-    pseudo: pseudo.value,
-    mdp: mdp.value,
-    mail: mail.value,
-    nom: nomUtilisateur.value,
-    prenom: prenomUtilisateur.value,
-  };
+/**
+ * Reactive variable holding the object name.
+ * @type {Ref<string>}
+ */
+const nomObjet: Ref<string> = ref('');
 
-  const objet = {
-    utilisateur,
-    nom: nomObjet.value,
-    description: descriptionObjet.value,
-    categorie: categorieObjet.value,
-    dateCreation: new Date().toISOString(), // Utilisation de la date actuelle
-  };
+/**
+ * Reactive variable holding the object description.
+ * @type {Ref<string>}
+ */
+const descriptionObjet: Ref<string> = ref('');
 
-  try {
-    const response = await fetch('http://localhost:3000/api/objets', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(objet),
-    });
+/**
+ * Reactive variable holding the object category.
+ * The value is either one of the categories or an empty string.
+ * @type {Ref<CategorieObjet | "">}
+ */
+const categorieObjet: Ref<CategorieObjet | ""> = ref<CategorieObjet | ''>('');
 
-    if (!response.ok) {
-      throw new Error('Erreur lors de l\'ajout de l\'objet');
-    }
+/**
+ * Flag indicating whether the success modal is visible.
+ * @type {Ref<boolean>}
+ */
+const showSuccessModal: Ref<boolean> = ref(false);
 
-    successMessage.value = 'Objet ajouté avec succès !';
-    // Reset form
-    pseudo.value = '';
-    mdp.value = '';
-    mail.value = '';
-    nomUtilisateur.value = '';
-    prenomUtilisateur.value = '';
-    nomObjet.value = '';
-    descriptionObjet.value = '';
-    categorieObjet.value = '';
-  } catch (error) {
-    errorMessage.value = (error as Error).message;
-  }
+/**
+ * Reactive variable storing the added object data returned from the API.
+ * @type {Ref<ObjetDTO | null>}
+ */
+const addedObjet: Ref<ObjetDTO | null> = ref<ObjetDTO | null>(null);
+
+/**
+ * Authentication token retrieved from local storage.
+ * @type {string}
+ */
+const authToken: string = localStorage.getItem('authToken') || '';
+
+/**
+ * Handles the event when ObjetForm has successfully added an object.
+ * Sets the added object and shows the success modal.
+ *
+ * @param {Object} payload - The event payload containing the added object and success message.
+ */
+const handleObjectAdded = (payload: { objet: ObjetDTO; successMessage: string; }) => {
+  addedObjet.value = {...payload.objet};
+  showSuccessModal.value = true;
+};
+
+/**
+ * Closes the success modal to allow the user to continue adding objects.
+ */
+const continueAdding = () => {
+  showSuccessModal.value = false;
+};
+
+/**
+ * Navigates back to the home page using the Vue router.
+ */
+const returnHome = () => {
+  router.push('/');
 };
 </script>
 
 <template>
   <div class="container">
-    <h2>Ajouter un Objet</h2>
-    <router-link to="/">Retour</router-link>
+    <!-- Header Component for the Add Object Screen -->
+    <AppHeader
+        title="Ajouter un Objet"
+        routerLinkLabel="Retour"
+        routerLinkTarget="/"
+    />
 
-    <!-- Affichage des messages d'erreur ou de succès -->
-    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-    <p v-if="successMessage" class="success">{{ successMessage }}</p>
+    <main>
 
-    <!-- Formulaire d'ajout d'objet -->
-    <form @submit.prevent="handleSubmit">
-      <div class="form-group">
-        <label for="pseudo">Pseudo Utilisateur</label>
-        <input v-model="pseudo" type="text" id="pseudo" required />
+      <!-- Reusable Objet Form Component -->
+      <ObjetForm
+          v-model:nomObjet="nomObjet"
+          v-model:descriptionObjet="descriptionObjet"
+          v-model:categorieObjet="categorieObjet"
+          :authToken="authToken"
+          @object-added="handleObjectAdded"
+      />
+
+      <!-- Success Modal displayed when an object is successfully added -->
+      <div v-if="showSuccessModal" class="modal">
+        <div class="modal-content">
+          <h2>Objet ajouté avec succès !</h2>
+          <div class="modal-details">
+            <p><strong>Nom :</strong> {{ addedObjet?.nom }}</p>
+            <p><strong>Description :</strong> {{ addedObjet?.description }}</p>
+            <p><strong>Catégorie :</strong> {{ addedObjet?.categorie }}</p>
+          </div>
+          <div class="modal-actions">
+            <!-- Button to continue adding new objects -->
+            <button class="modal-btn continue-btn" @click="continueAdding">
+              Continuer à ajouter
+            </button>
+            <!-- Button to navigate back to home -->
+            <button class="modal-btn home-btn" @click="returnHome">
+              Revenir à l&apos;accueil
+            </button>
+          </div>
+        </div>
       </div>
-
-      <div class="form-group">
-        <label for="mdp">Mot de Passe</label>
-        <input v-model="mdp" type="password" id="mdp" required />
-      </div>
-
-      <div class="form-group">
-        <label for="mail">Email</label>
-        <input v-model="mail" type="email" id="mail" required />
-      </div>
-
-      <div class="form-group">
-        <label for="nomUtilisateur">Nom Utilisateur</label>
-        <input v-model="nomUtilisateur" type="text" id="nomUtilisateur" required />
-      </div>
-
-      <div class="form-group">
-        <label for="prenomUtilisateur">Prénom Utilisateur</label>
-        <input v-model="prenomUtilisateur" type="text" id="prenomUtilisateur" required />
-      </div>
-
-      <div class="form-group">
-        <label for="nomObjet">Nom de l'Objet</label>
-        <input v-model="nomObjet" type="text" id="nomObjet" required />
-      </div>
-
-      <div class="form-group">
-        <label for="descriptionObjet">Description de l'Objet</label>
-        <textarea v-model="descriptionObjet" id="descriptionObjet" required></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="categorieObjet">Catégorie</label>
-        <select v-model="categorieObjet" id="categorieObjet" required>
-          <option value="" disabled selected>Sélectionner une catégorie</option>
-          <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
-        </select>
-      </div>
-
-      <button type="submit">Ajouter l'Objet</button>
-    </form>
+    </main>
   </div>
 </template>
 
 <style scoped>
+/* (Keep existing CSS unchanged) */
 .container {
   max-width: 600px;
   margin: 0 auto;
@@ -139,43 +136,53 @@ const handleSubmit = async () => {
   text-align: center;
 }
 
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  text-align: left;
-  margin-bottom: 5px;
-}
-
-input, select, textarea {
+/* Modal container styles */
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
 }
 
-button {
-  background-color: #4CAF50;
+/* Modal content box styling */
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+}
+
+/* Styles for details within the modal */
+.modal-details p {
+  margin: 10px 0;
+}
+
+/* Container for modal actions */
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+/* General style for modal buttons */
+.modal-btn {
+  background-color: #4caf50;
   color: white;
-  padding: 10px;
-  font-size: 16px;
   border: none;
   border-radius: 5px;
+  padding: 10px 20px;
   cursor: pointer;
 }
 
-button:hover {
+/* Hover effect for modal buttons */
+.modal-btn:hover {
   background-color: #45a049;
-}
-
-.error {
-  color: red;
-}
-
-.success {
-  color: green;
 }
 </style>

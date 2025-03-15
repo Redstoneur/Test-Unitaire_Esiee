@@ -1,9 +1,7 @@
 package fr.knap.testunitaire_esiee.services;
 
 import fr.knap.testunitaire_esiee.dto.ObjetDTO;
-import fr.knap.testunitaire_esiee.model.CategorieObjet;
-import fr.knap.testunitaire_esiee.model.Objet;
-import fr.knap.testunitaire_esiee.model.Utilisateur;
+import fr.knap.testunitaire_esiee.model.*;
 import fr.knap.testunitaire_esiee.repository.ObjetRepository;
 import fr.knap.testunitaire_esiee.repository.UtilisateurRepository;
 import org.junit.jupiter.api.Test;
@@ -144,10 +142,18 @@ class ObjetServiceTest {
     @Test
     void supprimerObjetDeletesObjet() {
         Long id = 1L;
+        // Given an existing objet with no deletion date
+        Objet objet = new Objet();
+        objet.setDateSuppression(null);
+        when(objetRepository.findById(id)).thenReturn(Optional.of(objet));
+        when(objetRepository.save(objet)).thenReturn(objet);
 
+        // When
         objetService.supprimerObjet(id);
 
-        verify(objetRepository, times(1)).deleteById(id);
+        // Then, the objet's deletion date should be set and saved
+        assertNotNull(objet.getDateSuppression());
+        verify(objetRepository, times(1)).save(objet);
     }
 
     /**
@@ -188,5 +194,50 @@ class ObjetServiceTest {
         assertNull(result);
         verify(utilisateurRepository, times(1)).findById(idUtilisateur);
         verify(objetRepository, times(0)).findByUtilisateurId(idUtilisateur);
+    }
+
+    /**
+     * Tests the updateExchangeObjects method to ensure it updates the Objet objects in the exchange.
+     */
+    @Test
+    void updateExchangeObjectsUpdatesExchangeObjects() {
+        Utilisateur proprietaireObjetPropose = new Utilisateur();
+        proprietaireObjetPropose.setId(1L);
+
+        Utilisateur proprietaireObjetDemande = new Utilisateur();
+        proprietaireObjetDemande.setId(2L);
+
+        Objet objetPropose = new Objet();
+        objetPropose.setId(1L);
+        objetPropose.setUtilisateur(proprietaireObjetPropose);
+
+        Objet objetDemande = new Objet();
+        objetDemande.setId(2L);
+        objetDemande.setUtilisateur(proprietaireObjetDemande);
+
+        Objet objetProposeUpdated = new Objet();
+        objetProposeUpdated.setId(1L);
+        objetProposeUpdated.setUtilisateur(proprietaireObjetDemande);
+
+        Objet objetDemandeUpdated = new Objet();
+        objetDemandeUpdated.setId(2L);
+        objetDemandeUpdated.setUtilisateur(proprietaireObjetPropose);
+
+        Echange echange = new Echange();
+        echange.setId(1L);
+        echange.setEtatEchange(Etat.ATTENTE);
+        echange.setObjetPropose(objetPropose);
+        echange.setObjetDemande(objetDemande);
+        echange.setProprietaireObjetPropose(proprietaireObjetPropose);
+        echange.setProprietaireObjetDemande(proprietaireObjetDemande);
+
+        when(objetRepository.existsById(1L)).thenReturn(true);
+        when(objetRepository.existsById(2L)).thenReturn(true);
+        when(objetRepository.save(any(Objet.class))).thenReturn(objetProposeUpdated, objetDemandeUpdated);
+
+        objetService.updateExchangeObjects(echange);
+
+        verify(objetRepository, times(2)).save(any(Objet.class));
+        verify(objetRepository, times(2)).existsById(anyLong());
     }
 }

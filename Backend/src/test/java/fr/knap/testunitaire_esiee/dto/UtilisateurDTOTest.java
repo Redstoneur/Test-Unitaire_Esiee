@@ -16,11 +16,12 @@ class UtilisateurDTOTest {
      */
     @Test
     void constructorWithAllParametersSetsAllFields() {
+        Long id = 1L;
         String pseudo = "user123";
         String nom = "Doe";
         String prenom = "John";
 
-        UtilisateurDTO utilisateurDTO = new UtilisateurDTO(pseudo, nom, prenom);
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO(id,pseudo, nom, prenom);
 
         assertEquals(pseudo, utilisateurDTO.getPseudo());
         assertEquals(nom, utilisateurDTO.getNom());

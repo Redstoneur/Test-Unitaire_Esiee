@@ -1,8 +1,8 @@
 package fr.knap.testunitaire_esiee.controller;
 
+import fr.knap.testunitaire_esiee.dto.ObjetBufferDTO;
 import fr.knap.testunitaire_esiee.dto.ObjetDTO;
 import fr.knap.testunitaire_esiee.model.Objet;
-import fr.knap.testunitaire_esiee.dto.ObjetBufferDTO;
 import fr.knap.testunitaire_esiee.model.Utilisateur;
 import fr.knap.testunitaire_esiee.services.ObjetService;
 import fr.knap.testunitaire_esiee.services.UtilisateurService;
@@ -34,7 +34,7 @@ public class ObjetController {
      * @return The created object.
      */
     @PostMapping
-    public Objet creerObjet(@RequestHeader("Authorization") String authToken, @RequestBody ObjetBufferDTO objetBufferDTO) {
+    public ObjetDTO creerObjet(@RequestHeader("Authorization") String authToken, @RequestBody ObjetBufferDTO objetBufferDTO) {
         if(!utilisateurService.verifyToken(authToken))
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
         Utilisateur utilisateur = utilisateurService.obtenirUtilisateurParToken(authToken);
@@ -46,7 +46,18 @@ public class ObjetController {
                 objetBufferDTO.getCategorie(),
                 objetBufferDTO.getDateCreation()
         );
-        return objetService.creerObjet(objet);
+
+        Objet objetCreated = objetService.creerObjet(objet);
+
+        return new ObjetDTO(
+                objetCreated.getId(),
+                objetCreated.getNom(),
+                objetCreated.getDescription(),
+                objetCreated.getCategorie(),
+                objetCreated.getUtilisateur().getPseudo(),
+                objetCreated.getUtilisateur().getId(),
+                objetCreated.getDateCreation()
+        );
     }
 
     /**
@@ -94,8 +105,13 @@ public class ObjetController {
      */
     @PutMapping("/{id}")
     public Objet mettreAJourObjet(@RequestHeader("Authorization") String authToken, @PathVariable Long id, @RequestBody Objet objet) {
-        if(utilisateurService.verifyToken(authToken))
+        if (utilisateurService.verifyToken(authToken)) {
+            Objet objetV = objetService.obtenirObjetParId(id);
+            if (objetV != null && objetV.getDateSuppression() != null)
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Object is deleted");
+
             return objetService.mettreAJourObjet(id, objet);
+        }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token is not valid");
     }
 

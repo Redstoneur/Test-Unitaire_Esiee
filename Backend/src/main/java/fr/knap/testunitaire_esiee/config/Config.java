@@ -1,5 +1,6 @@
 package fr.knap.testunitaire_esiee.config;
 
+import com.github.javafaker.Faker;
 import fr.knap.testunitaire_esiee.model.*;
 import fr.knap.testunitaire_esiee.repository.EchangeRepository;
 import fr.knap.testunitaire_esiee.repository.ObjetRepository;
@@ -13,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Configuration class for setting up initial data.
@@ -21,10 +24,14 @@ import java.util.List;
 public class Config {
 
     /**
-     * Bean that runs on application startup to create initial greetings.
+     * Bean that runs on application startup to create initial data.
      *
-     * @param utilisateurRepository The service used for managing greetings.
-     * @return A CommandLineRunner that creates initial greetings.
+     * @param utilisateurRepository The repository used for managing users.
+     * @param objetRepository       The repository used for managing objects.
+     * @param echangeRepository     The repository used for managing exchanges.
+     * @param utilisateurService    The service used for managing users.
+     * @param objetService          The service used for managing objects.
+     * @return A CommandLineRunner that creates initial data.
      */
     @Bean
     CommandLineRunner commandLineRunner(
@@ -34,221 +41,113 @@ public class Config {
             UtilisateurService utilisateurService,
             ObjetService objetService) {
         return args -> {
-            List<Utilisateur> utilisateurs = new ArrayList<>();
+            Faker faker = new Faker();
+            int numberOfUsers = 5;
+            int numberOfObjects = 40;
+            int numberOfExchanges = 10;
 
-            utilisateurs.add(new Utilisateur(
-                    "Nicolas", "testnicolas", "nicolas@test.testa",
-                    "Test", "Nicolas"
-            ));
-
-            utilisateurs.add(new Utilisateur(
-                    "Sophie", "sophietest", "sophie@test.com",
-                    "Test", "Sophie"
-            ));
-
-            utilisateurs.add(new Utilisateur(
-                    "Jean", "jeanpierre", "jean.pierre@test.net",
-                    "Pierre", "Jean"
-            ));
-
-            utilisateurs.add(new Utilisateur(
-                    "Laura", "lauratest", "laura@test.org",
-                    "Test", "Laura"
-            ));
-
-            utilisateurs.add(new Utilisateur(
-                    "David", "david123", "david@test.fr",
-                    "Test", "David"
-            ));
-
+            List<Utilisateur> utilisateurs = createUtilisateurs(faker, numberOfUsers);
             utilisateurRepository.saveAll(utilisateurs);
+            numberOfUsers = utilisateurs.size();
 
-            int numberOfUsers = utilisateurs.size();
-
-            List<Objet> objets = new ArrayList<>();
-
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "NVIDIA RTX 4070SUPER", "Carte graphique Nvidia RTX 4070SUPER",
-                    CategorieObjet.GAMING, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Fauteuil IKEA Markus", "Fauteuil de bureau ergonomique avec support lombaire.",
-                    CategorieObjet.MOBILIER, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Table basse Maison du Monde", "Table basse en bois massif avec rangement intégré.",
-                    CategorieObjet.MOBILIER, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Tondeuse Bosch Rotak 43", "Tondeuse à gazon électrique avec bac de ramassage.",
-                    CategorieObjet.JARDINAGE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Arrosoir Gardena 10L", "Arrosoir robuste en métal avec bec verseur précis.",
-                    CategorieObjet.JARDINAGE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Clavier mécanique Logitech G915",
-                    "Clavier mécanique sans fil avec switchs tactiles.",
-                    CategorieObjet.INFORMATIQUE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Écran Dell UltraSharp 27\"", "Écran 4K UHD avec technologie IPS.",
-                    CategorieObjet.INFORMATIQUE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Manette Xbox Elite Series 2", "Manette pro personnalisable avec paddles.",
-                    CategorieObjet.GAMING, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Casque SteelSeries Arctis Pro", "Casque gaming haute fidélité avec son surround.",
-                    CategorieObjet.GAMING, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Perceuse Bosch GSR 12V", "Perceuse-visseuse sans fil avec batterie lithium-ion.",
-                    CategorieObjet.OUTILS, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Timbre Napoléon III 1863", "Timbre rare en bon état, valeur collection.",
-                    CategorieObjet.COLLECTION, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Roman 'Dune' de Frank Herbert", "Édition collector avec couverture rigide.",
-                    CategorieObjet.LITTERATURE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Sweat Nike Tech Fleece", "Sweat à capuche gris, taille L.",
-                    CategorieObjet.VETEMENTS, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Aspirateur Dyson V11", "Aspirateur sans fil puissant avec station d'accueil.",
-                    CategorieObjet.ELECTROMENAGER, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Porte-clés Marvel", "Porte-clés en métal avec logo Avengers.",
-                    CategorieObjet.AUTRE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Tournevis multifonction Bosch", "Tournevis avec embouts interchangeables.",
-                    CategorieObjet.OUTILS, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Console PS5", "Console Sony PlayStation 5 en excellent état.",
-                    CategorieObjet.GAMING, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "MacBook Pro M2", "Ordinateur portable Apple, 16 Go RAM, 512 Go SSD.",
-                    CategorieObjet.INFORMATIQUE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Veste The North Face", "Veste imperméable, idéale pour l'hiver.",
-                    CategorieObjet.VETEMENTS, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Machine à café Nespresso Vertuo", "Machine avec capsules compatibles Vertuo.",
-                    CategorieObjet.ELECTROMENAGER, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Lampe Philips Hue", "Lampe connectée avec variation de couleurs.",
-                    CategorieObjet.MOBILIER, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Grille-pain SMEG", "Grille-pain rétro avec thermostat réglable.",
-                    CategorieObjet.ELECTROMENAGER, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Tondeuse Husqvarna Automower", "Robot tondeuse autonome.",
-                    CategorieObjet.JARDINAGE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Préférence d'échange : Roomba", "Aspirateur intelligent recherché en échange.",
-                    CategorieObjet.AUTRE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Sac à dos Eastpak", "Sac à dos noir, capacité 24L.",
-                    CategorieObjet.AUTRE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Jeu Zelda: Tears of the Kingdom", "Jeu Nintendo Switch, édition standard.",
-                    CategorieObjet.GAMING, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Bureau en bois massif", "Bureau spacieux avec tiroirs intégrés.",
-                    CategorieObjet.MOBILIER, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Souris Logitech MX Master 3", "Souris sans fil ergonomique pour travail intensif.",
-                    CategorieObjet.INFORMATIQUE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Livres Harry Potter édition Gallimard", "Collection complète, bon état.",
-                    CategorieObjet.LITTERATURE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Lunettes de soleil Ray-Ban Aviator", "Verres polarisés, monture dorée.",
-                    CategorieObjet.AUTRE, LocalDateTime.now()
-            ));
-            objets.add(new Objet(
-                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    "Gants de jardinage Wolf-Garten", "Gants résistants pour la taille et plantation.",
-                    CategorieObjet.JARDINAGE, LocalDateTime.now()
-            ));
-
+            List<Objet> objets = createObjets(faker, utilisateurService, numberOfObjects, numberOfUsers);
             objetRepository.saveAll(objets);
+            numberOfObjects = objets.size();
 
-            int numberOfObjects = objets.size();
-
-            List<Echange> echanges = new ArrayList<>();
-
-            echanges.add(new Echange(
-                    objetService.obtenirObjetParId((long) ((Math.random() * numberOfObjects) + 1)),
-                    objetService.obtenirObjetParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    LocalDateTime.now(), Etat.ATTENTE, null
-            ));
-            echanges.add(new Echange(
-                    objetService.obtenirObjetParId((long) ((Math.random() * numberOfObjects) + 1)),
-                    objetService.obtenirObjetParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    LocalDateTime.now(), Etat.ACCEPTE, LocalDateTime.now().plusDays(2)
-            ));
-            echanges.add(new Echange(
-                    objetService.obtenirObjetParId((long) ((Math.random() * numberOfObjects) + 1)),
-                    objetService.obtenirObjetParId((long) ((Math.random() * numberOfUsers) + 1)),
-                    LocalDateTime.now().minusDays(1), Etat.REFUSE, LocalDateTime.now().plusDays(3)
-            ));
-
+            List<Echange> echanges = createEchanges(objetService, numberOfObjects, numberOfExchanges);
             echangeRepository.saveAll(echanges);
         };
     }
 
+    /**
+     * Creates a list of users.
+     *
+     * @param faker         The Faker instance used to generate random data.
+     * @param numberOfUsers The number of users to create.
+     * @return A list of Utilisateur objects.
+     */
+    private List<Utilisateur> createUtilisateurs(Faker faker, int numberOfUsers) {
+        List<Utilisateur> utilisateurs = new ArrayList<>();
+        utilisateurs.add(new Utilisateur(
+                "admin",
+                "admin",
+                "admin@mail.fr",
+                "admin",
+                "admin"
+        ));
+        for (int i = 0; i < numberOfUsers; i++) {
+            utilisateurs.add(new Utilisateur(
+                    faker.name().firstName(),
+                    faker.internet().password(),
+                    faker.internet().emailAddress(),
+                    faker.name().lastName(),
+                    faker.name().firstName()
+            ));
+        }
+        return utilisateurs;
+    }
 
+    /**
+     * Creates a list of objects.
+     *
+     * @param faker              The Faker instance used to generate random data.
+     * @param utilisateurService The service used to manage users.
+     * @param numberOfObjects    The number of objects to create.
+     * @param numberOfUsers      The number of users available.
+     * @return A list of Objet objects.
+     */
+    private List<Objet> createObjets(Faker faker, UtilisateurService utilisateurService, int numberOfObjects, int numberOfUsers) {
+        List<Objet> objets = new ArrayList<>();
+        for (int i = 0; i < numberOfObjects; i++) {
+            objets.add(new Objet(
+                    utilisateurService.obtenirUtilisateurParId((long) ((Math.random() * numberOfUsers) + 1)),
+                    faker.commerce().productName(),
+                    faker.lorem().sentence(),
+                    CategorieObjet.values()[(int) (Math.random() * CategorieObjet.values().length)],
+                    LocalDateTime.now().minusDays((int) (Math.random() * 60))
+            ));
+        }
+        return objets;
+    }
+
+    /**
+     * Creates a list of exchanges.
+     *
+     * @param objetService      The service used to manage objects.
+     * @param numberOfObjects   The number of objects available.
+     * @param numberOfExchanges The number of exchanges to create.
+     * @return A list of Echange objects.
+     */
+    private List<Echange> createEchanges(ObjetService objetService, int numberOfObjects, int numberOfExchanges) {
+        List<Echange> echanges = new ArrayList<>();
+        for (int i = 0; i < numberOfExchanges; i++) {
+            AtomicBoolean isNotUnique = new AtomicBoolean(true);
+            AtomicLong id1 = new AtomicLong();
+            AtomicLong id2 = new AtomicLong();
+            do {
+                isNotUnique.set(false);
+                id1.set((long) ((Math.random() * numberOfObjects) + 1));
+                id2.set((long) ((Math.random() * numberOfObjects) + 1));
+                echanges.forEach(echange -> {
+                            if (echange.getObjetPropose().getId().equals(id1.get()) ||
+                                    echange.getObjetDemande().getId().equals(id1.get()) ||
+                                    echange.getObjetPropose().getId().equals(id2.get()) ||
+                                    echange.getObjetDemande().getId().equals(id2.get()))
+                                isNotUnique.set(true);
+                        }
+                );
+            } while (isNotUnique.get());
+            Etat etat = Etat.values()[(int) (Math.random() * Etat.values().length)];
+            LocalDateTime dateProposition = LocalDateTime.now().minusDays((int) (Math.random() * 30));
+            LocalDateTime dateCloture = etat == Etat.ATTENTE ? null : LocalDateTime.now().minusDays((int) (Math.random() * 10));
+            echanges.add(new Echange(
+                    objetService.obtenirObjetParId(id1.get()),
+                    objetService.obtenirObjetParId(id2.get()),
+                    dateProposition,
+                    etat,
+                    dateCloture
+            ));
+        }
+        return echanges;
+    }
 }

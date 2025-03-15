@@ -50,7 +50,7 @@ class ObjetControllerTest {
     @Test
     void creerObjetReturnsCreatedObjetIfTokenValid() {
         String authToken = "validToken";
-        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
+        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE);
         Utilisateur utilisateur = new Utilisateur();
         Objet objet = new Objet(utilisateur, "Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
 
@@ -58,9 +58,11 @@ class ObjetControllerTest {
         when(utilisateurService.obtenirUtilisateurParToken(authToken)).thenReturn(utilisateur);
         when(objetService.creerObjet(any(Objet.class))).thenReturn(objet);
 
-        Objet result = objetController.creerObjet(authToken, objetBufferDTO);
+        ObjetDTO result = objetController.creerObjet(authToken, objetBufferDTO);
 
-        assertEquals(objet, result);
+        assertEquals(objet.getNom(), result.getNom());
+        assertEquals(objet.getDescription(), result.getDescription());
+        assertEquals(objet.getCategorie(), result.getCategorie());
         verify(utilisateurService, times(1)).verifyToken(authToken);
         verify(utilisateurService, times(1)).obtenirUtilisateurParToken(authToken);
         verify(objetService, times(1)).creerObjet(any(Objet.class));
@@ -72,13 +74,13 @@ class ObjetControllerTest {
     @Test
     void creerObjetThrowsForbiddenIfTokenInvalid() {
         String authToken = "invalidToken";
-        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE, LocalDateTime.now());
+        ObjetBufferDTO objetBufferDTO = new ObjetBufferDTO("Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE);
 
         when(utilisateurService.verifyToken(authToken)).thenReturn(false);
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            objetController.creerObjet(authToken, objetBufferDTO);
-        });
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> objetController.creerObjet(authToken, objetBufferDTO));
 
         assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
         verify(utilisateurService, times(1)).verifyToken(authToken);
@@ -93,11 +95,11 @@ class ObjetControllerTest {
     void obtenirTousLesObjetsReturnsAllObjets() {
         List<ObjetDTO> objets = Arrays.asList(
                 new ObjetDTO(
-                        "Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE,
+                        1L,"Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE,
                         "John Doe", 1L, LocalDateTime.now()
                 ),
                 new ObjetDTO(
-                        "Smartphone", "A high-end smartphone", CategorieObjet.INFORMATIQUE,
+                        1L,"Smartphone", "A high-end smartphone", CategorieObjet.INFORMATIQUE,
                         "Jane Doe", 2L, LocalDateTime.now()
                 )
         );
@@ -118,11 +120,11 @@ class ObjetControllerTest {
         Long idUtilisateur = 1L;
         List<ObjetDTO> objets = Arrays.asList(
                 new ObjetDTO(
-                        "Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE,
+                        1L,"Laptop", "A high-end gaming laptop", CategorieObjet.INFORMATIQUE,
                         "John Doe", 1L, LocalDateTime.now()
                 ),
                 new ObjetDTO(
-                        "Smartphone", "A high-end smartphone", CategorieObjet.INFORMATIQUE,
+                        1L,"Smartphone", "A high-end smartphone", CategorieObjet.INFORMATIQUE,
                         "Jane Doe", 2L, LocalDateTime.now()
                 )
         );
@@ -147,9 +149,9 @@ class ObjetControllerTest {
 
         when(utilisateurService.verifyToken(authToken)).thenReturn(false);
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            objetController.obtenirObjetsParUtilisateur(authToken, idUtilisateur);
-        });
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> objetController.obtenirObjetsParUtilisateur(authToken, idUtilisateur));
 
         assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
         verify(utilisateurService, times(1)).verifyToken(authToken);
@@ -200,14 +202,40 @@ class ObjetControllerTest {
 
         when(utilisateurService.verifyToken(authToken)).thenReturn(false);
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            objetController.mettreAJourObjet(authToken, id, objet);
-        });
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> objetController.mettreAJourObjet(authToken, id, objet));
 
         assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
         verify(utilisateurService, times(1)).verifyToken(authToken);
         verify(objetService, times(0)).mettreAJourObjet(anyLong(), any(Objet.class));
     }
+
+    /**
+     * Tests the mettreAJourObjet method to ensure it throws a Forbidden exception if the object is already deleted.
+     */
+    @Test
+    void supprimerObjetThrowsForbiddenIfObjectDeleted() {
+        String authToken = "invalidToken";
+        Long id = 1L;
+        Objet objet = new Objet();
+        objet.setId(id);
+        Objet objet2 = new Objet();
+        objet2.setId(id);
+        objet2.setDateSuppression(LocalDateTime.now());
+
+        when(utilisateurService.verifyToken(authToken)).thenReturn(true);
+        when(objetService.obtenirObjetParId(id)).thenReturn(objet2);
+
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> objetController.mettreAJourObjet(authToken, id, objet));
+
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        verify(utilisateurService, times(1)).verifyToken(authToken);
+        verify(objetService, times(0)).mettreAJourObjet(anyLong(), any(Objet.class));
+    }
+
 
     /**
      * Tests the supprimerObjet method to ensure it deletes the Objet if the token is valid.
@@ -219,9 +247,9 @@ class ObjetControllerTest {
 
         when(utilisateurService.verifyToken(authToken)).thenReturn(true);
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            objetController.supprimerObjet(authToken, id);
-        });
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> objetController.supprimerObjet(authToken, id));
 
         assertEquals(HttpStatus.OK, exception.getStatusCode());
         verify(utilisateurService, times(1)).verifyToken(authToken);
@@ -238,9 +266,9 @@ class ObjetControllerTest {
 
         when(utilisateurService.verifyToken(authToken)).thenReturn(false);
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            objetController.supprimerObjet(authToken, id);
-        });
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> objetController.supprimerObjet(authToken, id));
 
         assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
         verify(utilisateurService, times(1)).verifyToken(authToken);
