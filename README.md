@@ -85,7 +85,7 @@ avec ces API et inclut des tests end-to-end automatisés avec Cypress.
        mvn spring-boot:run
        ```
 
-   Le serveur devrait démarrer sur le port par défaut (souvent 3000).
+   Le serveur devrait démarrer sur le port par défaut, `3000`.
 
 2. **Frontend**
 
@@ -98,8 +98,8 @@ avec ces API et inclut des tests end-to-end automatisés avec Cypress.
        ```bash
        npm start
        ```
-   L’application frontend sera accessible via l’adresse locale indiquée dans la console (par
-   exemple, http://localhost:5173/).
+   L’application frontend sera accessible via l\’adresse locale indiquée dans la console (par
+   exemple : <http://localhost:5173/>).
 
 ### Avec Docker
 
@@ -111,7 +111,7 @@ avec ces API et inclut des tests end-to-end automatisés avec Cypress.
        ```
     2. Lancer le conteneur :
        ```bash
-       docker run -p 8080:8080 testunitaire-esiee-backend
+       docker run -p 3000:3000 testunitaire-esiee-backend
        ```
 
 2. **Frontend**
@@ -122,7 +122,7 @@ avec ces API et inclut des tests end-to-end automatisés avec Cypress.
        ```
     2. Lancer le conteneur :
        ```bash
-       docker run -p 80:80 testunitaire-esiee-frontend
+       docker run -p 8080:8080 testunitaire-esiee-frontend
        ```
 
 3. Docker Compose (Optionnel)
