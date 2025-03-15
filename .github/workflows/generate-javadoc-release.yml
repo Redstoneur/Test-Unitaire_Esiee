@@ -41,14 +41,14 @@ jobs:
           name: javadoc
           path: ./Backend/target/reports/apidocs
 
-      - name: Generate JavaDoc
-        run: mvn javadoc:javadoc
-        working-directory: ./Backend
+      - name: Create zip file
+        run: zip -r javadoc.zip ./Backend/target/reports/apidocs
+        working-directory: .
 
       - name: Upload JavaDoc to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           name: javadoc
-          files: ./Backend/target/reports/apidocs
+          files: javadoc.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
