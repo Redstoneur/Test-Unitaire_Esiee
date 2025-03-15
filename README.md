@@ -1,5 +1,67 @@
 # Project Test-Unitaire_Esiee
 
+---
+
+![License](https://img.shields.io/github/license/Redstoneur/Test-Unitaire_Esiee)
+![Top Language](https://img.shields.io/github/languages/top/Redstoneur/Test-Unitaire_Esiee)
+![Size](https://img.shields.io/github/repo-size/Redstoneur/Test-Unitaire_Esiee)
+![Contributors](https://img.shields.io/github/contributors/Redstoneur/Test-Unitaire_Esiee)
+![Last Commit](https://img.shields.io/github/last-commit/Redstoneur/Test-Unitaire_Esiee)
+![Issues](https://img.shields.io/github/issues/Redstoneur/Test-Unitaire_Esiee)
+![Pull Requests](https://img.shields.io/github/issues-pr/Redstoneur/Test-Unitaire_Esiee)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/74796f194bb24bdcb67e05ee91a74b5d)](https://app.codacy.com/gh/Redstoneur/Test-Unitaire_Esiee/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
+---
+
+![Java Version](https://img.shields.io/badge/java-17-blue)
+![Maven Version](https://img.shields.io/badge/maven-3.8.3-blue)
+![Node.js Version](https://img.shields.io/badge/node.js-22-blue)
+![npm Version](https://img.shields.io/badge/npm-8.1.0-blue)
+![TypeScript Version](https://img.shields.io/badge/typescript-4.4.4-blue)
+![Vue.js Version](https://img.shields.io/badge/vue.js-3.2.20-blue)
+![Docker Version](https://img.shields.io/badge/docker-20.10.8-blue)
+![Docker Compose Version](https://img.shields.io/badge/docker-compose-1.29.2-blue)
+
+---
+
+![Forks](https://img.shields.io/github/forks/Redstoneur/Test-Unitaire_Esiee)
+![Stars](https://img.shields.io/github/stars/Redstoneur/Test-Unitaire_Esiee)
+![Watchers](https://img.shields.io/github/watchers/Redstoneur/Test-Unitaire_Esiee)
+
+---
+
+![Latest Release](https://img.shields.io/github/v/release/Redstoneur/Test-Unitaire_Esiee)
+![Release Date](https://img.shields.io/github/release-date/Redstoneur/Test-Unitaire_Esiee)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/74796f194bb24bdcb67e05ee91a74b5d)](https://app.codacy.com/gh/Redstoneur/Test-Unitaire_Esiee/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
+---
+
+![Backend Tests](https://img.shields.io/github/actions/workflow/status/Redstoneur/Test-Unitaire_Esiee/backend-tests.yml?label=Backend%20Tests)
+![Frontend Tests](https://img.shields.io/github/actions/workflow/status/Redstoneur/Test-Unitaire_Esiee/cypress.yml?label=Frontend%20Tests)
+![JavaDocs](https://img.shields.io/github/actions/workflow/status/Redstoneur/Test-Unitaire_Esiee/generate-javadoc.yml?label=JavaDocs)
+
+---
+
+## Sommaire
+
+<!-- TOC -->
+* [Project Test-Unitaire_Esiee](#project-test-unitaire_esiee)
+  * [Sommaire](#sommaire)
+  * [Description du projet](#description-du-projet)
+  * [Prérequis](#prérequis)
+  * [Lancement du projet](#lancement-du-projet)
+    * [Sans Docker](#sans-docker)
+      * [1. Backend](#1-backend)
+      * [2. Frontend](#2-frontend)
+    * [Avec Docker](#avec-docker)
+      * [1. Backend](#1-backend-1)
+      * [2. Frontend](#2-frontend-1)
+      * [3. Docker Compose (Optionnel)](#3-docker-compose-optionnel)
+  * [Tests](#tests)
+  * [Remarques](#remarques)
+<!-- TOC -->
+
+
 ## Description du projet
 
 Ce projet est une application web composée d’un backend en Java (Spring Boot) et d’un frontend en Vue.js, conçue pour
