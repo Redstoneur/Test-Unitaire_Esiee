@@ -41,6 +41,10 @@ jobs:
           name: javadoc
           path: ./Backend/target/reports/apidocs
 
+      - name: Generate JavaDoc
+        run: mvn javadoc:javadoc
+        working-directory: ./Backend
+
       - name: Upload JavaDoc to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
