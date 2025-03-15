@@ -1,14 +1,10 @@
-name: Generate JavaDoc
+name: Generate JavaDoc For Release
 
 on:
-  push:
+  release:
+    types: [ published ]
     branches:
       - master
-      - dev
-  pull_request:
-    branches:
-      - master
-      - dev
 
 jobs:
   javadoc:
@@ -37,8 +33,20 @@ jobs:
         run: mvn javadoc:javadoc
         working-directory: ./Backend
 
-      - name: Upload JavaDoc
+      - name: Upload JavaDoc to GitHub Actions
         uses: actions/upload-artifact@v4
         with:
           name: javadoc
           path: ./Backend/target/reports/apidocs
+
+      - name: Create zip file
+        run: zip -r javadoc.zip ./Backend/target/reports/apidocs
+        working-directory: .
+
+      - name: Upload JavaDoc to GitHub Release
+        uses: softprops/action-gh-release@c95fe1489396fe8a9eb87c0abf8aa5b2ef267fda  # v2.2.1
+        with:
+          name: javadoc
+          files: javadoc.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
