@@ -5,8 +5,6 @@ on:
     types: [ published ]
     branches:
       - master
-      - dev
-      - feature/*
 
 jobs:
   javadoc:
