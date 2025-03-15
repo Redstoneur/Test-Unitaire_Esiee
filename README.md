@@ -15,12 +15,14 @@
 
 ![Java Version](https://img.shields.io/badge/java-17-blue)
 ![Maven Version](https://img.shields.io/badge/maven-3.8.3-blue)
+
 ![Node.js Version](https://img.shields.io/badge/node.js-22-blue)
 ![npm Version](https://img.shields.io/badge/npm-8.1.0-blue)
 ![TypeScript Version](https://img.shields.io/badge/typescript-4.4.4-blue)
 ![Vue.js Version](https://img.shields.io/badge/vue.js-3.2.20-blue)
+
 ![Docker Version](https://img.shields.io/badge/docker-20.10.8-blue)
-![Docker Compose Version](https://img.shields.io/badge/docker-compose-1.29.2-blue)
+![Docker Compose Version](https://img.shields.io/badge/DockerCompose-1.29.2-blue)
 
 ---
 
