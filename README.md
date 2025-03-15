@@ -53,12 +53,7 @@
   * [Prérequis](#prérequis)
   * [Lancement du projet](#lancement-du-projet)
     * [Sans Docker](#sans-docker)
-      * [1. Backend](#1-backend)
-      * [2. Frontend](#2-frontend)
     * [Avec Docker](#avec-docker)
-      * [1. Backend](#1-backend-1)
-      * [2. Frontend](#2-frontend-1)
-      * [3. Docker Compose (Optionnel)](#3-docker-compose-optionnel)
   * [Tests](#tests)
   * [Remarques](#remarques)
 <!-- TOC -->
@@ -81,65 +76,66 @@ avec ces API et inclut des tests end-to-end automatisés avec Cypress.
 
 ### Sans Docker
 
-#### 1. Backend
+1. **Backend**
 
-1. Ouvrir un terminal dans le répertoire `Backend`.
-2. Compiler et lancer le projet avec Maven :
-   ```bash
-   mvn clean install
-   mvn spring-boot:run
-   ```
+    1. Ouvrir un terminal dans le répertoire `Backend`.
+    2. Compiler et lancer le projet avec Maven :
+       ```bash
+       mvn clean install
+       mvn spring-boot:run
+       ```
 
-Le serveur devrait démarrer sur le port par défaut (souvent 3000).
+   Le serveur devrait démarrer sur le port par défaut (souvent 3000).
 
-#### 2. Frontend
+2. **Frontend**
 
-1. Ouvrir un terminal dans le répertoire `Frontend`.
-2. Installer les dépendances :
-   ```bash
-   npm install
-   ```
-3. Démarrer le serveur de développement :
-   ```bash
-   npm start
-   ```
+    1. Ouvrir un terminal dans le répertoire `Frontend`.
+    2. Installer les dépendances :
+       ```bash
+       npm install
+       ```
+    3. Démarrer le serveur de développement :
+       ```bash
+       npm start
+       ```
    L’application frontend sera accessible via l’adresse locale indiquée dans la console (par
    exemple, http://localhost:5173/).
 
 ### Avec Docker
 
-#### 1. Backend
+1. **Backend**
 
-1. Dans le répertoire `Backend`, construire l’image Docker :
-   ```bash
-   docker build -t testunitaire-esiee-backend .
-   ```
-2. Lancer le conteneur :
-   ```bash
-   docker run -p 8080:8080 testunitaire-esiee-backend
-   ```
+    1. Dans le répertoire `Backend`, construire l’image Docker :
+       ```bash
+       docker build -t testunitaire-esiee-backend .
+       ```
+    2. Lancer le conteneur :
+       ```bash
+       docker run -p 8080:8080 testunitaire-esiee-backend
+       ```
 
-#### 2. Frontend
+2. **Frontend**
 
-1. Dans le répertoire `Frontend`, construire l’image Docker :
-   ```bash
-   docker build -t testunitaire-esiee-frontend .
-   ```
-2. Lancer le conteneur :
-   ```bash
-   docker run -p 80:80 testunitaire-esiee-frontend
-   ```
+    1. Dans le répertoire `Frontend`, construire l’image Docker :
+       ```bash
+       docker build -t testunitaire-esiee-frontend .
+       ```
+    2. Lancer le conteneur :
+       ```bash
+       docker run -p 80:80 testunitaire-esiee-frontend
+       ```
 
-#### 3. Docker Compose (Optionnel)
+3. Docker Compose (Optionnel)
 
-Si un fichier `docker-compose.yml` est mis en place dans le projet, il est possible de lancer l’ensemble des services :
+   Si un fichier `docker-compose.yml` est mis en place dans le projet, il est possible de lancer l’ensemble des
+   services :
 
-1. Dans le répertoire racine du projet, exécuter :
-   ```bash
-   docker-compose up --build
-   ```
+    1. Dans le répertoire racine du projet, exécuter :
+       ```bash
+       docker-compose up --build
+       ```
 
-Cela va construire et démarrer automatiquement le backend et le frontend dans les conteneurs configurés.
+   Cela va construire et démarrer automatiquement le backend et le frontend dans les conteneurs configurés.
 
 ## Tests
 
