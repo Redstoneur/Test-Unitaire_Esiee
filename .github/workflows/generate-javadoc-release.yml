@@ -1,4 +1,4 @@
-name: Generate JavaDoc
+name: Generate JavaDoc For Release
 
 on:
   release:
